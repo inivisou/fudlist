@@ -1,61 +1,15 @@
-Día,almuerzos sólo,Cena (proteína ligera),Lista de ingredientes para la compra
-1,Macarrones boloñesa,Sándwich mixto con huevo,macarrones - carne picada ternera - tomate triturado - cebolla - ajo - aceite - sal - pimienta - pan de molde - jamón york - queso - huevo
-2,Pollo al ajillo con arroz blanco,Wrap de pollo,pollo troceado - ajo - perejil - arroz - tortillas de trigo - lechuga - tomate - yogur natural - especias
-3,Lentejas estofadas,Sándwich de lacón con queso,lentejas - zanahoria - patata - cebolla - pimentón - laurel - lacón - queso - pan
-4,Merluza al horno con patatas,Fajitas de pollo,merluza - patatas - limón - ajo - aceite - pollo - pimientos - cebolla - tortillas de trigo
-5,Tortilla española,Ensalada de tomate con atún,patatas - huevo - cebolla - aceite - sal - tomate - atún en conserva
-6,Sopa de fideos + filete de lomo a la plancha,Hamburguesa clásica,fideos - caldo - zanahoria - patata - filetes de lomo - hamburguesa de ternera - pan de hamburguesa - lechuga - tomate
-7,Ensalada mixta de garbanzos,Pizza pan pita,garbanzos cocidos - tomate - pepino - cebolla - aceite - vinagre - pan pita - tomate frito - mozzarella
-8,Arroz frito con pollo,Wrap vegetal con pavo,arroz - pollo - huevo - ajo - salsa de soja - tortillas de trigo - pavo cocido - lechuga - tomate
-9,Chuletas de cerdo con patatas fritas (guarnición),Fajitas de ternera,chuletas de cerdo - patatas - aceite - sal - ternera - pimientos - cebolla - tortillas de trigo
-10,Crema de calabaza,Sándwich de pollo a la plancha,calabaza - patata - puerro - aceite - sal - pollo - pan
-11,Espaguetis al tomate,Hamburguesa clásica,espaguetis - tomate triturado - ajo - aceite - hamburguesa de ternera - pan - lechuga - tomate
-12,Judías blancas guisadas,Empanadas de carne,judías blancas cocidas - cebolla - zanahoria - pimiento verde - carne de ternera picada - obleas para empanadillas - huevo - sal - pimienta - tomillo
-13,Atún a la plancha con arroz pilaf,Sándwich vegetal con huevo,atún fresco - arroz - cebolla - caldo - aceite - pan - lechuga - tomate - huevo
-14,Pastel de calabacín,Wrap de pollo,calabacín - huevo - queso rallado - cebolla - pollo - tortillas de trigo - especias
-15,Costillas de cerdo al horno con patatas,Ensalada de queso fresco y pavo,costillas de cerdo - patatas - ajo - especias - lechuga - queso fresco - pavo cocido - aceite - vinagre
-16,Garbanzos con pisto,Sándwich mixto con huevo,garbanzos cocidos - tomate triturado - pimiento rojo - cebolla - ajo - aceite - sal - pan de molde - jamón york - queso - huevo
-17,Filetes de lomo a la plancha con arroz blanco,Wrap de pollo,filetes de lomo - arroz - ajo - aceite - sal - pollo - tortillas de trigo - lechuga - tomate
-18,Merluza en salsa verde con patatas,Hamburguesa clásica,merluza - ajo - perejil - patatas - aceite - sal - hamburguesa de ternera - pan - lechuga - tomate
-19,Arroz pilaf con pollo,Sándwich de lacón con queso,arroz - pollo - cebolla - caldo - aceite - lacón - queso - pan
-20,Longaniza con pimientos y cebolla,Ensalada de tomate y atún,longaniza - pimientos - cebolla - aceite - sal - tomate - atún en conserva
-21,Sopa de cocido,Wrap de pavo y queso,garbanzos - fideos - zanahoria - patata - pollo - jamón - hueso - tortillas de trigo - pavo cocido - queso
-22,Espaguetis a la carbonara,Hamburguesa Acueducto,espaguetis - bacon - huevo - nata - queso - hamburguesa de ternera - tomate - mozzarella - queso de cabra - cebolla caramelizada
-23,Chuletas de cerdo con patatas fritas (guarnición),Fajitas de ternera,chuletas de cerdo - patatas - aceite - sal - ternera - pimientos - cebolla - tortillas de trigo
-24,Judías blancas con chorizo,Sándwich de pollo a la plancha,judías blancas cocidas - chorizo - cebolla - ajo - laurel - aceite - pollo - pan
-25,Crema de calabaza,Wrap de pollo,calabaza - patata - puerro - aceite - sal - pollo - tortillas de trigo
-26,Tortilla española,Ensalada de pavo y queso fresco,patatas - huevo - cebolla - aceite - sal - lechuga - pavo cocido - queso fresco
-27,Atún al horno con verduras,Empanadas de pollo al curry,atún fresco - pimiento rojo - cebolla - aceite - sal - pollo desmenuzado - zanahoria - patatas - curry - obleas para empanadillas - huevo
-28,Costillas de cerdo con arroz blanco,Sándwich vegetal con huevo,costillas de cerdo - arroz - ajo - especias - pan - lechuga - tomate - huevo
-29,Lentejas estofadas,Pizza pan pita,lentejas - zanahoria - patata - cebolla - laurel - aceite - sal - pan pita - tomate frito - mozzarella
-30,Pastel de calabacín,Hamburguesa clásica,calabacín - huevo - queso rallado - cebolla - hamburguesa de ternera - pan - lechuga - tomate
-31,Longanizas a la cerveza con patatas,Wrap de pollo,longanizas - cerveza - patatas - cebolla - aceite - sal - pollo - tortillas de trigo - lechuga - tomate
-32,Macarrones Carbonara,Sándwich mixto con huevo,macarrones - bacon - huevo - nata - queso - pan de molde - jamón york - queso - huevo
-33,Merluza a la plancha con arroz blanco,Fajitas de pollo,merluza - arroz - ajo - aceite - sal - pollo - pimientos - cebolla - tortillas de trigo
-34,Garbanzos con pisto,Hamburguesa clásica,garbanzos cocidos - tomate triturado - pimiento - cebolla - ajo - aceite - hamburguesa de ternera - pan - lechuga - tomate
-35,Solomillo con queso y jamón york,Ensalada de tomate con atún,solomillo de cerdo - queso - jamón york - aceite - sal - tomate - atún en conserva
-36,Arroz frito,Hamburguesa Acueducto,arroz - huevo - ajo - aceite - hamburguesa de ternera - tomate - mozzarella - queso de cabra - bacon - cebolla caramelizada
-37,Croquetas de jamón con ensalada verde,Wrap de pavo y queso,croquetas de jamón - lechuga - aceite - vinagre - tortillas de trigo - pavo cocido - queso
-38,Atún a la plancha con patatas,Fajitas de ternera,atún fresco - patatas - aceite - sal - ternera - pimientos - cebolla - tortillas de trigo
-39,Judías blancas guisadas,Empanadas de carne,judías blancas cocidas - cebolla - zanahoria - pimiento verde - carne picada ternera - obleas para empanadillas - huevo - sal - pimienta - tomillo
-40,Canelones de carne,Hamburguesa Acueducto,canelones - carne picada - tomate frito - bechamel - queso - hamburguesa de ternera - tomate - mozzarella - queso de cabra - bacon - cebolla caramelizada
-41,Pollo al ajillo con arroz blanco,Wrap de pollo,pollo - ajo - perejil - arroz - aceite - sal - tortillas de trigo
-42,Ensalada de pasta,Sándwich vegetal con huevo,espirales de macarrón - nueces - pasas - pavo - queso en dados - aceite de Módena - pan - lechuga - tomate - huevo
-43,Chuletas de cerdo con patatas fritas (guarnición),Pizza Acueducto,chuletas de cerdo - patatas - aceite - sal - masa pizza - tomate - mozzarella - queso de cabra - bacon - cebolla caramelizada
-44,Crema de calabaza y vichissoi,Sándwich de pollo a la plancha,calabaza - patata - puerro - nata - aceite - sal - pollo - pan
-45,Filete de lomo con patatas fritas (guarnición) y huevo,Ensalada de pavo y queso fresco,filete de lomo - patatas - huevo - aceite - sal - lechuga - pavo cocido - queso fresco
-46,Longaniza con pimientos y cebolla,Wrap de pollo,longaniza - pimientos - cebolla - aceite - sal - pollo - tortillas de trigo - lechuga - tomate
-47,Espaguetis al ajillo con pollo,Sándwich mixto con huevo,espaguetis - ajo - aceite - pollo - pan de molde - jamón york - queso - huevo
-48,Merluza rebozada con arroz blanco,Hamburguesa clásica,merluza - huevo - pan rallado - arroz - aceite - hamburguesa de ternera - pan - lechuga - tomate
-49,Garbanzos con pisto,Fajitas de ternera,garbanzos cocidos - tomate triturado - pimiento - cebolla - ajo - aceite - ternera - tortillas de trigo
-50,Sopa de fideos + filete de lomo a la plancha,Wrap de pavo y queso,fideos - caldo - zanahoria - patata - filete de lomo - pavo cocido - queso - tortillas de trigo
-51,Arroz frito con pollo,Sándwich de lacón con queso,arroz - pollo - huevo - ajo - aceite - lacón - queso - pan
-52,Judías blancas guisadas,Empanadas de pollo al curry,judías blancas cocidas - cebolla - zanahoria - aceite - pollo desmenuzado - curry - obleas para empanadillas - huevo
-53,Costillas de cerdo al horno con patatas,Hamburguesa Acueducto,costillas de cerdo - patatas - ajo - especias - hamburguesa de ternera - tomate - mozzarella - queso de cabra - bacon - cebolla caramelizada
-54,Macarrones boloñesa,Wrap de pollo,macarrones - carne picada ternera - tomate triturado - cebolla - ajo - aceite - pollo - tortillas de trigo
-55,Atún a la plancha con arroz pilaf,Sándwich vegetal con huevo,atún fresco - arroz - cebolla - caldo - aceite - pan - lechuga - tomate - huevo
-56,Crema de calabaza,Pizza pan pita,calabaza - patata - puerro - aceite - sal - pan pita - tomate frito - mozzarella
-57,Chuletas de cerdo con patatas fritas (guarnición),Fajitas de pollo,chuletas de cerdo - patatas - aceite - sal - pollo - pimientos - cebolla - tortillas de trigo
-58,Lentejas estofadas,Sándwich de pollo a la plancha,lentejas - zanahoria - patata - cebolla - laurel - aceite - pollo - pan
-59,Tortilla española,Ensalada de tomate con atún,patatas - huevo - cebolla - aceite - sal - tomate - atún en conserva
-60,Pastel de calabacín,Filete de lomo con patatas fritas (guarnición) y huevo,calabacín - huevo - queso rallado - cebolla - filete de lomo - patatas - aceite - sal
+Numero de plato,Comida,Cena,Lista ingredientes,Enlace,Para
+1,"Sopa de cocido + Filete de lomo","Sándwich mixto con huevo","Comida (fideos - caldo de cocido - zanahoria - patata - garbanzos - pollo - jamón - sal - filete de lomo) # Cena (pan de molde - jamón york - queso en lonchas - huevo - mantequilla)","https://www.recetasderechupete.com/sopa-de-cocido/2466/","Eme - Cris"
+2,"Garbanzos con pisto","Wrap de pollo","Comida (garbanzos cocidos - tomate triturado - pimiento - cebolla - aceite de oliva - sal) # Cena (tortillas de trigo - pechuga de pollo - lechuga - tomate - salsa)","https://www.recetasderechupete.com/garbanzos-con-pisto/17469/","Eme - Cris"
+3,"Canelones","Ensalada de pimientos","Comida (placas de canelones - carne picada - tomate frito - bechamel - queso rallado) # Cena (espirales de macarrón - pimientos asados - queso de cabra - aceite de oliva - sal)","https://www.recetasderechupete.com/canelones-de-carne/1589/","Eme - Cris"
+4,"Crema de calabaza","Sándwich de lacón con queso","Comida (calabaza - patata - cebolla - zanahoria - aceite de oliva - sal) # Cena (pan de molde - lacón - queso en lonchas - mantequilla)","https://www.recetasderechupete.com/crema-de-calabaza/2395/","Eme - Cris"
+5,"Longanizas a la cerveza con patatas","Brochetas de pollo con pimientos y cebolla","Comida (longaniza - cerveza - patata - cebolla - aceite de oliva - sal) # Cena (pechuga de pollo - pimiento - cebolla - aceite de oliva - sal)","https://www.recetasderechupete.com/longaniza-a-la-cerveza/17136/","Eme - Cris"
+6,"Ensalada de pasta","Tortilla de atún","Comida (espirales de macarrón - nueces - aceite de Módena - pasas - pavo - queso en dados) # Cena (huevo - atún en conserva - patata - cebolla - aceite de oliva - sal)","https://www.recetasderechupete.com/ensalada-de-pasta/1504/","Eme - Cris"
+7,"Calamares","Pizza Acueducto","Comida (calamares - harina - aceite de oliva - sal) # Cena (masa pizza - tomate - mozzarella - queso de cabra - bacon - cebolla caramelizada)","https://www.recetasderechupete.com/calamares-a-la-romana/1778/","Eme - Cris"
+8,"Vichissoi","Hamburguesa Acueducto","Comida (puerros - patata - nata para cocinar - mantequilla - sal) # Cena (hamburguesa de ternera - pan de hamburguesa - tomate - mozzarella - queso de cabra - bacon - cebolla caramelizada)","https://www.recetasderechupete.com/vichyssoise/1236/","Eme - Cris"
+9,"Macarrones Carbonara","Empanadas de carne","Comida (macarrones - bacon - huevo - nata para cocinar - queso rallado) # Cena (cebolla - zanahoria - patata - pimiento verde - carne de ternera picada - sal - pimienta - tomillo - obleas para empanadillas - huevo)","https://www.recetasderechupete.com/macarrones-a-la-carbonara/987/","Eme - Cris"
+10,"Costillas de cerdo al horno con patatas","Fajitas de pollo","Comida (costillas de cerdo - patata - ajo - aceite de oliva - sal) # Cena (tortillas de trigo - pollo - pimiento - cebolla - especias fajitas)","https://www.recetasderechupete.com/costillas-al-horno/2382/","Eme - Cris"
+11,"Cerdo guisado","Empanadas de pollo al curry","Comida (carne de cerdo - patata - zanahoria - cebolla - ajo - aceite de oliva - sal) # Cena (cebolla - zanahoria - patata - pollo desmenuzado - curry - obleas para empanadillas - huevo)","https://www.recetasderechupete.com/guiso-de-cerdo/13273/","Eme - Cris"
+12,"Espaguettis con calabacín","Longaniza con pimientos y cebolla","Comida (espaguetis - calabacín - ajo - aceite de oliva - sal) # Cena (longaniza - pimiento - cebolla - aceite de oliva - sal)","https://www.recetasderechupete.com/espaguetis-con-calabacin/14825/","Eme - Cris"
+13,"Pollo con tomate (Monsieur Cuisine)","Tortilla española (Lekue)","Comida (pollo - tomate triturado - cebolla - aceite de oliva - sal) # Cena (huevo - patata - cebolla - aceite de oliva - sal)","https://www.youtube.com/watch?v=CqGonsv0uyI","Eme - Cris"
+14,"Pasta con pimientos","Fajitas de ternera","Comida (espirales de pasta - pimientos asados - queso de cabra - aceite de oliva - sal) # Cena (tortillas de trigo - ternera - pimiento - cebolla - especias fajitas)","https://www.recetasderechupete.com/pasta-con-pimientos-asados/15047/","Eme - Cris"
