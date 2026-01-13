@@ -1,0 +1,167 @@
+
+## 🧾 PROMPT DEFINITIVO 
+
+### ⚠️ Instrucción crítica (NO EJECUTAR)
+
+**No generes ningún plato automáticamente.**
+Este prompt **solo establece el contexto**.
+
+👉 La generación **solo se realizará** cuando el usuario escriba exactamente:
+**`Genera`**
+
+---
+
+## 🧠 Gestión de contexto (OBLIGATORIO)
+
+* Mantener **memoria completa** de todo lo generado.
+* No duplicar platos, a no ser que sea necesario para llegar a los días que se solicitan, deben estar separados platos parecidos al menos 9 días.
+* Considerar el listado como **un catálogo único**.
+* No inventar platos nuevos.
+
+---
+
+## 🎯 Objetivo
+
+Generar un menú para 60 días a partir de la sección **Platos especiales**.
+
+## 🍽️ Reglas generales
+
+* **NO se generan platos nuevos**, solo los definidos en *Platos especiales*.
+* Todos los platos:
+
+  * Por defecto: **[Comida;Cena]**
+  * Por defecto: **[Eme;Cris]**
+* Si un plato:
+
+  * Solo encaja en una comida → ajustar `[Comida]` o `[Cena]`
+  * Es válido solo para una persona → ajustar el bloque `[Para]`
+* **La validez para Eme o Cris se decide exclusivamente plato a plato**,
+  **no existen restricciones externas ni globales por persona**.
+
+
+
+## 🔁 Reglas de separación
+
+* **≥ 4 días** entre macarrones, espaguetis, ensalada de pasta, Ensalada de pimientos.
+* **≥ 9 días** entre fajitas de pollo y fajitas de ternera.
+* **≥ 9 días** entre sandwichs.
+* **≥ 14 días** entre totillas.
+* **≥ 14 días** entre cremas.
+
+
+---
+
+## 🥣 Platos especiales (CATÁLOGO ÚNICO)
+
+Para **cada uno de los siguientes platos**, debes:
+
+1. **Completar ingredientes** si faltan
+2. Añadir un **enlace válido**:
+
+   * Preferencia: receta escrita
+   * Alternativa: vídeo de YouTube
+3. Determinar si es:
+
+   * `[Comida]`
+   * `[Cena]`
+   * o `[Comida;Cena]`
+4. Determinar si es válido para:
+
+   * `Eme`
+   * `Cris`
+   * o ambos (**esto sustituye cualquier restricción personal previa**)
+5. * Al generar la columna Lista ingredientes, **indicar siempre Comida y Cena**, incluso si son iguales a los ingredientes de la comida, respetando este formato: Comida (...) # Cena (...)
+
+
+### Lista de platos
+
+* Sopa de cocido + Filete de lomo - [Comida] - [Ingredientes: fideos, caldo de cocido, zanahoria, patata, garbanzos, pollo, jamón, sal, filetes de lomo] - [Enlace: https://www.recetasderechupete.com/sopa-de-cocido/2466/] - [Eme;Cris]
+* Sopa de fideos + Filete de ternera - [Comida] - [Ingredientes: fideos finos, caldo de pollo, zanahoria, patata, sal, filetes de ternera] - [Enlace: https://www.recetasderechupete.com/sopa-de-fideos/11389/] - [Eme;Cris]
+* Crema de calabaza - [Comida;Cena] - [Ingredientes: calabaza, patata, cebolla, zanahoria, aceite de oliva, sal] - [Enlace: https://www.recetasderechupete.com/crema-de-calabaza/2395/] - [Eme;Cris]
+* Vichissoi - [Comida;Cena] - [Ingredientes: puerros, patata, nata para cocinar, mantequilla, sal] - [Enlace: https://www.recetasderechupete.com/vichyssoise/1236/] - [Eme;Cris]
+* Pastel de calabacín - [Comida;Cena] - [Ingredientes: calabacín, huevo, cebolla, queso rallado, aceite de oliva, sal] - [Enlace: https://www.recetasderechupete.com/pastel-de-calabacin/7426/] - [Eme;Cris]
+* Garbanzos con pisto - [Comida] - [Ingredientes: garbanzos cocidos, tomate triturado, pimiento rojo, cebolla, aceite de oliva, sal] - [Enlace: https://www.recetasderechupete.com/garbanzos-con-pisto/17469/] - [Eme;Cris]
+* Canelones - [Comida] - [Ingredientes: placas de canelones, carne picada, tomate frito, bechamel, queso rallado] - [Enlace: https://www.recetasderechupete.com/canelones-de-carne/1589/] - [Eme;Cris]
+* Macarrones Carbonara - [Comida] - [Ingredientes: macarrones, bacon, huevo, nata para cocinar, queso rallado] - [Enlace: https://www.recetasderechupete.com/macarrones-a-la-carbonara/987/] - [Eme;Cris]
+* Ensalada de pasta - [Comida;Cena] - [Ingredientes: espirales de macarrón, nueces, aceite de Módena, pasas, pavo, queso en dados] - [Enlace: https://www.recetasderechupete.com/ensalada-de-pasta/1504/] - [Eme;Cris]
+* Ensalada de pimientos - [Comida;Cena] - [Ingredientes: espirales de macarrón, pimientos asados, queso de cabra, aceite de oliva, sal] - [Enlace: https://www.recetasderechupete.com/ensalada-de-pimientos-asados/5226/] - [Eme;Cris]
+* Longanizas a la cerveza con patatas - [Comida] - [Ingredientes: longaniza, cerveza, patatas, cebolla, aceite de oliva, sal] - [Enlace: https://www.recetasderechupete.com/longaniza-a-la-cerveza/17136/] - [Eme;Cris]
+* Solomillo con queso y jamón york - [Comida;Cena] - [Ingredientes: solomillo de cerdo, jamón york, queso en lonchas, aceite de oliva, sal] - [Enlace: https://www.recetasderechupete.com/solomillo-relleno/4568/] - [Eme;Cris]
+* Filete de lomo con patatas fritas y huevo - [Comida] - [Ingredientes: filete de lomo, patatas, huevo, aceite de oliva, sal] - [Enlace: https://www.recetasderechupete.com/filetes-de-lomo-con-huevo/13392/] - [Eme;Cris]
+* Costillas de cerdo al horno con patatas - [Comida] - [Ingredientes: costillas de cerdo, patatas, ajo, aceite de oliva, sal] - [Enlace: https://www.recetasderechupete.com/costillas-al-horno/2382/] - [Eme;Cris]
+* Cerdo guisado - [Comida] - [Ingredientes: carne de cerdo, patata, zanahoria, cebolla, ajo, aceite de oliva, sal] - [Enlace: https://www.recetasderechupete.com/guiso-de-cerdo/13273/] - [Eme;Cris]
+* Sándwich de lacón con queso - [Cena] - [Ingredientes: pan de molde, lacón, queso en lonchas, mantequilla] - [Enlace: https://www.directoalpaladar.com/recetas-de-sandwich/sandwich-caliente-de-lacon] - [Eme;Cris]
+* Sándwich mixto con huevo - [Cena] - [Ingredientes: pan de molde, jamón york, queso en lonchas, huevo, mantequilla] - [Enlace: https://www.recetasderechupete.com/sandwich-mixto-con-huevo/16193/] - [Eme;Cris]
+* Wrap de pollo - [Cena] - [Ingredientes: tortillas de trigo, pechuga de pollo, lechuga, tomate, salsa] - [Enlace: https://www.recetasderechupete.com/wrap-de-pollo/8655/] - [Eme;Cris]
+* Fajitas de pollo - [Comida;Cena] - [Ingredientes: tortillas de trigo, pollo, pimiento, cebolla, especias fajitas] - [Enlace: https://www.recetasderechupete.com/fajitas-de-pollo/10915/] - [Eme;Cris]
+* Fajitas de ternera - [Comida;Cena] - [Ingredientes: tortillas de trigo, ternera, pimiento, cebolla, especias fajitas] - [Enlace: https://www.recetasderechupete.com/fajitas-de-ternera/18452/] - [Eme;Cris]
+* Pizza Acueducto - [Comida;Cena] - [Ingredientes: masa pizza, tomate, mozzarella, queso de cabra, bacon, cebolla caramelizada] - [Enlace: https://www.recetasderechupete.com/pizza-casera/2144/] - [Eme;Cris]
+* Hamburguesa Acueducto - [Comida;Cena] - [Ingredientes: hamburguesa de ternera, pan de hamburguesa, tomate, mozzarella, queso de cabra, bacon, cebolla caramelizada] - [Enlace: https://www.recetasderechupete.com/hamburguesa-casera/2286/] - [Eme;Cris]
+* Empanadas de carne - [Comida;Cena] - [Ingredientes: cebolla, zanahoria, patata, pimiento verde, carne de ternera picada, sal, pimienta, tomillo, obleas para empanadillas, huevo] - [Enlace: https://www.recetasderechupete.com/empanadillas-de-carne/1189/] - [Eme;Cris]
+* Empanadas de pollo al curry - [Comida;Cena] - [Ingredientes: cebolla, zanahoria, patata, pollo desmenuzado, curry, obleas para empanadillas, huevo] - [Enlace: https://www.recetasderechupete.com/empanadillas-de-pollo-al-curry/15807/] - [Eme;Cris]
+* Calamares - [Comida;Cena] - [Ingredientes: calamares, harina, aceite de oliva, sal] - [Enlace: https://www.recetasderechupete.com/calamares-a-la-romana/1778/] - [Eme;Cris]
+* Tortilla de atún - [Comida;Cena] - [Ingredientes: huevo, atún en conserva, patata, cebolla, aceite de oliva, sal] - [Enlace: https://www.recetasderechupete.com/tortilla-de-atun/10127/] - [Eme;Cris]
+* Espaguettis con calabacín - [Comida] - [Ingredientes: espaguetis, calabacín, ajo, aceite de oliva, sal] - [Enlace: https://www.recetasderechupete.com/espaguetis-con-calabacin/14825/] - [Eme;Cris]
+* Brochetas de pollo con pimientos y cebolla - [Cena] - [Ingredientes: pechuga de pollo, pimiento, cebolla, aceite de oliva, sal] - [Enlace: https://www.recetasderechupete.com/brochetas-de-pollo/10431/] - [Eme;Cris]
+* Lacón con patatas - [Comida] - [Ingredientes: lacón, patatas, pimentón, aceite de oliva, sal] - [Enlace: https://www.recetasderechupete.com/lacon-con-patatas/16562/] - [Eme;Cris]
+* Longaniza con pimientos y cebolla - [Comida;Cena] - [Ingredientes: longaniza, pimientos, cebolla, aceite de oliva, sal] - [Enlace: https://www.recetasderechupete.com/longaniza-con-pimientos/18056/] - [Eme;Cris]
+* Tortilla española (Lekue) - [Comida;Cena] - [Ingredientes: huevo, patata, cebolla, aceite de oliva, sal] - [Enlace: https://www.youtube.com/watch?v=1g0Z8Y9f3bM] - [Eme;Cris]
+* Pasta con pimientos - [Comida] - [Ingredientes: espirales de pasta, pimientos asados, queso de cabra, aceite de oliva, sal] - [Enlace: https://www.recetasderechupete.com/pasta-con-pimientos-asados/15047/] - [Eme;Cris]
+* Pollo con tomate (Monsieur Cuisine) - [Comida] - [Ingredientes: pollo, tomate triturado, cebolla, aceite de oliva, sal] - [Enlace: https://www.youtube.com/watch?v=CqGonsv0uyI] - [Eme;Cris]
+* Pollo Tikka Masala - [Comida;Cena] - [Ingredientes: pollo, tomate triturado, nata para cocinar, especias tikka masala, aceite, sal] - [Enlace: https://www.youtube.com/watch?v=5WciQDdxPCQ] - [Eme;Cris]
+---
+
+## 📎 CSV (OBLIGATORIO tras generar todos los platos)
+
+Generar un CSV con las siguientes **cabeceras exactas**:
+
+```
+Numero de plato,Comida,Cena,Lista ingredientes,Enlace,Para
+```
+
+### Reglas CSV
+
+* Separador de columnas: `,`
+* Separador de ingredientes: `;`
+* Compatible con **LibreOffice Calc**
+* Numeración correlativa empezando en 1
+
+### Ejemplo
+
+```
+1,Pizza Acueducto,Brochetas de pollo con pimientos y cebolla,"Comida (masa pizza - tomate - mozzarella - queso de cabra - bacon - cebolla caramelizada) # Cena (pechuga de pollo - pimiento - cebolla - aceite de oliva - sal)",https://glovoapp.com/es/es/segovia/stores/trattoria-pizzeria-da-mario-segovia,Eme - Cris
+
+```
+
+---
+
+
+
+## 📎 CSV (SOLO en la última tanda)
+
+* Incluir los **60 días completos**.
+* Separador de columnas: coma `,`
+* Para la columna "Lista ingredientes", **indicar Comida y Cena por separado** usando este formato:
+  Comida (ingredientes de la comida) # Cena (ingredientes de la cena)
+* Separador de ingredientes dentro de cada bloque: - (espacio-guion-espacio)
+* Si no hay comida o cena, dejar solo el bloque correspondiente.
+* **Separador de Tipo dentro de la celda:**
+  **`-`** (espacio-guion-espacio)
+* **Separador de Para dentro de la celda:**
+  **`-`** (espacio-guion-espacio)  
+* Compatible con **LibreOffice Calc**.
+
+- Todas las columnas de texto (Comida, Cena, Lista ingredientes) deben ir entrecomilladas con comillas dobles (" ").
+- Dentro de Lista ingredientes, separar ingredientes con " - " y separar Comida y Cena con " # ".
+- Separador de columnas sigue siendo la coma (,).
+
+
+---
+
+### ✅ Flujo esperado
+
+* Pegar este prompt → no se genera nada.
+* Escribes **Genera** → días 1–15
+* **Genera** → días 16–30
+* **Genera** → días 31–45
+* **Genera** → días 46–60 + CSV + validación
