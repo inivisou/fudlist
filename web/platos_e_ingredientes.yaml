@@ -1,0 +1,567 @@
+Plato:
+  - id: 1
+    Nombre del plato: "Sopa de cocido + Filete de lomo"
+    comida: true
+    cena: false
+    tipo: sopa
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [1,2,3,4,5,6,7,8,9]
+    enlace: "https://www.recetasderechupete.com/sopa-de-cocido/2466/"
+
+  - id: 2
+    Nombre del plato: "Sopa de fideos + Filete de ternera"
+    comida: true
+    cena: false
+    tipo: sopa
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [10,11,3,4,8,12]
+    enlace: "https://www.recetasderechupete.com/sopa-de-fideos/11389/"
+
+  - id: 3
+    Nombre del plato: "Crema de calabaza"
+    comida: true
+    cena: true
+    tipo: crema
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [13,4,14,3,15,8]
+    enlace: "https://www.recetasderechupete.com/crema-de-calabaza/2395/"
+
+  - id: 4
+    Nombre del plato: "Vichissoi"
+    comida: true
+    cena: true
+    tipo: crema
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [16,4,17,18,8]
+    enlace: "https://www.recetasderechupete.com/vichyssoise/1236/"
+
+  - id: 5
+    Nombre del plato: "Pastel de calabacín"
+    comida: true
+    cena: true
+    tipo: pastel
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [19,20,14,21,15,8]
+    enlace: "https://www.recetasderechupete.com/pastel-de-calabacin/7426/"
+
+  - id: 6
+    Nombre del plato: "Garbanzos con pisto"
+    comida: true
+    cena: false
+    tipo: legumbres
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [22,23,24,14,15,8]
+    enlace: "https://www.recetasderechupete.com/garbanzos-con-pisto/17469/"
+
+  - id: 7
+    Nombre del plato: "Canelones"
+    comida: true
+    cena: false
+    tipo: pasta
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [25,26,27,28,21]
+    enlace: "https://www.recetasderechupete.com/canelones-de-carne/1589/"
+
+  - id: 8
+    Nombre del plato: "Macarrones Carbonara"
+    comida: true
+    cena: false
+    tipo: pasta
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [29,30,20,17,21]
+    enlace: "https://www.recetasderechupete.com/macarrones-a-la-carbonara/987/"
+
+  - id: 9
+    Nombre del plato: "Ensalada de pasta"
+    comida: true
+    cena: true
+    tipo: pasta
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [31,32,33,34,35,36]
+    enlace: "https://www.recetasderechupete.com/ensalada-de-pasta/1504/"
+
+  - id: 10
+    Nombre del plato: "Ensalada de pimientos"
+    comida: true
+    cena: true
+    tipo: ensalada
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [31,37,38,15,8]
+    enlace: "https://www.recetasderechupete.com/ensalada-de-pimientos-asados/5226/"
+
+  - id: 11
+    Nombre del plato: "Longanizas a la cerveza con patatas"
+    comida: true
+    cena: false
+    tipo: carne
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [39,40,4,14,15,8]
+    enlace: "https://www.recetasderechupete.com/longaniza-a-la-cerveza/17136/"
+
+  - id: 12
+    Nombre del plato: "Solomillo con queso y jamón york"
+    comida: true
+    cena: true
+    tipo: carne
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [41,42,43,15,8]
+    enlace: "https://www.recetasderechupete.com/solomillo-relleno/4568/"
+
+  - id: 13
+    Nombre del plato: "Filete de lomo con patatas fritas y huevo"
+    comida: true
+    cena: false
+    tipo: carne
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [9,4,20,15,8]
+    enlace: "https://www.recetasderechupete.com/filetes-de-lomo-con-huevo/13392/"
+
+  - id: 14
+    Nombre del plato: "Costillas de cerdo al horno con patatas"
+    comida: true
+    cena: false
+    tipo: carne
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [44,4,45,15,8]
+    enlace: "https://www.recetasderechupete.com/costillas-al-horno/2382/"
+
+  - id: 15
+    Nombre del plato: "Cerdo guisado"
+    comida: true
+    cena: false
+    tipo: guiso
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [46,4,3,14,45,15,8]
+    enlace: "https://www.recetasderechupete.com/guiso-de-cerdo/13273/"
+
+  - id: 16
+    Nombre del plato: "Sándwich de lacón con queso"
+    comida: false
+    cena: true
+    tipo: sándwich
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [47,48,43,18]
+    enlace: "https://www.directoalpaladar.com/recetas-de-sandwich/sandwich-caliente-de-lacon"
+
+  - id: 17
+    Nombre del plato: "Sándwich mixto con huevo"
+    comida: false
+    cena: true
+    tipo: sándwich
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [47,42,43,20,18]
+    enlace: "https://www.recetasderechupete.com/sandwich-mixto-con-huevo/16193/"
+
+  - id: 18
+    Nombre del plato: "Wrap de pollo"
+    comida: false
+    cena: true
+    tipo: wrap
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [49,50,51,52,53]
+    enlace: "https://www.recetasderechupete.com/wrap-de-pollo/8655/"
+
+  - id: 19
+    Nombre del plato: "Fajitas de pollo"
+    comida: true
+    cena: true
+    tipo: fajitas
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [49,6,24,14,54]
+    enlace: "https://www.recetasderechupete.com/fajitas-de-pollo/10915/"
+
+  - id: 20
+    Nombre del plato: "Fajitas de ternera"
+    comida: true
+    cena: true
+    tipo: fajitas
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [49,55,24,14,54]
+    enlace: "https://www.recetasderechupete.com/fajitas-de-ternera/18452/"
+
+  - id: 21
+    Nombre del plato: "Pizza Acueducto"
+    comida: true
+    cena: true
+    tipo: pizza
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [56,52,57,38,30,58]
+    enlace: "https://www.recetasderechupete.com/pizza-casera/2144/"
+
+  - id: 22
+    Nombre del plato: "Hamburguesa Acueducto"
+    comida: true
+    cena: true
+    tipo: hamburguesa
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [59,60,52,57,38,30,58]
+    enlace: "https://www.recetasderechupete.com/hamburguesa-casera/2286/"
+
+  - id: 23
+    Nombre del plato: "Empanadas de carne"
+    comida: true
+    cena: true
+    tipo: empanadas
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [14,3,4,61,62,8,63,64,65,20]
+    enlace: "https://www.recetasderechupete.com/empanadillas-de-carne/1189/"
+
+  - id: 24
+    Nombre del plato: "Empanadas de pollo al curry"
+    comida: true
+    cena: true
+    tipo: empanadas
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [14,3,4,66,67,65,20]
+    enlace: "https://www.recetasderechupete.com/empanadillas-de-pollo-al-curry/15807/"
+
+  - id: 25
+    Nombre del plato: "Calamares"
+    comida: true
+    cena: true
+    tipo: pescado
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [68,69,15,8]
+    enlace: "https://www.recetasderechupete.com/calamares-a-la-romana/1778/"
+
+  - id: 26
+    Nombre del plato: "Tortilla de atún"
+    comida: true
+    cena: true
+    tipo: tortilla
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [20,70,4,14,15,8]
+    enlace: "https://www.recetasderechupete.com/tortilla-de-atun/10127/"
+
+  - id: 27
+    Nombre del plato: "Espaguettis con calabacín"
+    comida: true
+    cena: false
+    tipo: pasta
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [71,19,45,15,8]
+    enlace: "https://www.recetasderechupete.com/espaguetis-con-calabacin/14825/"
+
+  - id: 28
+    Nombre del plato: "Brochetas de pollo con pimientos y cebolla"
+    comida: false
+    cena: true
+    tipo: brochetas
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [50,24,14,15,8]
+    enlace: "https://www.recetasderechupete.com/brochetas-de-pollo/10431/"
+
+  - id: 29
+    Nombre del plato: "Lacón con patatas"
+    comida: true
+    cena: false
+    tipo: carne
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [48,4,72,15,8]
+    enlace: "https://www.recetasderechupete.com/lacon-con-patatas/16562/"
+
+  - id: 30
+    Nombre del plato: "Longaniza con pimientos y cebolla"
+    comida: true
+    cena: true
+    tipo: carne
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [39,24,14,15,8]
+    enlace: "https://www.recetasderechupete.com/longaniza-con-pimientos/18056/"
+
+  - id: 31
+    Nombre del plato: "Tortilla española (Lekue)"
+    comida: true
+    cena: true
+    tipo: tortilla
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [20,4,14,15,8]
+    enlace: "https://www.youtube.com/watch?v=1g0Z8Y9f3bM"
+
+  - id: 32
+    Nombre del plato: "Pasta con pimientos"
+    comida: true
+    cena: false
+    tipo: pasta
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [73,37,38,15,8]
+    enlace: "https://www.recetasderechupete.com/pasta-con-pimientos-asados/15047/"
+
+  - id: 33
+    Nombre del plato: "Pollo con tomate (Monsieur Cuisine)"
+    comida: true
+    cena: false
+    tipo: pollo
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [6,23,14,15,8]
+    enlace: "https://www.youtube.com/watch?v=CqGonsv0uyI"
+
+  - id: 34
+    Nombre del plato: "Pollo Tikka Masala"
+    comida: true
+    cena: true
+    tipo: pollo
+    Para_Eme: true
+    Para_Cris: true
+    Ingredientes: [6,23,17,74,75,8]
+    enlace: "https://www.youtube.com/watch?v=5WciQDdxPCQ"
+
+Ingredientes:
+  - id: 1
+    nombre: "fideos"
+    Supermercado: ""
+  - id: 2
+    nombre: "caldo de cocido"
+    Supermercado: ""
+  - id: 3
+    nombre: "zanahoria"
+    Supermercado: ""
+  - id: 4
+    nombre: "patata"
+    Supermercado: ""
+  - id: 5
+    nombre: "garbanzos"
+    Supermercado: ""
+  - id: 6
+    nombre: "pollo"
+    Supermercado: ""
+  - id: 7
+    nombre: "jamón"
+    Supermercado: ""
+  - id: 8
+    nombre: "sal"
+    Supermercado: ""
+  - id: 9
+    nombre: "filete de lomo"
+    Supermercado: ""
+  - id: 10
+    nombre: "fideos finos"
+    Supermercado: ""
+  - id: 11
+    nombre: "caldo de pollo"
+    Supermercado: ""
+  - id: 12
+    nombre: "filetes de ternera"
+    Supermercado: ""
+  - id: 13
+    nombre: "calabaza"
+    Supermercado: ""
+  - id: 14
+    nombre: "cebolla"
+    Supermercado: ""
+  - id: 15
+    nombre: "aceite de oliva"
+    Supermercado: ""
+  - id: 16
+    nombre: "puerros"
+    Supermercado: ""
+  - id: 17
+    nombre: "nata para cocinar"
+    Supermercado: ""
+  - id: 18
+    nombre: "mantequilla"
+    Supermercado: ""
+  - id: 19
+    nombre: "calabacín"
+    Supermercado: ""
+  - id: 20
+    nombre: "huevo"
+    Supermercado: ""
+  - id: 21
+    nombre: "queso rallado"
+    Supermercado: ""
+  - id: 22
+    nombre: "garbanzos cocidos"
+    Supermercado: ""
+  - id: 23
+    nombre: "tomate triturado"
+    Supermercado: ""
+  - id: 24
+    nombre: "pimiento"
+    Supermercado: ""
+  - id: 25
+    nombre: "placas de canelones"
+    Supermercado: ""
+  - id: 26
+    nombre: "carne picada"
+    Supermercado: ""
+  - id: 27
+    nombre: "tomate frito"
+    Supermercado: ""
+  - id: 28
+    nombre: "bechamel"
+    Supermercado: ""
+  - id: 29
+    nombre: "macarrones"
+    Supermercado: ""
+  - id: 30
+    nombre: "bacon"
+    Supermercado: ""
+  - id: 31
+    nombre: "espirales de macarrón"
+    Supermercado: ""
+  - id: 32
+    nombre: "nueces"
+    Supermercado: ""
+  - id: 33
+    nombre: "aceite de Módena"
+    Supermercado: ""
+  - id: 34
+    nombre: "pasas"
+    Supermercado: ""
+  - id: 35
+    nombre: "pavo"
+    Supermercado: ""
+  - id: 36
+    nombre: "queso en dados"
+    Supermercado: ""
+  - id: 37
+    nombre: "pimientos asados"
+    Supermercado: ""
+  - id: 38
+    nombre: "queso de cabra"
+    Supermercado: ""
+  - id: 39
+    nombre: "longaniza"
+    Supermercado: ""
+  - id: 40
+    nombre: "cerveza"
+    Supermercado: ""
+  - id: 41
+    nombre: "solomillo de cerdo"
+    Supermercado: ""
+  - id: 42
+    nombre: "jamón york"
+    Supermercado: ""
+  - id: 43
+    nombre: "queso en lonchas"
+    Supermercado: ""
+  - id: 44
+    nombre: "costillas de cerdo"
+    Supermercado: ""
+  - id: 45
+    nombre: "ajo"
+    Supermercado: ""
+  - id: 46
+    nombre: "carne de cerdo"
+    Supermercado: ""
+  - id: 47
+    nombre: "pan de molde"
+    Supermercado: ""
+  - id: 48
+    nombre: "lacón"
+    Supermercado: ""
+  - id: 49
+    nombre: "tortillas de trigo"
+    Supermercado: ""
+  - id: 50
+    nombre: "pechuga de pollo"
+    Supermercado: ""
+  - id: 51
+    nombre: "lechuga"
+    Supermercado: ""
+  - id: 52
+    nombre: "tomate"
+    Supermercado: ""
+  - id: 53
+    nombre: "salsa"
+    Supermercado: ""
+  - id: 54
+    nombre: "especias fajitas"
+    Supermercado: ""
+  - id: 55
+    nombre: "ternera"
+    Supermercado: ""
+  - id: 56
+    nombre: "masa pizza"
+    Supermercado: ""
+  - id: 57
+    nombre: "mozzarella"
+    Supermercado: ""
+  - id: 58
+    nombre: "cebolla caramelizada"
+    Supermercado: ""
+  - id: 59
+    nombre: "hamburguesa de ternera"
+    Supermercado: ""
+  - id: 60
+    nombre: "pan de hamburguesa"
+    Supermercado: ""
+  - id: 61
+    nombre: "pimiento verde"
+    Supermercado: ""
+  - id: 62
+    nombre: "carne de ternera picada"
+    Supermercado: ""
+  - id: 63
+    nombre: "pimienta"
+    Supermercado: ""
+  - id: 64
+    nombre: "tomillo"
+    Supermercado: ""
+  - id: 65
+    nombre: "obleas para empanadillas"
+    Supermercado: ""
+  - id: 66
+    nombre: "pollo desmenuzado"
+    Supermercado: ""
+  - id: 67
+    nombre: "curry"
+    Supermercado: ""
+  - id: 68
+    nombre: "calamares"
+    Supermercado: ""
+  - id: 69
+    nombre: "harina"
+    Supermercado: ""
+  - id: 70
+    nombre: "atún en conserva"
+    Supermercado: ""
+  - id: 71
+    nombre: "espaguetis"
+    Supermercado: ""
+  - id: 72
+    nombre: "pimentón"
+    Supermercado: ""
+  - id: 73
+    nombre: "espirales de pasta"
+    Supermercado: ""
+  - id: 74
+    nombre: "especias tikka masala"
+    Supermercado: ""
+  - id: 75
+    nombre: "aceite"
+    Supermercado: ""

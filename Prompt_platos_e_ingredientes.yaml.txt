@@ -1,0 +1,69 @@
+Prompt_platos_e_ingredientes yaml
+
+Dada la lista completa de platos que aparece a continuación, genera un archivo **YAML** llamado `platos_e_ingredientes.yaml` con la siguiente estructura:
+
+Plato:
+  - id: <número correlativo>                     # 1, 2, 3 …
+    Nombre del plato: "<nombre tal cual>"
+    comida: <true|false>                         # true si la etiqueta incluye “Comida”
+    cena: <true|false>                           # true si la etiqueta incluye “Cena”
+    tipo: "<categoría>"                          # una palabra que describa el tipo principal del plato
+                                                  # (p.ej. pasta, pescado, sándwich, legumbres, sopa, crema, guiso, etc.)
+    Para_Eme: <true|false>                       # true si la etiqueta incluye “Eme”
+    Para_Cris: <true|false>                      # true si la etiqueta incluye “Cris”
+    Ingredientes: [<id‑ingrediente 1>, <id‑ingrediente 2>, …]
+    enlace: "<URL del plato>"
+
+Ingredientes:
+  - id: <número correlativo>                     # 1, 2, 3 …
+    nombre: "<nombre del ingrediente>"
+    Supermercado: ""                              # opcional, lo dejamos vacío
+
+---  
+
+Reglas que debe aplicar el generador  
+
+1. **Un solo registro por ingrediente** – aunque aparezca en varios platos, se crea **un único ID** y se reutiliza en todos los platos que lo necesiten.  
+2. El campo **`tipo`** se determina a partir del nombre o la naturaleza predominante del plato (p.ej. si el nombre contiene “pasta”, “espaguetis”, “macarrones” → `pasta`; si contiene “sándwich” → `sándwich`; si la receta es esencialmente a base de legumbres → `legumbres`; si es una sopa o crema → `sopa` o `crema`; etc.).  
+3. Los valores **`comida`** y **`cena`** son `true` cuando la etiqueta correspondiente está presente dentro de los corchetes `[Comida]` o `[Cena]`.  
+4. Las etiquetas de usuarios (`Eme`, `Cris`) controlan los campos **`Para_Eme`** y **`Para_Cris`**.  
+5. El campo **`enlace`** copia literalmente la URL que sigue a la etiqueta `[Enlace:]`.  
+6. El resultado se escribe en formato **YAML** sin comentarios adicionales.
+
+---  
+
+### Lista de platos
+Sopa de cocido + Filete de lomo - [Comida] - [Ingredientes: fideos, caldo de cocido, zanahoria, patata, garbanzos, pollo, jamón, sal, filetes de lomo] - [Enlace: https://www.recetasderechupete.com/sopa-de-cocido/2466/] - [Eme;Cris]
+Sopa de fideos + Filete de ternera - [Comida] - [Ingredientes: fideos finos, caldo de pollo, zanahoria, patata, sal, filetes de ternera] - [Enlace: https://www.recetasderechupete.com/sopa-de-fideos/11389/] - [Eme;Cris]
+Crema de calabaza - [Comida;Cena] - [Ingredientes: calabaza, patata, cebolla, zanahoria, aceite de oliva, sal] - [Enlace: https://www.recetasderechupete.com/crema-de-calabaza/2395/] - [Eme;Cris]
+Vichissoi - [Comida;Cena] - [Ingredientes: puerros, patata, nata para cocinar, mantequilla, sal] - [Enlace: https://www.recetasderechupete.com/vichyssoise/1236/] - [Eme;Cris]
+Pastel de calabacín - [Comida;Cena] - [Ingredientes: calabacín, huevo, cebolla, queso rallado, aceite de oliva, sal] - [Enlace: https://www.recetasderechupete.com/pastel-de-calabacin/7426/] - [Eme;Cris]
+Garbanzos con pisto - [Comida] - [Ingredientes: garbanzos cocidos, tomate triturado, pimiento rojo, cebolla, aceite de oliva, sal] - [Enlace: https://www.recetasderechupete.com/garbanzos-con-pisto/17469/] - [Eme;Cris]
+Canelones - [Comida] - [Ingredientes: placas de canelones, carne picada, tomate frito, bechamel, queso rallado] - [Enlace: https://www.recetasderechupete.com/canelones-de-carne/1589/] - [Eme;Cris]
+Macarrones Carbonara - [Comida] - [Ingredientes: macarrones, bacon, huevo, nata para cocinar, queso rallado] - [Enlace: https://www.recetasderechupete.com/macarrones-a-la-carbonara/987/] - [Eme;Cris]
+Ensalada de pasta - [Comida;Cena] - [Ingredientes: espirales de macarrón, nueces, aceite de Módena, pasas, pavo, queso en dados] - [Enlace: https://www.recetasderechupete.com/ensalada-de-pasta/1504/] - [Eme;Cris]
+Ensalada de pimientos - [Comida;Cena] - [Ingredientes: espirales de macarrón, pimientos asados, queso de cabra, aceite de oliva, sal] - [Enlace: https://www.recetasderechupete.com/ensalada-de-pimientos-asados/5226/] - [Eme;Cris]
+Longanizas a la cerveza con patatas - [Comida] - [Ingredientes: longaniza, cerveza, patatas, cebolla, aceite de oliva, sal] - [Enlace: https://www.recetasderechupete.com/longaniza-a-la-cerveza/17136/] - [Eme;Cris]
+Solomillo con queso y jamón york - [Comida;Cena] - [Ingredientes: solomillo de cerdo, jamón york, queso en lonchas, aceite de oliva, sal] - [Enlace: https://www.recetasderechupete.com/solomillo-relleno/4568/] - [Eme;Cris]
+Filete de lomo con patatas fritas y huevo - [Comida] - [Ingredientes: filete de lomo, patatas, huevo, aceite de oliva, sal] - [Enlace: https://www.recetasderechupete.com/filetes-de-lomo-con-huevo/13392/] - [Eme;Cris]
+Costillas de cerdo al horno con patatas - [Comida] - [Ingredientes: costillas de cerdo, patatas, ajo, aceite de oliva, sal] - [Enlace: https://www.recetasderechupete.com/costillas-al-horno/2382/] - [Eme;Cris]
+Cerdo guisado - [Comida] - [Ingredientes: carne de cerdo, patata, zanahoria, cebolla, ajo, aceite de oliva, sal] - [Enlace: https://www.recetasderechupete.com/guiso-de-cerdo/13273/] - [Eme;Cris]
+Sándwich de lacón con queso - [Cena] - [Ingredientes: pan de molde, lacón, queso en lonchas, mantequilla] - [Enlace: https://www.directoalpaladar.com/recetas-de-sandwich/sandwich-caliente-de-lacon] - [Eme;Cris]
+Sándwich mixto con huevo - [Cena] - [Ingredientes: pan de molde, jamón york, queso en lonchas, huevo, mantequilla] - [Enlace: https://www.recetasderechupete.com/sandwich-mixto-con-huevo/16193/] - [Eme;Cris]
+Wrap de pollo - [Cena] - [Ingredientes: tortillas de trigo, pechuga de pollo, lechuga, tomate, salsa] - [Enlace: https://www.recetasderechupete.com/wrap-de-pollo/8655/] - [Eme;Cris]
+Fajitas de pollo - [Comida;Cena] - [Ingredientes: tortillas de trigo, pollo, pimiento, cebolla, especias fajitas] - [Enlace: https://www.recetasderechupete.com/fajitas-de-pollo/10915/] - [Eme;Cris]
+Fajitas de ternera - [Comida;Cena] - [Ingredientes: tortillas de trigo, ternera, pimiento, cebolla, especias fajitas] - [Enlace: https://www.recetasderechupete.com/fajitas-de-ternera/18452/] - [Eme;Cris]
+Pizza Acueducto - [Comida;Cena] - [Ingredientes: masa pizza, tomate, mozzarella, queso de cabra, bacon, cebolla caramelizada] - [Enlace: https://www.recetasderechupete.com/pizza-casera/2144/] - [Eme;Cris]
+Hamburguesa Acueducto - [Comida;Cena] - [Ingredientes: hamburguesa de ternera, pan de hamburguesa, tomate, mozzarella, queso de cabra, bacon, cebolla caramelizada] - [Enlace: https://www.recetasderechupete.com/hamburguesa-casera/2286/] - [Eme;Cris]
+Empanadas de carne - [Comida;Cena] - [Ingredientes: cebolla, zanahoria, patata, pimiento verde, carne de ternera picada, sal, pimienta, tomillo, obleas para empanadillas, huevo] - [Enlace: https://www.recetasderechupete.com/empanadillas-de-carne/1189/] - [Eme;Cris]
+Empanadas de pollo al curry - [Comida;Cena] - [Ingredientes: cebolla, zanahoria, patata, pollo desmenuzado, curry, obleas para empanadillas, huevo] - [Enlace: https://www.recetasderechupete.com/empanadillas-de-pollo-al-curry/15807/] - [Eme;Cris]
+Calamares - [Comida;Cena] - [Ingredientes: calamares, harina, aceite de oliva, sal] - [Enlace: https://www.recetasderechupete.com/calamares-a-la-romana/1778/] - [Eme;Cris]
+Tortilla de atún - [Comida;Cena] - [Ingredientes: huevo, atún en conserva, patata, cebolla, aceite de oliva, sal] - [Enlace: https://www.recetasderechupete.com/tortilla-de-atun/10127/] - [Eme;Cris]
+Espaguettis con calabacín - [Comida] - [Ingredientes: espaguetis, calabacín, ajo, aceite de oliva, sal] - [Enlace: https://www.recetasderechupete.com/espaguetis-con-calabacin/14825/] - [Eme;Cris]
+Brochetas de pollo con pimientos y cebolla - [Cena] - [Ingredientes: pechuga de pollo, pimiento, cebolla, aceite de oliva, sal] - [Enlace: https://www.recetasderechupete.com/brochetas-de-pollo/10431/] - [Eme;Cris]
+Lacón con patatas - [Comida] - [Ingredientes: lacón, patatas, pimentón, aceite de oliva, sal] - [Enlace: https://www.recetasderechupete.com/lacon-con-patatas/16562/] - [Eme;Cris]
+Longaniza con pimientos y cebolla - [Comida;Cena] - [Ingredientes: longaniza, pimientos, cebolla, aceite de oliva, sal] - [Enlace: https://www.recetasderechupete.com/longaniza-con-pimientos/18056/] - [Eme;Cris]
+Tortilla española (Lekue) - [Comida;Cena] - [Ingredientes: huevo, patata, cebolla, aceite de oliva, sal] - [Enlace: https://www.youtube.com/watch?v=1g0Z8Y9f3bM] - [Eme;Cris]
+Pasta con pimientos - [Comida] - [Ingredientes: espirales de pasta, pimientos asados, queso de cabra, aceite de oliva, sal] - [Enlace: https://www.recetasderechupete.com/pasta-con-pimientos-asados/15047/] - [Eme;Cris]
+Pollo con tomate (Monsieur Cuisine) - [Comida] - [Ingredientes: pollo, tomate triturado, cebolla, aceite de oliva, sal] - [Enlace: https://www.youtube.com/watch?v=CqGonsv0uyI] - [Eme;Cris]
+Pollo Tikka Masala - [Comida;Cena] - [Ingredientes: pollo, tomate triturado, nata para cocinar, especias tikka masala, aceite, sal] - [Enlace: https://www.youtube.com/watch?v=5WciQDdxPCQ] - [Eme;Cris]
