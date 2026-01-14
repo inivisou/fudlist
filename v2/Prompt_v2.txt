@@ -1,0 +1,374 @@
+Te voy a pasar un prompt y después te iré pidiendo cosas.
+
+	- Analizalo minuciosamente para que te quede claro que es lo que estoy buscando. 
+	- Ante cualquier mínima duda preguntamela. 
+	- No hace falta que ejecutes el prompt, ahora mismo, sólo tienes que centrarte en dejar claro lo que se desea.
+	- Lo que te vaya solicitando, generamelo un bloque sin renderizar tus respuestas para que pueda copiar en un txt.
+	
+	Tarda lo que necesites y analizalo MUY BIEN y no escatimes en caracteres, puede ser todo lo extenso que quieras para que quede claro. 
+
+---
+
+# PROMPT TÉCNICO COMPLETO – GENERADOR DE MENÚS SEMANALES EN PHP CON YAML
+
+---
+
+## 🎭 ROL QUE DEBE ASUMIR LA IA
+
+Asume el rol de **Arquitecto de Software Web Senior y Desarrollador PHP Experto**, con amplia experiencia en:
+
+- PHP sin frameworks obligatorios
+- Aplicaciones web sin base de datos
+- Uso de ficheros YAML como fuente de datos
+- Diseño de lógica compleja de negocio
+- UX clara y sin ambigüedades
+- Accesibilidad WCAG 2.2
+- Interfaces responsive (móvil y escritorio)
+- JavaScript moderno (Fetch API, sin jQuery)
+- Gestión de estado en cliente
+- Generación de PDFs en cliente
+- Código mantenible, robusto y bien estructurado
+
+Debes pensar **como arquitecto**, no solo como programador.  
+Prioriza claridad conceptual, coherencia de flujos y mantenibilidad.
+
+---
+
+## 🧠 CONTEXTO GENERAL DEL PROYECTO
+
+Se desea construir una **aplicación web en PHP** para la **generación de menús semanales (comida y cena)**.
+
+### Principios fundamentales
+
+- ❌ No usar base de datos
+- ✅ Usar exclusivamente **ficheros YAML**
+- ✅ Los YAML actúan como si fueran tablas relacionales
+- ✅ La aplicación debe ser segura, simple y editable manualmente
+- ✅ Todo el contenido se genera dinámicamente desde los YAML
+
+---
+
+## 🗂️ MODELO DE DATOS (FUENTE ÚNICA DE VERDAD)
+
+Existen **tres ficheros YAML**:
+
+- `Platos.yaml`
+- `Recetas.yaml`
+- `Ingredientes.yaml`
+
+Relación lógica:
+
+Plato (1) → Receta (1) → Ingredientes (N)
+
+---
+
+### 📄 Platos.yaml
+
+Representa **platos finales consumibles**.  
+Un plato puede ser internamente compuesto (ej. sopa + carne), pero **siempre se trata como una única unidad** y **tiene una sola receta asociada**.
+
+```yaml
+Platos:
+  - id: 1
+    nombre: "Sopa de cocido + Filete de lomo"
+    comida: true
+    cena: false
+    tipo: sopa
+    Para_Eme: true
+    Para_Cris: true
+    id_receta: 1
+```
+
+Notas:
+- `tipo` se usa para restricciones temporales
+- `Para_Eme` y `Para_Cris` influyen en la lógica de emparejamiento
+- No se guardan URLs aquí, solo IDs
+
+---
+
+### 📄 Recetas.yaml
+
+Describe **cómo se cocina el plato** y **qué necesita**.
+
+```yaml
+Recetas:
+  - id: 1
+    Titulo_html: "Receta de Sopa de cocido + Filete de lomo"
+    Subtitulo_html: "Plato tradicional completo"
+    Texto_html: "<p>Descripción completa de la receta en HTML...</p>"
+    Ingredientes: [1, 2, 3, 4]
+    Herramientas: ["olla", "sartén"]
+    Enlace: "https://www.ejemplo.com/receta"
+```
+
+---
+
+### 📄 Ingredientes.yaml
+
+```yaml
+Ingredientes:
+  - id: 1
+    nombre: "Filetes de lomo"
+    calorias_x_100g: 250
+    Supermercado: "Carnicería"
+```
+
+---
+
+## 🧩 ARQUITECTURA GENERAL
+
+La aplicación consta de **dos ficheros PHP principales**:
+
+1. `index.php` → Generador de menús
+2. `receta.php` → Visualización de recetas
+
+---
+
+## 🧪 index.php — GENERADOR DE MENÚS
+
+---
+
+## 🧠 CONCEPTO CLAVE: DOS MENÚS DIFERENCIADOS
+
+### 1️⃣ MENÚ TENTATIVO (GENERADO AUTOMÁTICAMENTE)
+
+- Se genera al pulsar **Generar**
+- Cumple **todas las restricciones**
+- ❌ **NO permite platos repetidos**
+- ❌ **NO es editable**
+- ❌ **NO tiene checkboxes**
+- Actúa como **origen / catálogo de selección**
+
+---
+
+### 2️⃣ MENÚ EFECTIVO (CONSTRUIDO POR EL USUARIO)
+
+- Se construye mediante interacciones del usuario
+- ✅ **ES editable**
+- ✅ **TIENE checkboxes**
+- ✅ **PUEDE tener platos repetidos**
+- Es el menú real que:
+  - genera la lista de ingredientes
+  - genera el PDF final
+
+---
+
+## 🎛️ INTERFAZ DE USUARIO
+
+1. **Selector múltiple**
+   - Etiqueta: `No contenga herramientas`
+   - Opciones: herramientas únicas desde `Recetas.yaml`
+   - Excluye recetas que usen cualquiera de las seleccionadas
+
+2. **Input numérico**
+   - Etiqueta: `Días`
+   - Entero obligatorio
+   - Mínimo: 1
+   - Máximo: (total de platos / 2)
+
+3. **Botón**
+   - Texto: `Generar`
+
+---
+
+## 📊 TABLA DEL MENÚ TENTATIVO (SIN CHECKBOXES)
+
+### Cabecera
+
+```
+Nº | Comida | Para | Cena | Para
+```
+
+### Ejemplo de filas
+
+```
+1 | Sopa de cocido + Filete de lomo [Receta] | Eme<br/>Cris |
+    Sándwich mixto con huevo [Receta] | Eme
+
+2 | Garbanzos con pisto [Receta] | Cris |
+    Wrap de pollo [Receta] | Eme<br/>Cris
+```
+
+---
+
+## 🖱️ INTERACCIÓN CON EL MENÚ TENTATIVO (CRÍTICO)
+
+### 📌 Acción de AÑADIR
+
+- **NO hay checkboxes**
+- El usuario hace **click sobre la celda** de:
+  - una comida
+  - o una cena
+
+#### Al hacer click:
+- Se añade el plato al **menú efectivo**
+- Se coloca en:
+  - el **primer hueco libre de comida** si es comida
+  - el **primer hueco libre de cena** si es cena
+- Se muestra un **alert visual agradable** indicando:
+  - “Comida añadida”
+  - o “Cena añadida”
+
+---
+
+## 📊 TABLA DEL MENÚ EFECTIVO (EDITABLE)
+
+Esta tabla representa el menú real.
+
+### Cabecera
+
+```
+Día | Comida | Quitar | Cena | Quitar
+```
+
+### Ejemplo
+
+```
+1 | Sopa de cocido + Filete de lomo | [✔] |
+    Wrap de pollo | [✔]
+
+2 | Garbanzos con pisto | [✔] |
+    (vacío) |
+```
+
+---
+
+## ☑️ CHECKBOXES DEL MENÚ EFECTIVO
+
+### Reglas IMPORTANTES
+
+- Los **checkboxes SOLO EXISTEN AQUÍ**
+- Representan:
+  - “Este plato forma parte del menú efectivo”
+
+### Al DESMARCAR un checkbox de COMIDA
+
+- Esa comida:
+  - se elimina del menú efectivo
+  - deja su hueco libre
+- El día queda disponible para:
+  - recibir otra comida desde el menú tentativo
+
+### Al DESMARCAR un checkbox de CENA
+
+- Esa cena:
+  - se elimina del menú efectivo
+  - deja su hueco libre
+- El día queda disponible para:
+  - recibir otra cena desde el menú tentativo
+
+---
+
+## 🔁 REGLAS DE REPETICIÓN
+
+- Menú tentativo:
+  - ❌ No permite repetidos
+- Menú efectivo:
+  - ✅ Permite repetidos sin restricción
+
+---
+
+## 🔄 LISTA DINÁMICA DE INGREDIENTES (AJAX)
+
+- Refleja **EXCLUSIVAMENTE el menú efectivo**
+- Se actualiza en tiempo real
+- Usa Fetch API (JS nativo)
+
+### Ejemplo
+
+```
+1 | Comida | Sopa de cocido + Filete de lomo |
+  · Filetes de lomo
+  · Caldo
+  · Fideos
+  · Sal
+```
+
+---
+
+## 📄 PDF DE INGREDIENTES
+
+Dos acciones separadas:
+
+- **Vista Previa** → abre PDF en nueva pestaña
+- **Descargar** → descarga directa
+
+Contenido:
+- Ingredientes únicos
+- Ordenados por `Supermercado`
+
+PDF generado **en cliente**.
+
+---
+
+## 🍳 receta.php — VISUALIZACIÓN DE RECETA
+
+- Recibe `id`
+- Lee `Recetas.yaml`
+- Genera toda la estructura HTML desde PHP
+
+Orden obligatorio:
+1. Titulo_html (enlace externo, target="_blank")
+2. Subtitulo_html
+3. Texto_html
+4. Ingredientes
+5. Herramientas
+
+---
+
+## 🚦 RESTRICCIONES DE GENERACIÓN (MENÚ TENTATIVO)
+
+- No repetir platos salvo necesidad
+- ≥ 4 días entre pasta
+- ≥ 9 días entre fajitas
+- ≥ 5 días entre tortillas
+- ≥ 5 días entre cremas
+- Al menos un pescado cada 7 días
+
+---
+
+## 👥 LÓGICA DE PERSONAS (EME / CRIS)
+
+- Si hay plato solo para Cris:
+  - mantenerlo
+  - añadir uno para Eme
+- Prioridad:
+  1. Para_X true / Para_Y false
+  2. Ambos true
+- Lógica simétrica
+
+---
+
+## ♿ ACCESIBILIDAD
+
+- WCAG 2.2 obligatorio
+- Navegación por teclado
+- Labels asociados
+- Tablas accesibles
+- Responsive móvil y escritorio
+
+---
+
+## 🔐 RESTRICCIONES FINALES
+
+- ❌ No base de datos
+- ❌ No jQuery
+- ❌ No frameworks obligatorios
+- ✅ Validar YAML
+- ✅ Manejar errores
+- ✅ Código claro y comentado
+
+---
+
+## 🧠 EXPECTATIVA FINAL
+
+Este documento es una **especificación técnica completa y cerrada**.  
+No debe reinterpretarse, simplificarse ni ignorarse ninguna regla.
+
+FIN DEL PROMPT
+
+
+----------
+
+1-El menú efectivo, solo en cliente (ya se generará el pdf si se quiere guardar.
+2- Al pulsar generar se resetea el tentativo y se mantiene el efectivo
