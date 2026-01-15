@@ -1,0 +1,154 @@
+Perfecto, Emeterio.  
+Con la opción **C** queda completamente definido el comportamiento del PDF:
+
+> **El PDF debe incluir un título con la fecha de generación.**
+
+Voy a integrar esta decisión dentro de toda la arquitectura para que quede **cerrado al 100%**, sin ningún punto interpretable.
+
+---
+
+# 🔒 INTEGRACIÓN FINAL DE LA OPCIÓN C (TÍTULO + FECHA EN EL PDF)
+
+## ✔️ 1. Estructura final del PDF (versión definitiva)
+
+El PDF tendrá **dos grandes bloques**, en este orden:
+
+---
+
+## 🟦 **BLOQUE 1 — CABECERA DEL PDF**
+
+Incluye:
+
+- **Título fijo:**  
+  `Menú efectivo`
+
+- **Fecha de generación:**  
+  Formato recomendado (pero tú puedes cambiarlo cuando quieras):  
+  `Generado el: 15/01/2026`  
+  (día/mes/año, sin hora)
+
+Notas:
+
+- La fecha se obtiene **en cliente**, en el momento de generar el PDF.
+- No depende del servidor.
+- No depende del menú tentativo.
+- Refleja exactamente el instante de generación.
+
+---
+
+## 🟦 **BLOQUE 2 — MENÚ EFECTIVO DETALLADO**
+
+Tabla con columnas:
+
+```
+DIA | PERIODO | NOMBRE | INGREDIENTES
+```
+
+Donde:
+
+- **DIA** → número correlativo tras compactación inmediata.
+- **PERIODO** → “Comida” o “Cena”.
+- **NOMBRE** → nombre del plato.
+- **INGREDIENTES** → lista de ingredientes de la receta, separados por “ - ”.
+
+Ejemplo EXACTO según tu formato:
+
+```
+1 | Comida | Pollo | Pollo - Sal - Aceite
+1 | Cena   | Ternera | Ternera - Sal - Aceite
+2 | Comida | Sopa | Sopa - Sal - Aceite
+2 | Cena   | Tortilla de patatas | Huevo - Patatas - Sal - Aceite
+```
+
+Reglas:
+
+- Se listan **todos los platos del menú efectivo**, en orden.
+- No se deduplican ingredientes aquí.
+- No se ordenan por supermercado aquí.
+- Esta parte refleja **exactamente** el menú efectivo en ese momento.
+
+---
+
+## 🟦 **BLOQUE 3 — LISTA DE INGREDIENTES ÚNICOS**
+
+Tabla con columnas:
+
+```
+Numero | Nombre | Supermercado
+```
+
+Reglas:
+
+- Ingredientes **únicos**, sin repetir.
+- Ordenados por **supermercado** (alfabético).
+- Dentro del mismo supermercado, ordenados por nombre.
+- `Numero` es un índice correlativo.
+
+Ejemplo EXACTO según tu formato:
+
+```
+1 | Pollo   | Lupa
+2 | Sal     | Lidl
+3 | Aceite  | Aldi
+4 | Sopa    | Aldi
+5 | Huevo   | Aldi
+6 | Patatas | Aldi
+```
+
+Notas:
+
+- Si un ingrediente no existe en `ingredientes.json` → supermercado = `"Desconocido"`.
+- Esta lista se genera **solo** a partir del menú efectivo.
+- No depende del menú tentativo.
+
+---
+
+# 🔍 IMPACTO DE ESTA DECISIÓN EN EL SISTEMA
+
+### 1. El PDF ahora tiene una identidad clara
+- Título fijo.
+- Fecha de generación.
+- Estructura profesional.
+
+### 2. La fecha se obtiene en cliente
+- No depende del servidor.
+- No depende de zona horaria del hosting.
+- Siempre coincide con el momento real de generación.
+
+### 3. La compactación inmediata del menú efectivo garantiza coherencia
+- La numeración del PDF siempre será limpia.
+- No habrá saltos de días.
+
+### 4. La lista de ingredientes coincide con la lista dinámica
+- Misma lógica.
+- Misma deduplicación.
+- Mismo orden.
+
+---
+
+# ✔️ ESPECIFICACIÓN FINAL CERRADA
+
+Con esta última decisión, ya no queda **ninguna ambigüedad** en:
+
+- Modelo de datos  
+- Lógica de generación  
+- Lógica de exclusividades  
+- Restricciones de tipo  
+- Política de repeticiones  
+- Interacción tentativo → efectivo  
+- Crecimiento dinámico  
+- Compactación inmediata  
+- Lista dinámica  
+- PDF (estructura, orden, contenido, título, fecha)  
+- UX  
+- Accesibilidad  
+- Restricciones técnicas  
+
+El sistema está **cerrado al 100%** y listo para pasar a la siguiente fase.
+
+---
+
+# 🟢 Cuando tú digas:  
+**“Vamos a ello, genera la estructura de ficheros”**  
+
+Te entregaré la estructura completa en un **bloque TXT sin renderizar**, tal como quieres.

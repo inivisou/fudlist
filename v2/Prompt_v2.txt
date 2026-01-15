@@ -9,7 +9,8 @@ Te voy a pasar un prompt y después te iré pidiendo cosas.
 
 ---
 
-# PROMPT TÉCNICO COMPLETO – GENERADOR DE MENÚS SEMANALES EN PHP CON YAML
+# PROMPT TÉCNICO COMPLETO – GENERADOR DE MENÚS SEMANALES EN PHP CON JSON  
+# (INGREDIENTES IDENTIFICADOS POR NOMBRE – MENÚ TENTATIVO + MENÚ EFECTIVO)
 
 ---
 
@@ -19,18 +20,18 @@ Asume el rol de **Arquitecto de Software Web Senior y Desarrollador PHP Experto*
 
 - PHP sin frameworks obligatorios
 - Aplicaciones web sin base de datos
-- Uso de ficheros YAML como fuente de datos
+- Uso de ficheros JSON como fuente de datos
 - Diseño de lógica compleja de negocio
 - UX clara y sin ambigüedades
 - Accesibilidad WCAG 2.2
 - Interfaces responsive (móvil y escritorio)
 - JavaScript moderno (Fetch API, sin jQuery)
-- Gestión de estado en cliente
+- Gestión de estado exclusivamente en cliente
 - Generación de PDFs en cliente
 - Código mantenible, robusto y bien estructurado
 
 Debes pensar **como arquitecto**, no solo como programador.  
-Prioriza claridad conceptual, coherencia de flujos y mantenibilidad.
+Prioriza claridad conceptual, corrección lógica, consistencia de datos y mantenibilidad.
 
 ---
 
@@ -41,278 +42,267 @@ Se desea construir una **aplicación web en PHP** para la **generación de menú
 ### Principios fundamentales
 
 - ❌ No usar base de datos
-- ✅ Usar exclusivamente **ficheros YAML**
-- ✅ Los YAML actúan como si fueran tablas relacionales
+- ✅ Usar exclusivamente **ficheros JSON**
+- ✅ Los JSON actúan como si fueran tablas relacionales
 - ✅ La aplicación debe ser segura, simple y editable manualmente
-- ✅ Todo el contenido se genera dinámicamente desde los YAML
+- ✅ Todo el contenido se genera dinámicamente desde los JSON
+- ✅ El **menú efectivo vive únicamente en cliente**
+- ✅ La persistencia solo existe si el usuario genera un PDF
 
 ---
 
 ## 🗂️ MODELO DE DATOS (FUENTE ÚNICA DE VERDAD)
 
-Existen **tres ficheros YAML**:
+Existen **tres ficheros JSON**:
 
-- `Platos.yaml`
-- `Recetas.yaml`
-- `Ingredientes.yaml`
+- `platos.json`
+- `recetas.json`
+- `ingredientes.json`
 
 Relación lógica:
 
 Plato (1) → Receta (1) → Ingredientes (N)
 
+⚠️ **Los ingredientes se referencian por nombre**, no por ID.
+
 ---
 
-### 📄 Platos.yaml
+## 📄 platos.json
 
-Representa **platos finales consumibles**.  
-Un plato puede ser internamente compuesto (ej. sopa + carne), pero **siempre se trata como una única unidad** y **tiene una sola receta asociada**.
-
-```yaml
-Platos:
-  - id: 1
-    nombre: "Sopa de cocido + Filete de lomo"
-    comida: true
-    cena: false
-    tipo: sopa
-    Para_Eme: true
-    Para_Cris: true
-    id_receta: 1
+```json
+{
+  "platos": [
+    {
+      "id": 1,
+      "nombre": "Sopa de cocido + Filete de lomo",
+      "comida": true,
+      "cena": false,
+      "tipo": "sopa",
+      "para_eme": true,
+      "para_cris": true,
+      "id_receta": 1
+    }
+  ]
+}
 ```
 
-Notas:
+Reglas:
+- Un plato **siempre tiene una única receta**
+- Puede ser internamente compuesto
 - `tipo` se usa para restricciones temporales
-- `Para_Eme` y `Para_Cris` influyen en la lógica de emparejamiento
-- No se guardan URLs aquí, solo IDs
 
 ---
 
-### 📄 Recetas.yaml
+## 📄 recetas.json
 
-Describe **cómo se cocina el plato** y **qué necesita**.
-
-```yaml
-Recetas:
-  - id: 1
-    Titulo_html: "Receta de Sopa de cocido + Filete de lomo"
-    Subtitulo_html: "Plato tradicional completo"
-    Texto_html: "<p>Descripción completa de la receta en HTML...</p>"
-    Ingredientes: [1, 2, 3, 4]
-    Herramientas: ["olla", "sartén"]
-    Enlace: "https://www.ejemplo.com/receta"
+```json
+{
+  "recetas": [
+    {
+      "id": 1,
+      "titulo_html": "Receta de Sopa de cocido + Filete de lomo",
+      "subtitulo_html": "Plato tradicional completo",
+      "texto_html": "<p>Descripción completa de la receta en HTML...</p>",
+      "ingredientes": [
+        "Filetes de lomo",
+        "Caldo de cocido",
+        "Fideos",
+        "Sal"
+      ],
+      "herramientas": ["olla", "sartén"],
+      "enlace": "https://www.ejemplo.com/receta"
+    }
+  ]
+}
 ```
 
 ---
 
-### 📄 Ingredientes.yaml
+## 📄 ingredientes.json
 
-```yaml
-Ingredientes:
-  - id: 1
-    nombre: "Filetes de lomo"
-    calorias_x_100g: 250
-    Supermercado: "Carnicería"
+```json
+{
+  "ingredientes": [
+    {
+      "nombre": "Filetes de lomo",
+      "calorias_x_100g": 250,
+      "supermercado": "Carnicería"
+    },
+    {
+      "nombre": "Sal",
+      "supermercado": "General"
+    }
+  ]
+}
 ```
+
+Reglas:
+- `nombre` es **clave única**
+- Se usa para agrupar, ordenar y deduplicar ingredientes
 
 ---
 
-## 🧩 ARQUITECTURA GENERAL
+## 🧩 RESOLUCIÓN DE INGREDIENTES
 
-La aplicación consta de **dos ficheros PHP principales**:
+- Buscar por coincidencia exacta de nombre
+- Si no existe en el catálogo:
+  - se acepta igualmente
+  - supermercado = `"Desconocido"`
+- Nunca se rompe la ejecución
 
-1. `index.php` → Generador de menús
-2. `receta.php` → Visualización de recetas
+---
+
+## 🧠 CONCEPTO CLAVE: DOS MENÚS TOTALMENTE DIFERENCIADOS
+
+### 1️⃣ MENÚ TENTATIVO (GENERADO)
+
+- Se genera al pulsar **Generar**
+- Cumple **todas las restricciones**
+- ❌ No repetidos
+- ❌ No editable
+- ❌ No tiene checkboxes
+- Es **efímero**
+- Se **resetea completamente** cada vez que se pulsa Generar
+
+---
+
+### 2️⃣ MENÚ EFECTIVO (SELECCIONADO POR EL USUARIO)
+
+- Vive **únicamente en cliente**
+- ❌ No se guarda en servidor
+- ❌ No persiste entre recargas
+- ✅ Editable
+- ✅ Puede contener repetidos
+- ✅ Es la base para:
+  - lista dinámica de ingredientes
+  - generación del PDF
+
+⚠️ Al pulsar **Generar** de nuevo:
+- el menú tentativo se reinicia
+- el menú efectivo **SE MANTIENE INTACTO**
 
 ---
 
 ## 🧪 index.php — GENERADOR DE MENÚS
 
----
-
-## 🧠 CONCEPTO CLAVE: DOS MENÚS DIFERENCIADOS
-
-### 1️⃣ MENÚ TENTATIVO (GENERADO AUTOMÁTICAMENTE)
-
-- Se genera al pulsar **Generar**
-- Cumple **todas las restricciones**
-- ❌ **NO permite platos repetidos**
-- ❌ **NO es editable**
-- ❌ **NO tiene checkboxes**
-- Actúa como **origen / catálogo de selección**
-
----
-
-### 2️⃣ MENÚ EFECTIVO (CONSTRUIDO POR EL USUARIO)
-
-- Se construye mediante interacciones del usuario
-- ✅ **ES editable**
-- ✅ **TIENE checkboxes**
-- ✅ **PUEDE tener platos repetidos**
-- Es el menú real que:
-  - genera la lista de ingredientes
-  - genera el PDF final
-
----
-
-## 🎛️ INTERFAZ DE USUARIO
+### 🎛️ CONTROLES
 
 1. **Selector múltiple**
-   - Etiqueta: `No contenga herramientas`
-   - Opciones: herramientas únicas desde `Recetas.yaml`
-   - Excluye recetas que usen cualquiera de las seleccionadas
+   - Texto: `No contenga herramientas`
+   - Opciones: herramientas únicas de `recetas.json`
+   - Excluye recetas con esas herramientas
 
 2. **Input numérico**
-   - Etiqueta: `Días`
+   - Texto: `Días`
    - Entero obligatorio
    - Mínimo: 1
-   - Máximo: (total de platos / 2)
+   - Máximo: total_platos / 2
 
 3. **Botón**
    - Texto: `Generar`
 
 ---
 
-## 📊 TABLA DEL MENÚ TENTATIVO (SIN CHECKBOXES)
-
-### Cabecera
+## 📊 MENÚ TENTATIVO (TABLA NO EDITABLE)
 
 ```
 Nº | Comida | Para | Cena | Para
 ```
 
-### Ejemplo de filas
+Ejemplo:
 
 ```
-1 | Sopa de cocido + Filete de lomo [Receta] | Eme<br/>Cris |
+1 | Sopa de cocido + Filete de lomo [Receta] | Eme / Cris |
     Sándwich mixto con huevo [Receta] | Eme
-
-2 | Garbanzos con pisto [Receta] | Cris |
-    Wrap de pollo [Receta] | Eme<br/>Cris
 ```
 
+- No hay checkboxes
+- Click sobre la **celda** añade al menú efectivo
+
 ---
 
-## 🖱️ INTERACCIÓN CON EL MENÚ TENTATIVO (CRÍTICO)
+## 🖱️ INTERACCIÓN CON EL MENÚ TENTATIVO
 
-### 📌 Acción de AÑADIR
-
-- **NO hay checkboxes**
-- El usuario hace **click sobre la celda** de:
-  - una comida
-  - o una cena
-
-#### Al hacer click:
-- Se añade el plato al **menú efectivo**
-- Se coloca en:
-  - el **primer hueco libre de comida** si es comida
-  - el **primer hueco libre de cena** si es cena
-- Se muestra un **alert visual agradable** indicando:
+- Click en celda de comida → añadir comida
+- Click en celda de cena → añadir cena
+- Se coloca en el **primer hueco libre**
+- Mostrar alert visual:
   - “Comida añadida”
-  - o “Cena añadida”
+  - “Cena añadida”
 
 ---
 
-## 📊 TABLA DEL MENÚ EFECTIVO (EDITABLE)
+## 📊 MENÚ EFECTIVO (TABLA EDITABLE – SOLO CLIENTE)
 
-Esta tabla representa el menú real.
-
-### Cabecera
+Los días son **números correlativos**, empezando en 1, sin fechas.
 
 ```
 Día | Comida | Quitar | Cena | Quitar
 ```
 
-### Ejemplo
+### Ejemplo de MENÚ EFECTIVO
 
 ```
-1 | Sopa de cocido + Filete de lomo | [✔] |
-    Wrap de pollo | [✔]
-
-2 | Garbanzos con pisto | [✔] |
-    (vacío) |
+1 | Sopa de cocido + Filete de lomo | [✔] | Wrap de pollo | [✔]
+2 | Garbanzos con pisto            | [✔] |              |
+3 |                                |     | Tortilla francesa | [✔]
 ```
 
 ---
 
 ## ☑️ CHECKBOXES DEL MENÚ EFECTIVO
 
-### Reglas IMPORTANTES
-
-- Los **checkboxes SOLO EXISTEN AQUÍ**
-- Representan:
-  - “Este plato forma parte del menú efectivo”
-
-### Al DESMARCAR un checkbox de COMIDA
-
-- Esa comida:
-  - se elimina del menú efectivo
-  - deja su hueco libre
-- El día queda disponible para:
-  - recibir otra comida desde el menú tentativo
-
-### Al DESMARCAR un checkbox de CENA
-
-- Esa cena:
-  - se elimina del menú efectivo
-  - deja su hueco libre
-- El día queda disponible para:
-  - recibir otra cena desde el menú tentativo
+- Solo existen en el menú efectivo
+- Al desmarcar:
+  - se elimina la comida o cena
+  - el hueco queda libre
+- El hueco puede volver a rellenarse desde el tentativo
 
 ---
 
-## 🔁 REGLAS DE REPETICIÓN
+## 🔄 LISTA DINÁMICA DE INGREDIENTES (CLIENTE)
 
-- Menú tentativo:
-  - ❌ No permite repetidos
-- Menú efectivo:
-  - ✅ Permite repetidos sin restricción
+- Se actualiza en tiempo real (AJAX)
+- Basada **solo en el menú efectivo**
+- Ingredientes agrupados por nombre
 
----
-
-## 🔄 LISTA DINÁMICA DE INGREDIENTES (AJAX)
-
-- Refleja **EXCLUSIVAMENTE el menú efectivo**
-- Se actualiza en tiempo real
-- Usa Fetch API (JS nativo)
-
-### Ejemplo
+Ejemplo:
 
 ```
-1 | Comida | Sopa de cocido + Filete de lomo |
-  · Filetes de lomo
-  · Caldo
-  · Fideos
-  · Sal
+Día 1 – Comida
+· Filetes de lomo
+· Caldo de cocido
+· Fideos
+· Sal
 ```
 
 ---
 
 ## 📄 PDF DE INGREDIENTES
 
-Dos acciones separadas:
+Dos opciones:
 
-- **Vista Previa** → abre PDF en nueva pestaña
-- **Descargar** → descarga directa
+- **Vista previa** (nueva pestaña)
+- **Descargar**
 
 Contenido:
 - Ingredientes únicos
-- Ordenados por `Supermercado`
-
-PDF generado **en cliente**.
+- Ordenados por supermercado
 
 ---
 
 ## 🍳 receta.php — VISUALIZACIÓN DE RECETA
 
 - Recibe `id`
-- Lee `Recetas.yaml`
-- Genera toda la estructura HTML desde PHP
+- Lee `recetas.json`
+- Renderiza:
+  1. titulo_html (enlace externo, target="_blank")
+  2. subtitulo_html
+  3. texto_html
+  4. lista de ingredientes
+  5. lista de herramientas
 
-Orden obligatorio:
-1. Titulo_html (enlace externo, target="_blank")
-2. Subtitulo_html
-3. Texto_html
-4. Ingredientes
-5. Herramientas
+Toda la estructura HTML la genera PHP.
 
 ---
 
@@ -329,13 +319,11 @@ Orden obligatorio:
 
 ## 👥 LÓGICA DE PERSONAS (EME / CRIS)
 
-- Si hay plato solo para Cris:
-  - mantenerlo
-  - añadir uno para Eme
+- Mantener platos exclusivos
+- Añadir complemento si coincide el día
 - Prioridad:
-  1. Para_X true / Para_Y false
-  2. Ambos true
-- Lógica simétrica
+  1. Exclusivo
+  2. Compartido
 
 ---
 
@@ -343,9 +331,8 @@ Orden obligatorio:
 
 - WCAG 2.2 obligatorio
 - Navegación por teclado
-- Labels asociados
 - Tablas accesibles
-- Responsive móvil y escritorio
+- Responsive
 
 ---
 
@@ -354,7 +341,7 @@ Orden obligatorio:
 - ❌ No base de datos
 - ❌ No jQuery
 - ❌ No frameworks obligatorios
-- ✅ Validar YAML
+- ✅ Validar JSON
 - ✅ Manejar errores
 - ✅ Código claro y comentado
 
@@ -362,13 +349,7 @@ Orden obligatorio:
 
 ## 🧠 EXPECTATIVA FINAL
 
-Este documento es una **especificación técnica completa y cerrada**.  
-No debe reinterpretarse, simplificarse ni ignorarse ninguna regla.
+Este documento es una **especificación técnica completa, cerrada y no interpretable**.  
+Debe implementarse tal cual se describe.
 
 FIN DEL PROMPT
-
-
-----------
-
-1-El menú efectivo, solo en cliente (ya se generará el pdf si se quiere guardar.
-2- Al pulsar generar se resetea el tentativo y se mantiene el efectivo
