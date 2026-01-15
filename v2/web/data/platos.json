@@ -1,0 +1,104 @@
+{
+  "platos": [
+    {
+      "id": 1,
+      "nombre": "Macarrones con tomate",
+      "comida": true,
+      "cena": false,
+      "tipo": ["pasta"],
+      "para_eme": true,
+      "para_cris": true,
+      "id_receta": 1
+    },
+    {
+      "id": 2,
+      "nombre": "Fajitas de pollo",
+      "comida": true,
+      "cena": true,
+      "tipo": ["fajitas"],
+      "para_eme": true,
+      "para_cris": true,
+      "id_receta": 2
+    },
+    {
+      "id": 3,
+      "nombre": "Tortilla francesa",
+      "comida": true,
+      "cena": true,
+      "tipo": ["tortilla"],
+      "para_eme": true,
+      "para_cris": true,
+      "id_receta": 3
+    },
+    {
+      "id": 4,
+      "nombre": "Crema de calabaza",
+      "comida": true,
+      "cena": true,
+      "tipo": ["crema"],
+      "para_eme": true,
+      "para_cris": true,
+      "id_receta": 4
+    },
+    {
+      "id": 5,
+      "nombre": "Merluza al horno",
+      "comida": true,
+      "cena": false,
+      "tipo": ["pescado"],
+      "para_eme": true,
+      "para_cris": true,
+      "id_receta": 5
+    },
+    {
+      "id": 6,
+      "nombre": "Ensalada de atún",
+      "comida": true,
+      "cena": true,
+      "tipo": ["pescado", "ensalada"],
+      "para_eme": true,
+      "para_cris": true,
+      "id_receta": 6
+    },
+    {
+      "id": 7,
+      "nombre": "Pollo al ajillo",
+      "comida": true,
+      "cena": false,
+      "tipo": ["carne"],
+      "para_eme": true,
+      "para_cris": false,
+      "id_receta": 7
+    },
+    {
+      "id": 8,
+      "nombre": "Revuelto de setas",
+      "comida": true,
+      "cena": true,
+      "tipo": ["huevo"],
+      "para_eme": false,
+      "para_cris": true,
+      "id_receta": 8
+    },
+    {
+      "id": 9,
+      "nombre": "Sopa de cocido",
+      "comida": true,
+      "cena": false,
+      "tipo": ["sopa"],
+      "para_eme": true,
+      "para_cris": true,
+      "id_receta": 9
+    },
+    {
+      "id": 10,
+      "nombre": "Wrap de pollo",
+      "comida": true,
+      "cena": true,
+      "tipo": ["carne", "rapido"],
+      "para_eme": true,
+      "para_cris": true,
+      "id_receta": 10
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "ingredientes": [
+    { "nombre": "Macarrones", "calorias_x_100g": 350, "supermercado": "Carrefour" },
+    { "nombre": "Tomate frito", "calorias_x_100g": 90, "supermercado": "Carrefour" },
+    { "nombre": "Sal", "calorias_x_100g": 0, "supermercado": "Lidl" },
+    { "nombre": "Aceite", "calorias_x_100g": 900, "supermercado": "Aldi" },
+
+    { "nombre": "Pollo", "calorias_x_100g": 165, "supermercado": "Lupa" },
+    { "nombre": "Pimiento", "calorias_x_100g": 20, "supermercado": "Mercadona" },
+    { "nombre": "Cebolla", "calorias_x_100g": 40, "supermercado": "Mercadona" },
+    { "nombre": "Tortillas de trigo", "calorias_x_100g": 310, "supermercado": "Carrefour" },
+
+    { "nombre": "Huevo", "calorias_x_100g": 155, "supermercado": "Aldi" },
+
+    { "nombre": "Calabaza", "calorias_x_100g": 26, "supermercado": "Mercadona" },
+    { "nombre": "Zanahoria", "calorias_x_100g": 41, "supermercado": "Mercadona" },
+
+    { "nombre": "Merluza", "calorias_x_100g": 85, "supermercado": "Pescadería" },
+
+    { "nombre": "Lechuga", "calorias_x_100g": 15, "supermercado": "Mercadona" },
+    { "nombre": "Tomate", "calorias_x_100g": 18, "supermercado": "Mercadona" },
+    { "nombre": "Atún", "calorias_x_100g": 132, "supermercado": "Lidl" },
+
+    { "nombre": "Ajo", "calorias_x_100g": 149, "supermercado": "Mercadona" },
+
+    { "nombre": "Setas", "calorias_x_100g": 22, "supermercado": "Mercadona" },
+
+    { "nombre": "Caldo de cocido", "calorias_x_100g": 12, "supermercado": "General" },
+    { "nombre": "Fideos", "calorias_x_100g": 350, "supermercado": "Carrefour" },
+
+    { "nombre": "Salsa", "calorias_x_100g": 120, "supermercado": "Carrefour" }
+  ]
+}

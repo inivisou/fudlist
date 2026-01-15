@@ -1,0 +1,94 @@
+{
+  "recetas": [
+    {
+      "id": 1,
+      "titulo_html": "Macarrones con tomate",
+      "subtitulo_html": "Plato de pasta sencillo y rápido",
+      "texto_html": "<p>Cocer los macarrones en agua con sal. Preparar una salsa de tomate casera o usar una ya hecha. Mezclar y servir caliente.</p>",
+      "ingredientes": ["Macarrones", "Tomate frito", "Sal", "Aceite"],
+      "herramientas": ["olla", "colador"],
+      "enlace": "https://ejemplo.com/macarrones"
+    },
+    {
+      "id": 2,
+      "titulo_html": "Fajitas de pollo",
+      "subtitulo_html": "Receta mexicana fácil",
+      "texto_html": "<p>Cortar el pollo en tiras y saltear con verduras. Rellenar las tortillas y servir con salsa al gusto.</p>",
+      "ingredientes": ["Pollo", "Pimiento", "Cebolla", "Tortillas de trigo", "Aceite", "Sal"],
+      "herramientas": ["sartén"],
+      "enlace": "https://ejemplo.com/fajitas"
+    },
+    {
+      "id": 3,
+      "titulo_html": "Tortilla francesa",
+      "subtitulo_html": "Clásico rápido y ligero",
+      "texto_html": "<p>Batir los huevos con una pizca de sal. Cocinar en sartén con un poco de aceite hasta que cuaje.</p>",
+      "ingredientes": ["Huevo", "Sal", "Aceite"],
+      "herramientas": ["sartén"],
+      "enlace": "https://ejemplo.com/tortilla-francesa"
+    },
+    {
+      "id": 4,
+      "titulo_html": "Crema de calabaza",
+      "subtitulo_html": "Suave y reconfortante",
+      "texto_html": "<p>Cocer la calabaza con cebolla y zanahoria. Triturar con batidora hasta obtener una crema fina.</p>",
+      "ingredientes": ["Calabaza", "Cebolla", "Zanahoria", "Sal", "Aceite"],
+      "herramientas": ["olla", "batidora"],
+      "enlace": "https://ejemplo.com/crema-calabaza"
+    },
+    {
+      "id": 5,
+      "titulo_html": "Merluza al horno",
+      "subtitulo_html": "Pescado saludable",
+      "texto_html": "<p>Colocar la merluza en una bandeja con aceite y sal. Hornear hasta que esté tierna.</p>",
+      "ingredientes": ["Merluza", "Aceite", "Sal"],
+      "herramientas": ["horno"],
+      "enlace": "https://ejemplo.com/merluza"
+    },
+    {
+      "id": 6,
+      "titulo_html": "Ensalada de atún",
+      "subtitulo_html": "Fresca y ligera",
+      "texto_html": "<p>Mezclar lechuga, tomate y atún. Aliñar con aceite y sal.</p>",
+      "ingredientes": ["Lechuga", "Tomate", "Atún", "Aceite", "Sal"],
+      "herramientas": ["bol"],
+      "enlace": "https://ejemplo.com/ensalada-atun"
+    },
+    {
+      "id": 7,
+      "titulo_html": "Pollo al ajillo",
+      "subtitulo_html": "Receta tradicional",
+      "texto_html": "<p>Dorar el pollo con ajos enteros. Añadir vino blanco y dejar reducir.</p>",
+      "ingredientes": ["Pollo", "Ajo", "Aceite", "Sal"],
+      "herramientas": ["sartén"],
+      "enlace": "https://ejemplo.com/pollo-ajillo"
+    },
+    {
+      "id": 8,
+      "titulo_html": "Revuelto de setas",
+      "subtitulo_html": "Sabroso y rápido",
+      "texto_html": "<p>Saltear las setas y añadir huevos batidos. Cocinar hasta que cuaje ligeramente.</p>",
+      "ingredientes": ["Setas", "Huevo", "Aceite", "Sal"],
+      "herramientas": ["sartén"],
+      "enlace": "https://ejemplo.com/revuelto-setas"
+    },
+    {
+      "id": 9,
+      "titulo_html": "Sopa de cocido",
+      "subtitulo_html": "Plato tradicional",
+      "texto_html": "<p>Calentar el caldo de cocido y añadir fideos. Cocer hasta que estén tiernos.</p>",
+      "ingredientes": ["Caldo de cocido", "Fideos", "Sal"],
+      "herramientas": ["olla"],
+      "enlace": "https://ejemplo.com/sopa-cocido"
+    },
+    {
+      "id": 10,
+      "titulo_html": "Wrap de pollo",
+      "subtitulo_html": "Rápido y delicioso",
+      "texto_html": "<p>Rellenar una tortilla con pollo, lechuga y salsa. Enrollar y servir.</p>",
+      "ingredientes": ["Pollo", "Lechuga", "Tortillas de trigo", "Salsa", "Sal"],
+      "herramientas": ["tabla", "cuchillo"],
+      "enlace": "https://ejemplo.com/wrap-pollo"
+    }
+  ]
+}

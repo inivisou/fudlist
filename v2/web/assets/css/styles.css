@@ -1,0 +1,183 @@
+/* ===============================
+   RESET SUAVE
+   =============================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f7f7f7;
+    color: #222;
+    line-height: 1.5;
+    padding: 20px;
+}
+
+/* ===============================
+   CONTENEDOR PRINCIPAL
+   =============================== */
+.contenedor {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* ===============================
+   TITULOS
+   =============================== */
+h1, h2 {
+    margin: 20px 0 10px;
+    font-weight: bold;
+}
+
+/* ===============================
+   FORMULARIO
+   =============================== */
+.formulario {
+    background: #fff;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+}
+
+.formulario label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.formulario select,
+.formulario input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    border: 1px solid #aaa;
+}
+
+.formulario button {
+    padding: 10px 20px;
+    background: #0078d7;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.formulario button:hover {
+    background: #005fa3;
+}
+
+/* ===============================
+   TABLAS
+   =============================== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+thead {
+    background: #eaeaea;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+}
+
+th {
+    font-weight: bold;
+    text-align: left;
+}
+
+.clickable {
+    cursor: pointer;
+    background: #eef7ff;
+}
+
+.clickable:hover {
+    background: #d7ecff;
+}
+
+/* ===============================
+   TABLA EFECTIVO
+   =============================== */
+.tabla-efectivo input[type="checkbox"] {
+    transform: scale(1.2);
+}
+
+/* ===============================
+   INGREDIENTES
+   =============================== */
+#lista-ingredientes table {
+    margin-top: 10px;
+}
+
+/* ===============================
+   BOTONES PDF
+   =============================== */
+#pdf-preview,
+#pdf-download {
+    padding: 10px 20px;
+    background: #444;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+#pdf-preview:hover,
+#pdf-download:hover {
+    background: #222;
+}
+
+/* ===============================
+   TOASTS
+   =============================== */
+#toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+.toast {
+    background: #333;
+    color: white;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+}
+
+.toast.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ===============================
+   RESPONSIVE
+   =============================== */
+@media (max-width: 600px) {
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .formulario {
+        padding: 10px;
+    }
+
+    #pdf-preview,
+    #pdf-download {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
