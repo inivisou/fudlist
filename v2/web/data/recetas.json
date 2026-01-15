@@ -2,93 +2,309 @@
   "recetas": [
     {
       "id": 1,
-      "titulo_html": "Macarrones con tomate",
-      "subtitulo_html": "Plato de pasta sencillo y rápido",
-      "texto_html": "<p>Cocer los macarrones en agua con sal. Preparar una salsa de tomate casera o usar una ya hecha. Mezclar y servir caliente.</p>",
-      "ingredientes": ["Macarrones", "Tomate frito", "Sal", "Aceite"],
-      "herramientas": ["olla", "colador"],
-      "enlace": "https://ejemplo.com/macarrones"
+      "titulo_html": "Sopa de cocido + Filete de lomo",
+      "subtitulo_html": "Sopa tradicional acompañada de filete",
+      "texto_html": "<p>Calentar el caldo y añadir los fideos, zanahoria, patata y garbanzos hasta que estén tiernos. Servir la sopa caliente y acompañar con filete de lomo salteado y jamón.</p>",
+      "ingredientes": ["Fideo", "Caldo de cocido", "Zanahoria (genérico)", "Patata (genérico)", "Garbanzos (genérico)", "Pechuga de pollo", "Jamón", "Carne de cerdo (genérico)", "Sal"],
+      "herramientas": ["olla", "sartén"],
+      "enlace": "https://www.recetasderechupete.com/sopa-de-cocido/2466/"
     },
     {
       "id": 2,
-      "titulo_html": "Fajitas de pollo",
-      "subtitulo_html": "Receta mexicana fácil",
-      "texto_html": "<p>Cortar el pollo en tiras y saltear con verduras. Rellenar las tortillas y servir con salsa al gusto.</p>",
-      "ingredientes": ["Pollo", "Pimiento", "Cebolla", "Tortillas de trigo", "Aceite", "Sal"],
-      "herramientas": ["sartén"],
-      "enlace": "https://ejemplo.com/fajitas"
+      "titulo_html": "Sopa de fideos + Filete de ternera",
+      "subtitulo_html": "Sopa ligera con filete de ternera",
+      "texto_html": "<p>Hervir el caldo con fideos finos, zanahoria y patata hasta que estén tiernos. Servir la sopa y acompañar con filete de ternera a la plancha.</p>",
+      "ingredientes": ["Fideo fino", "Caldo de cocido", "Zanahoria (genérico)", "Patata (genérico)", "Sal", "Ternera"],
+      "herramientas": ["olla", "sartén"],
+      "enlace": "https://www.recetasderechupete.com/sopa-de-fideos/11389/"
     },
     {
       "id": 3,
-      "titulo_html": "Tortilla francesa",
-      "subtitulo_html": "Clásico rápido y ligero",
-      "texto_html": "<p>Batir los huevos con una pizca de sal. Cocinar en sartén con un poco de aceite hasta que cuaje.</p>",
-      "ingredientes": ["Huevo", "Sal", "Aceite"],
-      "herramientas": ["sartén"],
-      "enlace": "https://ejemplo.com/tortilla-francesa"
+      "titulo_html": "Crema de calabaza",
+      "subtitulo_html": "Suave y reconfortante",
+      "texto_html": "<p>Cocer la calabaza con patata, cebolla y zanahoria hasta que estén tiernas. Triturar con la batidora, ajustar de sal y añadir un chorrito de aceite antes de servir.</p>",
+      "ingredientes": ["Calabaza", "Patata (genérico)", "Cebolla (genérico)", "Zanahoria (genérico)", "Aceite", "Sal"],
+      "herramientas": ["olla", "batidora"],
+      "enlace": "https://www.recetasderechupete.com/crema-de-calabaza/2395/"
     },
     {
       "id": 4,
-      "titulo_html": "Crema de calabaza",
-      "subtitulo_html": "Suave y reconfortante",
-      "texto_html": "<p>Cocer la calabaza con cebolla y zanahoria. Triturar con batidora hasta obtener una crema fina.</p>",
-      "ingredientes": ["Calabaza", "Cebolla", "Zanahoria", "Sal", "Aceite"],
+      "titulo_html": "Vichyssoise",
+      "subtitulo_html": "Crema fría de puerros y patata",
+      "texto_html": "<p>Pochar puerros y patata en mantequilla, cubrir con caldo y cocer hasta que estén tiernos. Triturar y añadir nata para cocinar. Servir fría o templada.</p>",
+      "ingredientes": ["Puerro", "Patata (genérico)", "Nata para cocinar", "Mantequilla", "Sal"],
       "herramientas": ["olla", "batidora"],
-      "enlace": "https://ejemplo.com/crema-calabaza"
+      "enlace": "https://www.recetasderechupete.com/vichyssoise/1236/"
     },
     {
       "id": 5,
-      "titulo_html": "Merluza al horno",
-      "subtitulo_html": "Pescado saludable",
-      "texto_html": "<p>Colocar la merluza en una bandeja con aceite y sal. Hornear hasta que esté tierna.</p>",
-      "ingredientes": ["Merluza", "Aceite", "Sal"],
-      "herramientas": ["horno"],
-      "enlace": "https://ejemplo.com/merluza"
+      "titulo_html": "Pastel de calabacín",
+      "subtitulo_html": "Pastel salado de verduras y queso",
+      "texto_html": "<p>Rallar la calabaza y mezclar con huevo, cebolla pochada y queso rallado. Verter en molde y hornear hasta que cuaje y dore por encima.</p>",
+      "ingredientes": ["Calabaza", "Huevo", "Cebolla (genérico)", "Queso rallado", "Aceite", "Sal"],
+      "herramientas": ["horno", "molde"],
+      "enlace": "https://www.recetasderechupete.com/pastel-de-calabacin/7426/"
     },
     {
       "id": 6,
-      "titulo_html": "Ensalada de atún",
-      "subtitulo_html": "Fresca y ligera",
-      "texto_html": "<p>Mezclar lechuga, tomate y atún. Aliñar con aceite y sal.</p>",
-      "ingredientes": ["Lechuga", "Tomate", "Atún", "Aceite", "Sal"],
-      "herramientas": ["bol"],
-      "enlace": "https://ejemplo.com/ensalada-atun"
+      "titulo_html": "Garbanzos con pisto",
+      "subtitulo_html": "Legumbres con verduras guisadas",
+      "texto_html": "<p>Saltear cebolla y pimiento, añadir tomate triturado y cocinar hasta obtener un pisto. Incorporar garbanzos cocidos y cocer unos minutos para integrar sabores.</p>",
+      "ingredientes": ["Garbanzos (genérico)", "Tomate triturado", "Pimiento (genérico)", "Cebolla (genérico)", "Aceite", "Sal"],
+      "herramientas": ["sartén", "cuchara de madera"],
+      "enlace": "https://www.recetasderechupete.com/garbanzos-con-pisto/17469/"
     },
     {
       "id": 7,
-      "titulo_html": "Pollo al ajillo",
-      "subtitulo_html": "Receta tradicional",
-      "texto_html": "<p>Dorar el pollo con ajos enteros. Añadir vino blanco y dejar reducir.</p>",
-      "ingredientes": ["Pollo", "Ajo", "Aceite", "Sal"],
-      "herramientas": ["sartén"],
-      "enlace": "https://ejemplo.com/pollo-ajillo"
+      "titulo_html": "Canelones de carne",
+      "subtitulo_html": "Canelones rellenos y gratinados",
+      "texto_html": "<p>Rellenar placas de canelones con carne picada salteada y tomate frito. Cubrir con bechamel y queso rallado y gratinar en el horno hasta dorar.</p>",
+      "ingredientes": ["Bechamel", "Carne de ternera picada", "Tomate frito", "Queso rallado"],
+      "herramientas": ["horno", "fuente", "sartén"],
+      "enlace": "https://www.recetasderechupete.com/canelones-de-carne/1589/"
     },
     {
       "id": 8,
-      "titulo_html": "Revuelto de setas",
-      "subtitulo_html": "Sabroso y rápido",
-      "texto_html": "<p>Saltear las setas y añadir huevos batidos. Cocinar hasta que cuaje ligeramente.</p>",
-      "ingredientes": ["Setas", "Huevo", "Aceite", "Sal"],
-      "herramientas": ["sartén"],
-      "enlace": "https://ejemplo.com/revuelto-setas"
+      "titulo_html": "Macarrones Carbonara",
+      "subtitulo_html": "Pasta cremosa al estilo clásico",
+      "texto_html": "<p>Cocer los macarrones. Saltear bacon y mezclar con nata y huevo batido fuera del fuego para obtener una salsa cremosa. Añadir queso rallado y servir inmediatamente.</p>",
+      "ingredientes": ["Macarrones", "Bacon", "Huevo", "Nata para cocinar", "Queso rallado"],
+      "herramientas": ["olla", "sartén"],
+      "enlace": "https://www.recetasderechupete.com/macarrones-a-la-carbonara/987/"
     },
     {
       "id": 9,
-      "titulo_html": "Sopa de cocido",
-      "subtitulo_html": "Plato tradicional",
-      "texto_html": "<p>Calentar el caldo de cocido y añadir fideos. Cocer hasta que estén tiernos.</p>",
-      "ingredientes": ["Caldo de cocido", "Fideos", "Sal"],
-      "herramientas": ["olla"],
-      "enlace": "https://ejemplo.com/sopa-cocido"
+      "titulo_html": "Ensalada de pasta",
+      "subtitulo_html": "Fresca y versátil para verano",
+      "texto_html": "<p>Cocer la pasta en forma de espiral y enfriar. Mezclar con nueces, pasas, pavo en dados y queso en dados. Aliñar con aceite y sal al gusto.</p>",
+      "ingredientes": ["Espiral de pasta", "Nuez", "Aceite", "Pasa", "Pavo", "Queso en dados"],
+      "herramientas": ["olla", "bol"],
+      "enlace": "https://www.recetasderechupete.com/ensalada-de-pasta/1504/"
     },
     {
       "id": 10,
+      "titulo_html": "Ensalada de pimientos",
+      "subtitulo_html": "Ensalada templada con pimientos asados",
+      "texto_html": "<p>Mezclar espirales de pasta con pimientos asados y queso en dados. Aliñar con aceite y sal y servir templada o fría.</p>",
+      "ingredientes": ["Espiral de pasta", "Pimiento asado", "Queso en dados", "Aceite", "Sal"],
+      "herramientas": ["bol"],
+      "enlace": "https://www.recetasderechupete.com/ensalada-de-pimientos-asados/5226/"
+    },
+    {
+      "id": 11,
+      "titulo_html": "Longanizas a la cerveza con patatas",
+      "subtitulo_html": "Plato contundente y sabroso",
+      "texto_html": "<p>Dorar las longanizas en una sartén, añadir cebolla y patata en trozos y verter cerveza. Cocinar hasta que las patatas estén tiernas y la salsa reduzca.</p>",
+      "ingredientes": ["Longaniza", "Cerveza", "Patata (genérico)", "Cebolla (genérico)", "Aceite", "Sal"],
+      "herramientas": ["sartén", "cazuela"],
+      "enlace": "https://www.recetasderechupete.com/longaniza-a-la-cerveza/17136/"
+    },
+    {
+      "id": 12,
+      "titulo_html": "Solomillo con queso y jamón york",
+      "subtitulo_html": "Solomillo relleno y jugoso",
+      "texto_html": "<p>Rellenar el solomillo con jamón york y queso en lonchas, cerrar y dorar en sartén. Terminar en el horno hasta que el solomillo esté en su punto.</p>",
+      "ingredientes": ["Solomillo de cerdo", "Jamón york", "Queso en lonchas", "Aceite", "Sal"],
+      "herramientas": ["sartén", "horno"],
+      "enlace": "https://www.recetasderechupete.com/solomillo-relleno/4568/"
+    },
+    {
+      "id": 13,
+      "titulo_html": "Filete de lomo con patatas fritas y huevo",
+      "subtitulo_html": "Clásico contundente",
+      "texto_html": "<p>Freír las patatas hasta dorar. Hacer el filete a la plancha y freír un huevo. Servir todo junto con una pizca de sal.</p>",
+      "ingredientes": ["Carne de cerdo (genérico)", "Patata (genérico)", "Huevo", "Aceite", "Sal"],
+      "herramientas": ["sartén", "freidora o sartén honda"],
+      "enlace": "https://www.recetasderechupete.com/filetes-de-lomo-con-huevo/13392/"
+    },
+    {
+      "id": 14,
+      "titulo_html": "Costillas de cerdo al horno con patatas",
+      "subtitulo_html": "Costillas asadas con guarnición de patata",
+      "texto_html": "<p>Colocar las costillas en una bandeja con patatas y ajo, rociar con aceite y hornear hasta que estén tiernas y doradas.</p>",
+      "ingredientes": ["Costilla de cerdo", "Patata (genérico)", "Ajo (genérico)", "Aceite", "Sal"],
+      "herramientas": ["horno", "bandeja"],
+      "enlace": "https://www.recetasderechupete.com/costillas-al-horno/2382/"
+    },
+    {
+      "id": 15,
+      "titulo_html": "Cerdo guisado",
+      "subtitulo_html": "Guiso tradicional de carne y verduras",
+      "texto_html": "<p>Dorar la carne y añadir cebolla, zanahoria, patata y ajo. Cubrir con caldo o agua y cocer a fuego lento hasta que la carne esté tierna.</p>",
+      "ingredientes": ["Carne de cerdo (genérico)", "Patata (genérico)", "Zanahoria (genérico)", "Cebolla (genérico)", "Ajo (genérico)", "Aceite", "Sal"],
+      "herramientas": ["olla", "cuchara de madera"],
+      "enlace": "https://www.recetasderechupete.com/guiso-de-cerdo/13273/"
+    },
+    {
+      "id": 16,
+      "titulo_html": "Sándwich de lacón con queso",
+      "subtitulo_html": "Sándwich caliente y sabroso",
+      "texto_html": "<p>Rellenar pan de molde con lacón y queso en lonchas. Dorar en sartén con mantequilla hasta que el queso se funda.</p>",
+      "ingredientes": ["Pan de molde", "Lacón", "Queso en lonchas", "Mantequilla"],
+      "herramientas": ["sartén", "tabla"],
+      "enlace": "https://www.directoalpaladar.com/recetas-de-sandwich/sandwich-caliente-de-lacon"
+    },
+    {
+      "id": 17,
+      "titulo_html": "Sándwich mixto con huevo",
+      "subtitulo_html": "Versión con huevo para una cena rápida",
+      "texto_html": "<p>Tostar pan de molde con mantequilla, añadir jamón york, queso en lonchas y huevo frito. Servir caliente.</p>",
+      "ingredientes": ["Pan de molde", "Jamón york", "Queso en lonchas", "Huevo", "Mantequilla"],
+      "herramientas": ["sartén", "tabla"],
+      "enlace": "https://www.recetasderechupete.com/sandwich-mixto-con-huevo/16193/"
+    },
+    {
+      "id": 18,
       "titulo_html": "Wrap de pollo",
-      "subtitulo_html": "Rápido y delicioso",
-      "texto_html": "<p>Rellenar una tortilla con pollo, lechuga y salsa. Enrollar y servir.</p>",
-      "ingredientes": ["Pollo", "Lechuga", "Tortillas de trigo", "Salsa", "Sal"],
+      "subtitulo_html": "Rápido y delicioso para llevar",
+      "texto_html": "<p>Rellenar una tortilla de trigo con pechuga de pollo cocinada, lechuga, tomate y salsa. Enrollar y servir.</p>",
+      "ingredientes": ["Tortilla de trigo", "Pechuga de pollo", "Lechuga", "Tomate", "Salsa"],
       "herramientas": ["tabla", "cuchillo"],
-      "enlace": "https://ejemplo.com/wrap-pollo"
+      "enlace": "https://www.recetasderechupete.com/wrap-de-pollo/8655/"
+    },
+    {
+      "id": 19,
+      "titulo_html": "Fajitas de pollo",
+      "subtitulo_html": "Tiras de pollo y verduras para rellenar tortillas",
+      "texto_html": "<p>Saltear pechuga de pollo en tiras con pimiento y cebolla. Añadir especias para fajitas y servir en tortillas de trigo calientes.</p>",
+      "ingredientes": ["Tortilla de trigo", "Pechuga de pollo", "Pimiento (genérico)", "Cebolla (genérico)", "Especia fajitas"],
+      "herramientas": ["sartén"],
+      "enlace": "https://www.recetasderechupete.com/fajitas-de-pollo/10915/"
+    },
+    {
+      "id": 20,
+      "titulo_html": "Fajitas de ternera",
+      "subtitulo_html": "Fajitas con ternera y verduras",
+      "texto_html": "<p>Saltear tiras de ternera con pimiento y cebolla, sazonar con especias para fajitas y servir en tortillas de trigo.</p>",
+      "ingredientes": ["Tortilla de trigo", "Ternera", "Pimiento (genérico)", "Cebolla (genérico)", "Especia fajitas"],
+      "herramientas": ["sartén"],
+      "enlace": "https://www.recetasderechupete.com/fajitas-de-ternera/18452/"
+    },
+    {
+      "id": 21,
+      "titulo_html": "Pizza Acueducto",
+      "subtitulo_html": "Pizza casera con ingredientes variados",
+      "texto_html": "<p>Extender la masa de pizza, cubrir con tomate, mozzarella, bacon y cebolla caramelizada. Hornear hasta que la masa esté crujiente y el queso fundido.</p>",
+      "ingredientes": ["Masa de pizza", "Tomate", "Mozzarella", "Queso en dados", "Bacon", "Cebolla caramelizada"],
+      "herramientas": ["horno", "tabla"],
+      "enlace": "https://www.recetasderechupete.com/pizza-casera/2144/"
+    },
+    {
+      "id": 22,
+      "titulo_html": "Hamburguesa Acueducto",
+      "subtitulo_html": "Hamburguesa casera con toppings",
+      "texto_html": "<p>Cocinar la hamburguesa de ternera y montar en pan de hamburguesa con tomate, mozzarella, queso en dados, bacon y cebolla caramelizada.</p>",
+      "ingredientes": ["Hamburguesa de ternera", "Pan de hamburguesa", "Tomate", "Mozzarella", "Queso en dados", "Bacon", "Cebolla caramelizada"],
+      "herramientas": ["sartén", "parrilla"],
+      "enlace": "https://www.recetasderechupete.com/hamburguesa-casera/2286/"
+    },
+    {
+      "id": 23,
+      "titulo_html": "Empanadas de carne",
+      "subtitulo_html": "Empanadillas rellenas de carne y verduras",
+      "texto_html": "<p>Preparar un sofrito con cebolla, zanahoria, patata y pimiento. Añadir carne picada y condimentar. Rellenar obleas y cerrar, pintar con huevo y hornear o freír.</p>",
+      "ingredientes": ["Cebolla (genérico)", "Zanahoria (genérico)", "Patata (genérico)", "Pimiento (genérico)", "Carne de ternera picada", "Oblea para empanadilla", "Huevo"],
+      "herramientas": ["sartén", "horno"],
+      "enlace": "https://www.recetasderechupete.com/empanadillas-de-carne/1189/"
+    },
+    {
+      "id": 24,
+      "titulo_html": "Empanadas de pollo al curry",
+      "subtitulo_html": "Empanadillas con toque exótico",
+      "texto_html": "<p>Mezclar pollo desmenuzado con cebolla, zanahoria y patata cocida, añadir curry y rellenar obleas. Pintar con huevo y hornear hasta dorar.</p>",
+      "ingredientes": ["Cebolla (genérico)", "Zanahoria (genérico)", "Patata (genérico)", "Pechuga de pollo", "Especia tikka masala", "Oblea para empanadilla", "Huevo"],
+      "herramientas": ["sartén", "horno"],
+      "enlace": "https://www.recetasderechupete.com/empanadillas-de-pollo-al-curry/15807/"
+    },
+    {
+      "id": 25,
+      "titulo_html": "Calamares a la romana",
+      "subtitulo_html": "Calamares rebozados y crujientes",
+      "texto_html": "<p>Pasar los calamares por harina y freír en abundante aceite hasta que estén dorados. Escurrir y salar al gusto.</p>",
+      "ingredientes": ["Calamares", "Harina", "Aceite", "Sal"],
+      "herramientas": ["freidora o sartén honda"],
+      "enlace": "https://www.recetasderechupete.com/calamares-a-la-romana/1778/"
+    },
+    {
+      "id": 26,
+      "titulo_html": "Tortilla de atún",
+      "subtitulo_html": "Tortilla jugosa con atún en conserva",
+      "texto_html": "<p>Batir huevos y mezclar con atún escurrido, patata cocida en trozos y cebolla pochada. Cuajar en sartén con un poco de aceite.</p>",
+      "ingredientes": ["Huevo", "Atún", "Patata (genérico)", "Cebolla (genérico)", "Aceite", "Sal"],
+      "herramientas": ["sartén"],
+      "enlace": "https://www.recetasderechupete.com/tortilla-de-atun/10127/"
+    },
+    {
+      "id": 27,
+      "titulo_html": "Espaguetis con calabacín",
+      "subtitulo_html": "Pasta ligera con verduras salteadas",
+      "texto_html": "<p>Cocer los espaguetis y reservar. Saltear calabaza en tiras con ajo y aceite, mezclar con la pasta y ajustar de sal antes de servir.</p>",
+      "ingredientes": ["Espagueti", "Calabaza", "Ajo (genérico)", "Aceite", "Sal"],
+      "herramientas": ["olla", "sartén"],
+      "enlace": "https://www.recetasderechupete.com/espaguetis-con-calabacin/14825/"
+    },
+    {
+      "id": 28,
+      "titulo_html": "Brochetas de pollo con pimientos y cebolla",
+      "subtitulo_html": "Brochetas rápidas para la cena",
+      "texto_html": "<p>Montar brochetas alternando trozos de pechuga de pollo, pimiento y cebolla. Pintar con aceite y asar o cocinar en sartén hasta que estén doradas.</p>",
+      "ingredientes": ["Pechuga de pollo", "Pimiento (genérico)", "Cebolla (genérico)", "Aceite", "Sal"],
+      "herramientas": ["parrilla", "brochetas"],
+      "enlace": "https://www.recetasderechupete.com/brochetas-de-pollo/10431/"
+    },
+    {
+      "id": 29,
+      "titulo_html": "Lacón con patatas",
+      "subtitulo_html": "Plato tradicional de lacón y patata",
+      "texto_html": "<p>Cocer el lacón hasta que esté tierno. Servir con patatas cocidas y aliñar con aceite y pimentón si se desea.</p>",
+      "ingredientes": ["Lacón", "Patata (genérico)", "Aceite", "Sal"],
+      "herramientas": ["olla"],
+      "enlace": "https://www.recetasderechupete.com/lacon-con-patatas/16562/"
+    },
+    {
+      "id": 30,
+      "titulo_html": "Longaniza con pimientos y cebolla",
+      "subtitulo_html": "Salteado de longaniza y verduras",
+      "texto_html": "<p>Saltear longaniza en rodajas con pimiento y cebolla hasta que estén tiernos y dorados. Servir caliente.</p>",
+      "ingredientes": ["Longaniza", "Pimiento (genérico)", "Cebolla (genérico)", "Aceite", "Sal"],
+      "herramientas": ["sartén"],
+      "enlace": "https://www.recetasderechupete.com/longaniza-con-pimientos/18056/"
+    },
+    {
+      "id": 31,
+      "titulo_html": "Tortilla española (Lekue)",
+      "subtitulo_html": "Tortilla de patata y cebolla al microondas",
+      "texto_html": "<p>Preparar patata y cebolla en rodajas, cocinarlas y mezclar con huevo batido. Cocinar en el molde Lekue o en sartén hasta que cuaje.</p>",
+      "ingredientes": ["Huevo", "Patata (genérico)", "Cebolla (genérico)", "Aceite", "Sal"],
+      "herramientas": ["sartén", "molde Lekue"],
+      "enlace": "https://www.youtube.com/watch?v=1g0Z8Y9f3bM"
+    },
+    {
+      "id": 32,
+      "titulo_html": "Pasta con pimientos",
+      "subtitulo_html": "Pasta con pimientos asados y queso",
+      "texto_html": "<p>Cocer la pasta y mezclar con pimientos asados salteados y queso en dados. Aliñar con aceite y sal y servir caliente.</p>",
+      "ingredientes": ["Espiral de pasta", "Pimiento asado", "Queso en dados", "Aceite", "Sal"],
+      "herramientas": ["olla", "sartén"],
+      "enlace": "https://www.recetasderechupete.com/pasta-con-pimientos-asados/15047/"
+    },
+    {
+      "id": 33,
+      "titulo_html": "Pollo con tomate (Monsieur Cuisine)",
+      "subtitulo_html": "Pollo guisado con tomate",
+      "texto_html": "<p>Saltear pechuga de pollo con cebolla, añadir tomate triturado y cocinar hasta que la salsa reduzca y el pollo esté tierno.</p>",
+      "ingredientes": ["Pechuga de pollo", "Tomate triturado", "Cebolla (genérico)", "Aceite", "Sal"],
+      "herramientas": ["robot de cocina o sartén"],
+      "enlace": "https://www.youtube.com/watch?v=CqGonsv0uyI"
+    },
+    {
+      "id": 34,
+      "titulo_html": "Pollo Tikka Masala",
+      "subtitulo_html": "Pollo con salsa cremosa de especias",
+      "texto_html": "<p>Marinar y cocinar el pollo con tomate triturado y especias tikka masala. Añadir nata para cocinar para obtener una salsa cremosa y servir con arroz.</p>",
+      "ingredientes": ["Pechuga de pollo", "Tomate triturado", "Nata para cocinar", "Especia tikka masala", "Aceite", "Sal"],
+      "herramientas": ["sartén", "cazuela"],
+      "enlace": "https://www.youtube.com/watch?v=5WciQDdxPCQ"
     }
   ]
 }

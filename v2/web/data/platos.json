@@ -1,104 +1,38 @@
 {
   "platos": [
-    {
-      "id": 1,
-      "nombre": "Macarrones con tomate",
-      "comida": true,
-      "cena": false,
-      "tipo": ["pasta"],
-      "para_eme": true,
-      "para_cris": true,
-      "id_receta": 1
-    },
-    {
-      "id": 2,
-      "nombre": "Fajitas de pollo",
-      "comida": true,
-      "cena": true,
-      "tipo": ["fajitas"],
-      "para_eme": true,
-      "para_cris": true,
-      "id_receta": 2
-    },
-    {
-      "id": 3,
-      "nombre": "Tortilla francesa",
-      "comida": true,
-      "cena": true,
-      "tipo": ["tortilla"],
-      "para_eme": true,
-      "para_cris": true,
-      "id_receta": 3
-    },
-    {
-      "id": 4,
-      "nombre": "Crema de calabaza",
-      "comida": true,
-      "cena": true,
-      "tipo": ["crema"],
-      "para_eme": true,
-      "para_cris": true,
-      "id_receta": 4
-    },
-    {
-      "id": 5,
-      "nombre": "Merluza al horno",
-      "comida": true,
-      "cena": false,
-      "tipo": ["pescado"],
-      "para_eme": true,
-      "para_cris": true,
-      "id_receta": 5
-    },
-    {
-      "id": 6,
-      "nombre": "Ensalada de atún",
-      "comida": true,
-      "cena": true,
-      "tipo": ["pescado", "ensalada"],
-      "para_eme": true,
-      "para_cris": true,
-      "id_receta": 6
-    },
-    {
-      "id": 7,
-      "nombre": "Pollo al ajillo",
-      "comida": true,
-      "cena": false,
-      "tipo": ["carne"],
-      "para_eme": true,
-      "para_cris": false,
-      "id_receta": 7
-    },
-    {
-      "id": 8,
-      "nombre": "Revuelto de setas",
-      "comida": true,
-      "cena": true,
-      "tipo": ["huevo"],
-      "para_eme": false,
-      "para_cris": true,
-      "id_receta": 8
-    },
-    {
-      "id": 9,
-      "nombre": "Sopa de cocido",
-      "comida": true,
-      "cena": false,
-      "tipo": ["sopa"],
-      "para_eme": true,
-      "para_cris": true,
-      "id_receta": 9
-    },
-    {
-      "id": 10,
-      "nombre": "Wrap de pollo",
-      "comida": true,
-      "cena": true,
-      "tipo": ["carne", "rapido"],
-      "para_eme": true,
-      "para_cris": true,
-      "id_receta": 10
-    }
+    { "id": 1, "nombre": "Sopa de cocido + Filete de lomo", "comida": true, "cena": false, "tipo": ["sopa", "carne"], "para_eme": true, "para_cris": true, "id_receta": 1 },
+    { "id": 2, "nombre": "Sopa de fideos + Filete de ternera", "comida": true, "cena": false, "tipo": ["sopa", "carne"], "para_eme": true, "para_cris": true, "id_receta": 2 },
+    { "id": 3, "nombre": "Crema de calabaza", "comida": true, "cena": true, "tipo": ["crema"], "para_eme": true, "para_cris": true, "id_receta": 3 },
+    { "id": 4, "nombre": "Vichissoi", "comida": true, "cena": true, "tipo": ["crema"], "para_eme": true, "para_cris": true, "id_receta": 4 },
+    { "id": 5, "nombre": "Pastel de calabacín", "comida": true, "cena": true, "tipo": ["verdura"], "para_eme": true, "para_cris": true, "id_receta": 5 },
+    { "id": 6, "nombre": "Garbanzos con pisto", "comida": true, "cena": false, "tipo": ["legumbre"], "para_eme": true, "para_cris": true, "id_receta": 6 },
+    { "id": 7, "nombre": "Canelones", "comida": true, "cena": false, "tipo": ["pasta"], "para_eme": true, "para_cris": true, "id_receta": 7 },
+    { "id": 8, "nombre": "Macarrones Carbonara", "comida": true, "cena": false, "tipo": ["pasta"], "para_eme": true, "para_cris": true, "id_receta": 8 },
+    { "id": 9, "nombre": "Ensalada de pasta", "comida": true, "cena": true, "tipo": ["ensalada", "pasta"], "para_eme": true, "para_cris": true, "id_receta": 9 },
+    { "id": 10, "nombre": "Ensalada de pimientos", "comida": true, "cena": true, "tipo": ["ensalada"], "para_eme": true, "para_cris": true, "id_receta": 10 },
+    { "id": 11, "nombre": "Longanizas a la cerveza con patatas", "comida": true, "cena": false, "tipo": ["carne"], "para_eme": true, "para_cris": true, "id_receta": 11 },
+    { "id": 12, "nombre": "Solomillo con queso y jamón york", "comida": true, "cena": true, "tipo": ["carne"], "para_eme": true, "para_cris": true, "id_receta": 12 },
+    { "id": 13, "nombre": "Filete de lomo con patatas fritas y huevo", "comida": true, "cena": false, "tipo": ["carne"], "para_eme": true, "para_cris": true, "id_receta": 13 },
+    { "id": 14, "nombre": "Costillas de cerdo al horno con patatas", "comida": true, "cena": false, "tipo": ["carne"], "para_eme": true, "para_cris": true, "id_receta": 14 },
+    { "id": 15, "nombre": "Cerdo guisado", "comida": true, "cena": false, "tipo": ["carne"], "para_eme": true, "para_cris": true, "id_receta": 15 },
+    { "id": 16, "nombre": "Sándwich de lacón con queso", "comida": false, "cena": true, "tipo": ["sandwich"], "para_eme": true, "para_cris": true, "id_receta": 16 },
+    { "id": 17, "nombre": "Sándwich mixto con huevo", "comida": false, "cena": true, "tipo": ["sandwich"], "para_eme": true, "para_cris": true, "id_receta": 17 },
+    { "id": 18, "nombre": "Wrap de pollo", "comida": false, "cena": true, "tipo": ["wrap"], "para_eme": true, "para_cris": true, "id_receta": 18 },
+    { "id": 19, "nombre": "Fajitas de pollo", "comida": true, "cena": true, "tipo": ["fajitas"], "para_eme": true, "para_cris": true, "id_receta": 19 },
+    { "id": 20, "nombre": "Fajitas de ternera", "comida": true, "cena": true, "tipo": ["fajitas"], "para_eme": true, "para_cris": true, "id_receta": 20 },
+    { "id": 21, "nombre": "Pizza Acueducto", "comida": true, "cena": true, "tipo": ["pizza"], "para_eme": true, "para_cris": true, "id_receta": 21 },
+    { "id": 22, "nombre": "Hamburguesa Acueducto", "comida": true, "cena": true, "tipo": ["hamburguesa"], "para_eme": true, "para_cris": true, "id_receta": 22 },
+    { "id": 23, "nombre": "Empanadas de carne", "comida": true, "cena": true, "tipo": ["empanada"], "para_eme": true, "para_cris": true, "id_receta": 23 },
+    { "id": 24, "nombre": "Empanadas de pollo al curry", "comida": true, "cena": true, "tipo": ["empanada"], "para_eme": true, "para_cris": true, "id_receta": 24 },
+    { "id": 25, "nombre": "Calamares", "comida": true, "cena": true, "tipo": ["pescado"], "para_eme": true, "para_cris": true, "id_receta": 25 },
+    { "id": 26, "nombre": "Tortilla de atún", "comida": true, "cena": true, "tipo": ["tortilla"], "para_eme": true, "para_cris": true, "id_receta": 26 },
+    { "id": 27, "nombre": "Espaguettis con calabacín", "comida": true, "cena": false, "tipo": ["pasta"], "para_eme": true, "para_cris": true, "id_receta": 27 },
+    { "id": 28, "nombre": "Brochetas de pollo con pimientos y cebolla", "comida": false, "cena": true, "tipo": ["carne"], "para_eme": true, "para_cris": true, "id_receta": 28 },
+    { "id": 29, "nombre": "Lacón con patatas", "comida": true, "cena": false, "tipo": ["carne"], "para_eme": true, "para_cris": true, "id_receta": 29 },
+    { "id": 30, "nombre": "Longaniza con pimientos y cebolla", "comida": true, "cena": true, "tipo": ["carne"], "para_eme": true, "para_cris": true, "id_receta": 30 },
+    { "id": 31, "nombre": "Tortilla española (Lekue)", "comida": true, "cena": true, "tipo": ["tortilla"], "para_eme": true, "para_cris": true, "id_receta": 31 },
+    { "id": 32, "nombre": "Pasta con pimientos", "comida": true, "cena": false, "tipo": ["pasta"], "para_eme": true, "para_cris": true, "id_receta": 32 },
+    { "id": 33, "nombre": "Pollo con tomate (Monsieur Cuisine)", "comida": true, "cena": false, "tipo": ["carne"], "para_eme": true, "para_cris": true, "id_receta": 33 },
+    { "id": 34, "nombre": "Pollo Tikka Masala", "comida": true, "cena": true, "tipo": ["carne"], "para_eme": true, "para_cris": true, "id_receta": 34 }
   ]
 }
