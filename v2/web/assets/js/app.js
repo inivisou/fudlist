@@ -24,8 +24,13 @@ async function cargarDatos() {
         const platosResp = await fetch('data/platos.json');
         platosData = await platosResp.json();
 
-        datosCargados = true; // <-- AHORA SÍ SE PUEDE HACER CLICK
+        datosCargados = true;
         console.log("Datos cargados correctamente");
+
+        // OCULTAR SPINNER CUANDO JS ESTÁ LISTO
+        const sp = document.getElementById('spinner');
+        if (sp) sp.style.display = 'none';
+
     } catch (e) {
         console.error("Error cargando datos JSON:", e);
     }
@@ -68,6 +73,7 @@ function obtenerPlatoDesdePHP(id) {
 
     return {
         id: plato.id,
+        id_receta: plato.id_receta,
         nombre: plato.nombre,
         ingredientes: receta ? receta.ingredientes : []
     };
@@ -125,7 +131,12 @@ function pintarMenuEfectivo() {
         tr.appendChild(tdDia);
 
         const tdComida = document.createElement('td');
-        tdComida.textContent = dia.comida ? dia.comida.nombre : '';
+        if (dia.comida) {
+            tdComida.innerHTML = `
+                ${dia.comida.nombre}
+                <a href="receta.php?id=${dia.comida.id_receta}" target="_blank">Ver receta</a>
+            `;
+        }
         tr.appendChild(tdComida);
 
         const tdQ1 = document.createElement('td');
@@ -139,7 +150,12 @@ function pintarMenuEfectivo() {
         tr.appendChild(tdQ1);
 
         const tdCena = document.createElement('td');
-        tdCena.textContent = dia.cena ? dia.cena.nombre : '';
+        if (dia.cena) {
+            tdCena.innerHTML = `
+                ${dia.cena.nombre}
+                <a href="receta.php?id=${dia.cena.id_receta}" target="_blank">Ver receta</a>
+            `;
+        }
         tr.appendChild(tdCena);
 
         const tdQ2 = document.createElement('td');
@@ -313,6 +329,13 @@ function generarPDF(preview = false) {
 // ======================================================
 // EVENTOS
 // ======================================================
+
+// MOSTRAR SPINNER AL PULSAR "GENERAR"
+document.addEventListener('submit', () => {
+    const sp = document.getElementById('spinner');
+    if (sp) sp.style.display = 'flex';
+});
+
 document.getElementById('pdf-preview').addEventListener('click', () => generarPDF(true));
 document.getElementById('pdf-download').addEventListener('click', () => generarPDF(false));
 
