@@ -1,0 +1,408 @@
+-- ============================================================================
+-- SCRIPT DE INSTALACIÓN COMPLETA - GENERADOR DE MENÚS SEMANALES (MARIADB 11.8)
+-- Versión: Final con Roles, Permisos y Herramientas Relacionales
+-- ============================================================================
+
+-- 1. Crear la base de datos si no existe
+CREATE DATABASE IF NOT EXISTS inivi_f00dlist CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE inivi_f00dlist;
+
+-- 2. Limpiar tablas existentes (Orden inverso a las dependencias para evitar errores FK)
+DROP TABLE IF EXISTS ingredientes_comprados;
+DROP TABLE IF EXISTS platos_favoritos;
+DROP TABLE IF EXISTS menu_dias;
+DROP TABLE IF EXISTS menu_comensales;
+DROP TABLE IF EXISTS menus;
+DROP TABLE IF EXISTS recetas_ingredientes;
+DROP TABLE IF EXISTS recetas_herramientas;
+DROP TABLE IF EXISTS recetas;
+DROP TABLE IF EXISTS platos;
+DROP TABLE IF EXISTS herramientas;
+DROP TABLE IF EXISTS ingredientes;
+DROP TABLE IF EXISTS preferencias_usuario;
+DROP TABLE IF EXISTS usuarios_roles;
+DROP TABLE IF EXISTS roles_permisos;
+DROP TABLE IF EXISTS permisos;
+DROP TABLE IF EXISTS roles;
+DROP TABLE IF EXISTS users;
+
+-- ============================================================================
+-- 3. CREACIÓN DE TABLAS
+-- ============================================================================
+
+-- Tabla: users
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    nombre_completo VARCHAR(100),
+    avatar_url VARCHAR(255),
+    activo BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_username (username),
+    INDEX idx_email (email)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tabla: roles
+CREATE TABLE roles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) UNIQUE NOT NULL,
+    descripcion VARCHAR(255)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tabla: permisos
+CREATE TABLE permisos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) UNIQUE NOT NULL,
+    descripcion VARCHAR(255)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tabla: roles_permisos
+CREATE TABLE roles_permisos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_rol INT NOT NULL,
+    id_permiso INT NOT NULL,
+    FOREIGN KEY (id_rol) REFERENCES roles(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_permiso) REFERENCES permisos(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_rol_permiso (id_rol, id_permiso),
+    INDEX idx_rol (id_rol),
+    INDEX idx_permiso (id_permiso)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tabla: usuarios_roles
+CREATE TABLE usuarios_roles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    id_rol INT NOT NULL,
+    FOREIGN KEY (id_usuario) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_rol) REFERENCES roles(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_usuario_rol (id_usuario, id_rol),
+    INDEX idx_usuario (id_usuario),
+    INDEX idx_rol (id_rol)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tabla: preferencias_usuario
+CREATE TABLE preferencias_usuario (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    clave VARCHAR(50) NOT NULL,
+    valor TEXT NOT NULL,
+    tipo_dato ENUM('json', 'string', 'boolean', 'integer') DEFAULT 'string',
+    descripcion VARCHAR(255),
+    FOREIGN KEY (usuario_id) REFERENCES users(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_usuario_clave (usuario_id, clave),
+    INDEX idx_usuario (usuario_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tabla: ingredientes
+CREATE TABLE ingredientes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) UNIQUE NOT NULL,
+    calorias_x_100g DECIMAL(5,2) NOT NULL DEFAULT 0.00,
+    supermercado VARCHAR(100) DEFAULT 'General',
+    categoria VARCHAR(50) DEFAULT 'general',
+    activo BOOLEAN DEFAULT TRUE,
+    INDEX idx_nombre (nombre),
+    INDEX idx_supermercado (supermercado),
+    INDEX idx_categoria (categoria)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tabla: herramientas (NUEVO)
+CREATE TABLE herramientas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) UNIQUE NOT NULL,
+    descripcion VARCHAR(255),
+    activo BOOLEAN DEFAULT TRUE,
+    INDEX idx_nombre (nombre)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tabla: platos
+CREATE TABLE platos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(150) NOT NULL,
+    tipo ENUM('sopa', 'principal', 'postre', 'ensalada', 'guarnicion') DEFAULT 'principal',
+    categoria VARCHAR(50),
+    es_comida BOOLEAN DEFAULT TRUE,
+    es_cena BOOLEAN DEFAULT FALSE,
+    nivel_calorico ENUM('bajo', 'medio', 'alto') DEFAULT 'medio',
+    activo BOOLEAN DEFAULT TRUE,
+    INDEX idx_tipo (tipo),
+    INDEX idx_nivel_calorico (nivel_calorico),
+    INDEX idx_activo (activo)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tabla: recetas
+CREATE TABLE recetas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_plato INT NOT NULL,
+    titulo_html TEXT,
+    subtitulo_html TEXT,
+    texto_html LONGTEXT,
+    enlace VARCHAR(255),
+    FOREIGN KEY (id_plato) REFERENCES platos(id) ON DELETE CASCADE,
+    INDEX idx_plato (id_plato)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tabla: recetas_herramientas (NUEVO)
+CREATE TABLE recetas_herramientas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_receta INT NOT NULL,
+    id_herramienta INT NOT NULL,
+    FOREIGN KEY (id_receta) REFERENCES recetas(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_herramienta) REFERENCES herramientas(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_receta_herramienta (id_receta, id_herramienta),
+    INDEX idx_receta (id_receta),
+    INDEX idx_herramienta (id_herramienta)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tabla: recetas_ingredientes
+CREATE TABLE recetas_ingredientes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_receta INT NOT NULL,
+    id_ingrediente INT NOT NULL,
+    cantidad DECIMAL(10,2) DEFAULT 1.0,
+    unidad VARCHAR(20) DEFAULT 'g',
+    FOREIGN KEY (id_receta) REFERENCES recetas(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_ingrediente) REFERENCES ingredientes(id) ON DELETE RESTRICT,
+    UNIQUE KEY unique_receta_ingrediente (id_receta, id_ingrediente),
+    INDEX idx_receta (id_receta),
+    INDEX idx_ingrediente (id_ingrediente)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tabla: menus
+CREATE TABLE menus (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_creador_id INT NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
+    tipo ENUM('actual', 'favorito') DEFAULT 'actual',
+    fecha_generacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fecha_inicio DATE,
+    fecha_fin DATE,
+    FOREIGN KEY (usuario_creador_id) REFERENCES users(id) ON DELETE CASCADE,
+    INDEX idx_usuario (usuario_creador_id),
+    INDEX idx_tipo (tipo),
+    INDEX idx_fecha (fecha_generacion)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tabla: menu_comensales
+CREATE TABLE menu_comensales (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_menu INT NOT NULL,
+    id_usuario INT NOT NULL,
+    FOREIGN KEY (id_menu) REFERENCES menus(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_usuario) REFERENCES users(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_menu_usuario (id_menu, id_usuario),
+    INDEX idx_menu (id_menu),
+    INDEX idx_usuario (id_usuario)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tabla: menu_dias
+CREATE TABLE menu_dias (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_menu INT NOT NULL,
+    dia_numero TINYINT NOT NULL,
+    tipo_momento ENUM('comida', 'cena') NOT NULL,
+    id_plato INT,
+    FOREIGN KEY (id_menu) REFERENCES menus(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_plato) REFERENCES platos(id) ON DELETE SET NULL,
+    UNIQUE KEY unique_dia_momento (id_menu, dia_numero, tipo_momento),
+    INDEX idx_menu (id_menu),
+    INDEX idx_dia (dia_numero),
+    INDEX idx_momento (tipo_momento)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tabla: platos_favoritos
+CREATE TABLE platos_favoritos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    id_plato INT NOT NULL,
+    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_plato) REFERENCES platos(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_usuario_plato (usuario_id, id_plato),
+    INDEX idx_usuario (usuario_id),
+    INDEX idx_plato (id_plato)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tabla: ingredientes_comprados
+CREATE TABLE ingredientes_comprados (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_menu INT NOT NULL,
+    id_ingrediente INT NOT NULL,
+    comprado BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (id_menu) REFERENCES menus(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_ingrediente) REFERENCES ingredientes(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_menu_ingrediente (id_menu, id_ingrediente),
+    INDEX idx_menu (id_menu),
+    INDEX idx_ingrediente (id_ingrediente),
+    INDEX idx_comprado (comprado)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================================================
+-- 4. DATOS DE EJEMPLO INICIALES
+-- ============================================================================
+
+-- 4.1. Roles y Permisos
+INSERT INTO roles (nombre, descripcion) VALUES 
+('admin', 'Administrador con acceso total'),
+('usuario', 'Usuario estándar con acceso a menús');
+
+INSERT INTO permisos (nombre, descripcion) VALUES 
+('crear_menu', 'Puede generar y editar menús'),
+('gestionar_usuarios', 'Puede crear y editar usuarios'),
+('gestionar_herramientas', 'Puede editar el catálogo de herramientas'),
+('gestionar_recetas', 'Puede editar recetas y platos'),
+('ver_estadisticas', 'Puede ver reportes');
+
+-- Asignar permisos al rol Admin (ID 1)
+INSERT INTO roles_permisos (id_rol, id_permiso) VALUES 
+(1, 1), (1, 2), (1, 3), (1, 4), (1, 5);
+
+-- Asignar permisos al rol Usuario (ID 2)
+INSERT INTO roles_permisos (id_rol, id_permiso) VALUES 
+(2, 1);
+
+-- 4.2. Usuarios (Contraseñas: admin123 para admin, 123456 para otros)
+-- Hashes generados con PASSWORD_BCRYPT en PHP
+INSERT INTO users (username, email, password_hash, nombre_completo) VALUES
+('admin', 'admin@ejemplo.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Administrador'),
+('Eme', 'eme@ejemplo.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Eme'),
+('Cris', 'cris@ejemplo.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Cris');
+
+-- Asignar roles a usuarios
+INSERT INTO usuarios_roles (id_usuario, id_rol) VALUES
+(1, 1), -- Admin es Admin
+(2, 2), -- Eme es Usuario
+(3, 2); -- Cris es Usuario
+
+-- 4.3. Herramientas
+INSERT INTO herramientas (nombre, descripcion) VALUES
+('Olla', 'Recipiente profundo para hervir o guisar'),
+('Sartén', 'Recipiente plano para freír o saltear'),
+('Horno', 'Electrodoméstico para hornear'),
+('Plancha', 'Superficie caliente para planchar'),
+('Batidora', 'Para triturar alimentos'),
+('Termomix', 'Robot de cocina multifunción'),
+('Cuchillo', 'Utensilio de corte'),
+('Tenedor', 'Utensilio para comer'),
+('Cuchara', 'Utensilio para servir o comer'),
+('Placa', 'Base para hornear o asar');
+
+-- 4.4. Ingredientes
+INSERT INTO ingredientes (nombre, calorias_x_100g, supermercado, categoria) VALUES
+('Filetes de lomo', 143.00, 'Supermercado A', 'Carnes'),
+('Caldo de cocido', 15.00, 'Supermercado A', 'Líquidos'),
+('Fideos', 350.00, 'Supermercado B', 'Pasta'),
+('Sal', 0.00, 'General', 'Condimentos'),
+('Pollo', 165.00, 'Supermercado A', 'Carnes'),
+('Arroz', 130.00, 'Supermercado B', 'Granos'),
+('Tomate', 18.00, 'Mercado', 'Verduras'),
+('Aceite de Oliva', 884.00, 'Supermercado A', 'Grasas'),
+('Pescado Blanco', 82.00, 'Pescadería', 'Pescados'),
+('Patatas', 77.00, 'Mercado', 'Tubérculos'),
+('Huevos', 155.00, 'Supermercado B', 'Lácteos'),
+('Lechuga', 15.00, 'Mercado', 'Verduras'),
+('Cebolla', 40.00, 'Mercado', 'Verduras'),
+('Ajo', 149.00, 'Mercado', 'Condimentos'),
+('Pimiento', 20.00, 'Mercado', 'Verduras');
+
+-- 4.5. Platos
+INSERT INTO platos (nombre, tipo, es_comida, es_cena, nivel_calorico) VALUES
+('Sopa de Fideos', 'sopa', 1, 1, 'bajo'),
+('Lomo a la plancha', 'principal', 1, 0, 'medio'),
+('Pollo al horno con arroz', 'principal', 1, 0, 'alto'),
+('Ensalada de Tomate', 'ensalada', 1, 1, 'bajo'),
+('Pescado al horno con patatas', 'principal', 1, 0, 'medio'),
+('Tortilla de Patatas', 'principal', 1, 1, 'alto'),
+('Fajitas de Pollo', 'principal', 1, 0, 'medio'),
+('Crema de Verduras', 'sopa', 1, 1, 'bajo'),
+('Arroz con Pescado', 'principal', 1, 0, 'medio'),
+('Ensalada Mixta', 'ensalada', 1, 1, 'bajo');
+
+-- 4.6. Recetas
+INSERT INTO recetas (id_plato, titulo_html, subtitulo_html, texto_html) VALUES
+(1, 'Sopa de Fideos', 'Receta clásica', '<p>Cocer fideos en caldo durante 10 minutos. Añadir sal al gusto.</p>'),
+(2, 'Lomo a la plancha', 'Corte tierno', '<p>Sellar lomo en sartén caliente 3-4 minutos por lado. Salpimentar.</p>'),
+(3, 'Pollo al horno', 'Plato familiar', '<p>Hornear pollo a 180°C durante 45 minutos con especias.</p>'),
+(4, 'Ensalada de Tomate', 'Fresca y ligera', '<p>Cortar tomate en rodajas, añadir aceite y sal.</p>'),
+(5, 'Pescado al horno', 'Saludable', '<p>Pescado con patatas en el horno a 200°C durante 30 minutos.</p>'),
+(6, 'Tortilla de Patatas', 'Clásico español', '<p>Patatas y huevos batidos, cocinar en sartén hasta dorar.</p>'),
+(7, 'Fajitas de Pollo', 'Mexicano', '<p>Pollo y pimientos en tiras, servir en tortilla.</p>'),
+(8, 'Crema de Verduras', 'Ligera', '<p>Verduras cocidas y trituradas con un poco de leche.</p>'),
+(9, 'Arroz con Pescado', 'Mediterráneo', '<p>Arroz cocido con pescado blanco y verduras.</p>'),
+(10, 'Ensalada Mixta', 'Completa', '<p>Lechuga, tomate, cebolla y atún.</p>');
+
+-- 4.7. Vincular Herramientas a Recetas
+-- Receta 1: Sopa (Olla, Cuchara)
+INSERT INTO recetas_herramientas (id_receta, id_herramienta) VALUES (1, 1), (1, 9);
+-- Receta 2: Lomo (Sartén, Tenedor)
+INSERT INTO recetas_herramientas (id_receta, id_herramienta) VALUES (2, 2), (2, 8);
+-- Receta 3: Pollo (Horno, Placa)
+INSERT INTO recetas_herramientas (id_receta, id_herramienta) VALUES (3, 3), (3, 10);
+-- Receta 4: Ensalada (Cuchillo, Bowl - usamos Cuchillo y Tenedor como proxy)
+INSERT INTO recetas_herramientas (id_receta, id_herramienta) VALUES (4, 7), (4, 8);
+-- Receta 5: Pescado (Horno, Placa)
+INSERT INTO recetas_herramientas (id_receta, id_herramienta) VALUES (5, 3), (5, 10);
+-- Receta 6: Tortilla (Sartén, Plato - usamos Sartén y Tenedor)
+INSERT INTO recetas_herramientas (id_receta, id_herramienta) VALUES (6, 2), (6, 8);
+-- Receta 7: Fajitas (Sartén, Plancha)
+INSERT INTO recetas_herramientas (id_receta, id_herramienta) VALUES (7, 2), (7, 5);
+-- Receta 8: Crema (Olla, Batidora)
+INSERT INTO recetas_herramientas (id_receta, id_herramienta) VALUES (8, 1), (8, 5);
+-- Receta 9: Arroz (Olla, Cazuela - usamos Olla y Tenedor)
+INSERT INTO recetas_herramientas (id_receta, id_herramienta) VALUES (9, 1), (9, 8);
+-- Receta 10: Ensalada (Cuchillo, Bowl)
+INSERT INTO recetas_herramientas (id_receta, id_herramienta) VALUES (10, 7), (10, 8);
+
+-- 4.8. Vincular Ingredientes a Recetas
+-- Receta 1: Sopa (Fideos, Caldo, Sal, Cebolla)
+INSERT INTO recetas_ingredientes (id_receta, id_ingrediente, cantidad, unidad) VALUES 
+(1, 3, 100.00, 'g'), (1, 2, 500.00, 'ml'), (1, 4, 5.00, 'g'), (1, 13, 10.00, 'g');
+-- Receta 2: Lomo (Lomo, Sal, Ajo)
+INSERT INTO recetas_ingredientes (id_receta, id_ingrediente, cantidad, unidad) VALUES 
+(2, 1, 200.00, 'g'), (2, 4, 2.00, 'g'), (2, 14, 5.00, 'g');
+-- Receta 3: Pollo (Pollo, Arroz, Aceite, Cebolla)
+INSERT INTO recetas_ingredientes (id_receta, id_ingrediente, cantidad, unidad) VALUES 
+(3, 5, 1000.00, 'g'), (3, 6, 200.00, 'g'), (3, 8, 50.00, 'ml'), (3, 13, 50.00, 'g');
+-- Receta 4: Ensalada (Tomate, Aceite, Sal)
+INSERT INTO recetas_ingredientes (id_receta, id_ingrediente, cantidad, unidad) VALUES 
+(4, 7, 300.00, 'g'), (4, 8, 30.00, 'ml'), (4, 4, 3.00, 'g');
+-- Receta 5: Pescado (Pescado, Patatas, Aceite, Sal)
+INSERT INTO recetas_ingredientes (id_receta, id_ingrediente, cantidad, unidad) VALUES 
+(5, 9, 400.00, 'g'), (5, 10, 500.00, 'g'), (5, 8, 40.00, 'ml'), (5, 4, 5.00, 'g');
+-- Receta 6: Tortilla (Patatas, Huevos, Aceite, Sal)
+INSERT INTO recetas_ingredientes (id_receta, id_ingrediente, cantidad, unidad) VALUES 
+(6, 10, 400.00, 'g'), (6, 11, 4.00, 'unid'), (6, 8, 60.00, 'ml'), (6, 4, 5.00, 'g');
+-- Receta 7: Fajitas (Pollo, Pimiento, Cebolla, Aceite)
+INSERT INTO recetas_ingredientes (id_receta, id_ingrediente, cantidad, unidad) VALUES 
+(7, 5, 300.00, 'g'), (7, 15, 200.00, 'g'), (7, 13, 50.00, 'g'), (7, 8, 30.00, 'ml');
+-- Receta 8: Crema (Lechuga, Tomate, Cebolla, Ajo)
+INSERT INTO recetas_ingredientes (id_receta, id_ingrediente, cantidad, unidad) VALUES 
+(8, 12, 200.00, 'g'), (8, 7, 200.00, 'g'), (8, 13, 100.00, 'g'), (8, 14, 20.00, 'g');
+-- Receta 9: Arroz (Pescado, Arroz, Tomate, Aceite)
+INSERT INTO recetas_ingredientes (id_receta, id_ingrediente, cantidad, unidad) VALUES 
+(9, 9, 300.00, 'g'), (9, 6, 200.00, 'g'), (9, 7, 100.00, 'g'), (9, 8, 40.00, 'ml');
+-- Receta 10: Ensalada (Lechuga, Tomate, Cebolla, Sal)
+INSERT INTO recetas_ingredientes (id_receta, id_ingrediente, cantidad, unidad) VALUES 
+(10, 12, 100.00, 'g'), (10, 7, 150.00, 'g'), (10, 13, 50.00, 'g'), (10, 4, 3.00, 'g');
+
+-- 4.9. Preferencias de Ejemplo
+-- Eme (ID 2): Sin restricciones, prefiere Lomo, Pescado, Tortilla
+INSERT INTO preferencias_usuario (usuario_id, clave, valor, tipo_dato, descripcion) VALUES
+(2, 'restriccion_dietetica', 'normal', 'string', 'Sin restricciones'),
+(2, 'ingredientes_avitar', '[]', 'json', 'Ninguno'),
+(2, 'platos_exclusivos', '[]', 'json', 'Ninguno'),
+(2, 'platos_preferidos', '[2, 5, 6]', 'json', 'Prefiere Lomo, Pescado, Tortilla');
+
+-- Cris (ID 3): Vegetariana, evita carnes (IDs 1, 5, 9)
+INSERT INTO preferencias_usuario (usuario_id, clave, valor, tipo_dato, descripcion) VALUES
+(3, 'restriccion_dietetica', 'vegetariano', 'string', 'Vegetariana'),
+(3, 'ingredientes_avitar', '[1, 5, 9]', 'json', 'Evita carnes y pescados'),
+(3, 'platos_exclusivos', '[]', 'json', 'Ninguno'),
+(3, 'platos_preferidos', '[4, 8, 10]', 'json', 'Prefiere ensaladas y cremas');
+
+-- ============================================================================
+-- FIN DEL SCRIPT
+-- ============================================================================

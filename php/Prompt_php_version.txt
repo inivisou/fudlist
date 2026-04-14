@@ -1,54 +1,58 @@
+Está listo para ser copiado y utilizado como especificación maestra para el desarrollo.
+
+
 # PROMPT TÉCNICO COMPLETO – GENERADOR DE MENÚS SEMANALES (WEB + ANDROID HÍBRIDO)
-# (ESPECIFICACIÓN TÉCNICA FINAL: TODAS LAS REGLAS DE NEGOCIO DEL ORIGINAL + NUEVAS)
+# (ESPECIFICACIÓN TÉCNICA FINAL: SISTEMA DE ROLES, HERRAMIENTAS RELACIONALES, ADMIN Y TODAS LAS REGLAS DE NEGOCIO)
 
 ---
 
 ## 🎭 ROL QUE DEBE ASUMIR LA IA
 
-Asume el rol de Arquitecto de Software Web Senior y Desarrollador Full-Stack Experto, con amplia experiencia en:
+Asume el rol de **Arquitecto de Software Web Senior y Desarrollador Full-Stack Experto**, con amplia experiencia en:
 
-- PHP moderno (POO, PDO, Prepared Statements) como base principal del backend.
-- Diseño de esquemas de bases de datos relacionales (MariaDB/MySQL) normalizados y extensibles.
-- Sistemas multiusuario con autenticación segura y perfiles personalizables.
-- Lógica de negocio compleja para generación de menús con restricciones, preferencias, cálculo nutricional y gestión de inventario.
-- Desarrollo de aplicaciones híbridas móviles (Web-to-App) utilizando Apache Cordova o Capacitor.
-- UX/UI accesible (WCAG 2.2) y responsive (Mobile First).
-- JavaScript moderno (Fetch API, sin jQuery).
-- Seguridad contra inyecciones SQL, XSS y CSRF.
+- **PHP Moderno (POO, PDO, Prepared Statements)** como base principal del backend.
+- **Diseño de Esquemas de Bases de Datos Relacionales** (MariaDB/MySQL) normalizados, extensibles y optimizados.
+- **Sistemas Multiusuario** con autenticación segura, roles granulares y gestión de permisos.
+- **Lógica de Negocio Compleja** para generación de menús con restricciones temporales, preferencias de usuarios, cálculo nutricional y gestión de inventario.
+- **Desarrollo de Aplicaciones Híbridas** (Web-to-App) utilizando **Apache Cordova** o **Capacitor** para empaquetado en Android.
+- **UX/UI Accesible** (WCAG 2.2) y **Responsive Design** (Mobile First).
+- **JavaScript Moderno** (Fetch API, sin jQuery) para interacciones asíncronas.
+- **Seguridad Web** (Prevención de Inyección SQL, XSS, CSRF).
 
-Filosofía de Desarrollo:
-- Backend: PHP puro y SQL nativo.
-- Frontend Web: HTML5, CSS3, JS Vanilla.
-- App Móvil: La misma interfaz web encapsulada en un contenedor nativo (WebView) usando Capacitor o Cordova.
-- Librerías externas: Solo para tareas críticas (PDF, Iconos, Empaquetado).
-- Prohibido: Frameworks MVC pesados (Laravel/Symfony) o frameworks JS pesados (React/Angular) si no son estrictamente necesarios.
+**Filosofía de Desarrollo:**
+- **Backend:** PHP puro y SQL nativo. Sin frameworks MVC pesados (Laravel/Symfony).
+- **Frontend Web:** HTML5, CSS3, JS Vanilla.
+- **App Móvil:** La misma interfaz web encapsulada en un contenedor nativo (WebView) usando Capacitor/Cordova.
+- **Librerías Externas:** Solo para tareas críticas (Generación de PDF con TCPDF/Dompdf, Empaquetado móvil).
+- **Seguridad:** Uso obligatorio de `PDO::prepare()` y `htmlspecialchars()`.
 
 ---
 
 ## 🧠 CONTEXTO GENERAL DEL PROYECTO
 
-Aplicación web para la gestión y generación de menús semanales, accesible desde navegador y como aplicación nativa en Android (APK).
+Aplicación web para la **gestión y generación de menús semanales**, accesible desde navegador web y como aplicación nativa en Android (APK).
 
-Principios fundamentales:
-- Arquitectura Híbrida: Backend PHP + MariaDB en servidor remoto, Frontend Web completo, App Android encapsulada con Capacitor/Cordova.
-- Multiusuario Real: Usuarios con perfiles y preferencias.
-- Menú Actual Único: Solo se guarda el último menú generado.
-- Menús Favoritos Ilimitados: Con nombres personalizados.
-- Platos Favoritos: Preferencias personales.
-- Comensales Selectables: El menú se genera para usuarios específicos.
-- Persistencia Total: Todo en BD remota.
-- Cálculo Nutricional: Calorías por plato y por comida.
-- GESTIÓN DE INVENTARIO: Marcado de ingredientes como "ya en casa".
-- GESTIÓN DE HERRAMIENTAS: Resumen diario de herramientas necesarias.
-- ETIQUETADO CALÓRICO: Nivel calórico visual en los platos.
-- DOS MENÚS DIFERENCIADOS: Tentativo (efímero) vs Efectivo (persistente).
-- LÓGICA DE PERSONAS: Mostrar quién puede comer cada plato (columna "Para").
+### Principios Fundamentales
+1.  **Arquitectura Híbrida:** Backend PHP + MariaDB en servidor remoto; Frontend Web completo; App Android encapsulada.
+2.  **Multiusuario con Roles:** Sistema robusto de Roles y Permisos (Admin vs Usuario).
+3.  **Menú Actual Único:** Solo se guarda el último menú generado (se sobrescribe).
+4.  **Menús Favoritos Ilimitados:** Guardado con nombres personalizados.
+5.  **Platos Favoritos:** Preferencias personales de usuarios.
+6.  **Comensales Selectables:** El menú se genera para usuarios específicos seleccionados.
+7.  **Persistencia Total:** Todo en BD remota.
+8.  **Cálculo Nutricional:** Calorías por plato y por comida/cena.
+9.  **Gestión de Inventario:** Marcado de ingredientes como "ya en casa".
+10. **Gestión de Herramientas:** Catálogo centralizado con filtrado dinámico al generar menús (ej: "No tengo horno esta semana").
+11. **Etiquetado Calórico:** Nivel calórico visual (Bajo/Medio/Alto) en los platos.
+12. **Dos Menús Diferenciados:** Tentativo (efímero, con restricciones) vs Efectivo (persistente, editable).
+13. **Lógica de Personas:** Columna "Para" indicando quién puede comer cada plato.
 
 ---
 
 ## 🗂️ ESQUEMA DE BASE DE DATOS (MARIA DB)
 
-### 1. Tabla `users`
+### 1. Tabla `users` (Usuarios del sistema)
+```sql
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
@@ -57,27 +61,58 @@ CREATE TABLE users (
     nombre_completo VARCHAR(100),
     avatar_url VARCHAR(255),
     activo BOOLEAN DEFAULT TRUE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+2. Tabla roles (Sistema de Roles)
 
-### 2. Tabla `preferencias_usuario`
+CREATE TABLE roles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) UNIQUE NOT NULL, -- Ej: 'admin', 'usuario'
+    descripcion VARCHAR(255)
+);
+3. Tabla permisos (Lista de permisos posibles)
+
+CREATE TABLE permisos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) UNIQUE NOT NULL, -- Ej: 'crear_menu', 'gestionar_usuarios', 'editar_recetas', 'gestionar_herramientas'
+    descripcion VARCHAR(255)
+);
+4. Tabla roles_permisos (Asignación de permisos a roles)
+
+CREATE TABLE roles_permisos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_rol INT NOT NULL,
+    id_permiso INT NOT NULL,
+    FOREIGN KEY (id_rol) REFERENCES roles(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_permiso) REFERENCES permisos(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_rol_permiso (id_rol, id_permiso)
+);
+5. Tabla usuarios_roles (Asignación de roles a usuarios)
+
+CREATE TABLE usuarios_roles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    id_rol INT NOT NULL,
+    FOREIGN KEY (id_usuario) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_rol) REFERENCES roles(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_usuario_rol (id_usuario, id_rol)
+);
+6. Tabla preferencias_usuario (Reglas de negocio por usuario - JSON)
+
 CREATE TABLE preferencias_usuario (
     id INT AUTO_INCREMENT PRIMARY KEY,
     usuario_id INT NOT NULL,
     clave VARCHAR(50) NOT NULL,
-    valor TEXT NOT NULL,
+    valor TEXT NOT NULL, -- Almacena JSON para flexibilidad
     tipo_dato ENUM('json', 'string', 'boolean', 'integer') DEFAULT 'string',
     descripcion VARCHAR(255),
     FOREIGN KEY (usuario_id) REFERENCES users(id) ON DELETE CASCADE,
     UNIQUE KEY unique_usuario_clave (usuario_id, clave)
 );
-Claves predefinidas:
-- ingredientes_a_evitar: Array JSON de IDs de ingredientes que el usuario no quiere consumir.
-- restriccion_dietetica: String (ej: vegetariano, celiaco, sin lactosa).
-- platos_exclusivos: Array JSON de IDs de platos que son exclusivos para este usuario.
-- platos_preferidos: Array JSON de IDs de platos que este usuario prefiere.
+-- Claves predefinidas: ingredientes_avitar (JSON), restriccion_dietetica (String), platos_exclusivos (JSON), platos_preferidos (JSON).
+7. Tabla ingredientes (Catálogo maestro)
 
-### 3. Tabla `ingredientes`
 CREATE TABLE ingredientes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) UNIQUE NOT NULL,
@@ -86,8 +121,16 @@ CREATE TABLE ingredientes (
     categoria VARCHAR(50) DEFAULT 'general',
     activo BOOLEAN DEFAULT TRUE
 );
+8. Tabla herramientas (Catálogo centralizado de herramientas - NUEVO)
 
-### 4. Tabla `platos`
+CREATE TABLE herramientas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) UNIQUE NOT NULL, -- Ej: 'Termomix', 'Olla', 'Horno', 'Sartén'
+    descripcion VARCHAR(255),
+    activo BOOLEAN DEFAULT TRUE
+);
+9. Tabla platos (Definición de platos)
+
 CREATE TABLE platos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(150) NOT NULL,
@@ -98,8 +141,8 @@ CREATE TABLE platos (
     nivel_calorico ENUM('bajo', 'medio', 'alto') DEFAULT 'medio',
     activo BOOLEAN DEFAULT TRUE
 );
+10. Tabla recetas (Detalles de preparación)
 
-### 5. Tabla `recetas`
 CREATE TABLE recetas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_plato INT NOT NULL,
@@ -107,11 +150,21 @@ CREATE TABLE recetas (
     subtitulo_html TEXT,
     texto_html LONGTEXT,
     enlace VARCHAR(255),
-    herramientas JSON,
     FOREIGN KEY (id_plato) REFERENCES platos(id) ON DELETE CASCADE
 );
+-- Nota: Las herramientas YA NO se guardan aquí como JSON. Se gestionan en `recetas_herramientas`.
+11. Tabla recetas_herramientas (Relación N:M Recetas-Herramientas - NUEVO)
 
-### 6. Tabla `recetas_ingredientes`
+CREATE TABLE recetas_herramientas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_receta INT NOT NULL,
+    id_herramienta INT NOT NULL,
+    FOREIGN KEY (id_receta) REFERENCES recetas(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_herramienta) REFERENCES herramientas(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_receta_herramienta (id_receta, id_herramienta)
+);
+12. Tabla recetas_ingredientes (Relación Many-to-Many con cantidades)
+
 CREATE TABLE recetas_ingredientes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_receta INT NOT NULL,
@@ -122,8 +175,8 @@ CREATE TABLE recetas_ingredientes (
     FOREIGN KEY (id_ingrediente) REFERENCES ingredientes(id) ON DELETE RESTRICT,
     UNIQUE KEY unique_receta_ingrediente (id_receta, id_ingrediente)
 );
+13. Tabla menus (Cabecera de menús generados)
 
-### 7. Tabla `menus`
 CREATE TABLE menus (
     id INT AUTO_INCREMENT PRIMARY KEY,
     usuario_creador_id INT NOT NULL,
@@ -134,8 +187,8 @@ CREATE TABLE menus (
     fecha_fin DATE,
     FOREIGN KEY (usuario_creador_id) REFERENCES users(id) ON DELETE CASCADE
 );
+14. Tabla menu_comensales (Relación Menú - Usuarios)
 
-### 8. Tabla `menu_comensales`
 CREATE TABLE menu_comensales (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_menu INT NOT NULL,
@@ -144,20 +197,20 @@ CREATE TABLE menu_comensales (
     FOREIGN KEY (id_usuario) REFERENCES users(id) ON DELETE CASCADE,
     UNIQUE KEY unique_menu_usuario (id_menu, id_usuario)
 );
+15. Tabla menu_dias (Detalle diario: Comida y Cena)
 
-### 9. Tabla `menu_dias`
 CREATE TABLE menu_dias (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_menu INT NOT NULL,
-    dia_numero TINYINT NOT NULL, -- CAMBIO: Número correlativo (1, 2, 3...) NO día de semana
+    dia_numero TINYINT NOT NULL, -- Número correlativo (1, 2, 3...)
     tipo_momento ENUM('comida', 'cena') NOT NULL,
     id_plato INT,
     FOREIGN KEY (id_menu) REFERENCES menus(id) ON DELETE CASCADE,
     FOREIGN KEY (id_plato) REFERENCES platos(id) ON DELETE SET NULL,
     UNIQUE KEY unique_dia_momento (id_menu, dia_numero, tipo_momento)
 );
+16. Tabla platos_favoritos (Favoritos de usuario)
 
-### 10. Tabla `platos_favoritos`
 CREATE TABLE platos_favoritos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     usuario_id INT NOT NULL,
@@ -167,8 +220,8 @@ CREATE TABLE platos_favoritos (
     FOREIGN KEY (id_plato) REFERENCES platos(id) ON DELETE CASCADE,
     UNIQUE KEY unique_usuario_plato (usuario_id, id_plato)
 );
+17. Tabla ingredientes_comprados (Inventario: Ya en casa)
 
-### 11. Tabla `ingredientes_comprados`
 CREATE TABLE ingredientes_comprados (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_menu INT NOT NULL,
@@ -178,343 +231,170 @@ CREATE TABLE ingredientes_comprados (
     FOREIGN KEY (id_ingrediente) REFERENCES ingredientes(id) ON DELETE CASCADE,
     UNIQUE KEY unique_menu_ingrediente (id_menu, id_ingrediente)
 );
-
----
-
-## 🧩 LÓGICA DE NEGOCIO COMPLETA (VERIFICADA CONTRA EL ORIGINAL)
-
-### 1. AUTENTICACIÓN Y MULTIUSUARIO
-- Registro seguro con password_hash() (PASSWORD_BCRYPT).
-- Login con sesiones seguras (SESSION con cookies HttpOnly y Secure).
-- Todos los datos filtrados por usuario_id.
-- Un usuario solo ve sus propios menús y favoritos.
-
-### 2. GESTIÓN DEL MENÚ ACTUAL (ÚNICO)
-- Generación: Al pulsar Generar, se busca el menú existente del usuario con tipo='actual'.
-  - Si existe: Se borran sus registros en menu_dias y menu_comensales.
-  - Si no existe: Se crea uno nuevo con tipo='actual' y un nombre genérico (ej: Menú Actual).
-- Sobrescritura: El nuevo menú reemplaza al anterior. Solo hay uno por usuario.
-- Edición: El usuario puede editar este menú en tiempo real.
-
-### 3. GESTIÓN DE MENÚS FAVORITOS (MÚLTIPLES)
-- Guardar como Favorito:
-  - El usuario pulsa Guardar como Favorito en el menú actual.
-  - Se solicita un nombre para el menú (ej: Menú de Verano, Menú Vegano).
-  - Se crea un NUEVO registro en menus con tipo='favorito' y el nombre proporcionado.
-  - Se copian todos los registros de menu_dias y menu_comensales del menú actual al nuevo favorito.
-  - El menú actual sigue existiendo y se puede seguir editando/generando.
-- Listado: El dashboard muestra una lista de todos los favoritos del usuario con su nombre personalizado.
-- Cargar Favorito: Al hacer clic en un favorito, se carga su contenido en una vista de solo lectura o edición.
-
-### 4. GESTIÓN DE PLATOS FAVORITOS
-- Marcar/Desmarcar: En la lista de platos o en la vista de receta, el usuario puede marcar un plato como favorito.
-- Almacenamiento: Se inserta/borra en platos_favoritos.
-- Uso en Generación: Dar prioridad a los platos favoritos del usuario o de los comensales seleccionados.
-
-### 5. DOS MENÚS TOTALMENTE DIFERENCIADOS (REGLA CRÍTICA DEL ORIGINAL)
-
-#### 5.1. MENÚ TENTATIVO (GENERADO)
-- Se genera al pulsar Generar.
-- Cumple TODAS las restricciones.
-- NO repetidos.
-- NO editable.
-- NO tiene checkboxes.
-- Es efímero.
-- Se resetea completamente cada vez que se pulsa Generar.
-- **FORMATO DE TABLA EXACTO DEL ORIGINAL:**
-Nº | Comida | Para | Cena | Para
-
-- Columna "Para": Muestra qué comensales pueden comer ese plato (basado en preferencias/exclusivos).
-- Ejemplo: "Eme / Cris" o solo "Eme" o solo "Cris".
-- No hay checkboxes.
-- Click sobre la **celda** (no botón) añade al menú efectivo.
-- **Visualización:** Mostrar el plato con su nombre, calorías y etiqueta del nivel_calorico.
-
-#### 5.2. MENÚ EFECTIVO (SELECCIONADO POR EL USUARIO)
-- Vive en la base de datos (menu_dias).
-- Editable.
-- Puede contener repetidos (el usuario puede modificarlo).
-- Tiene checkboxes para quitar platos.
-- Es la base para:
-- Lista dinámica de ingredientes.
-- Generación del PDF.
-- Al pulsar Generar de nuevo:
-- El menú tentativo se reinicia.
-- El menú efectivo SE MANTIENE INTACTO (hasta que el usuario lo modifique).
-- **FORMATO DE TABLA EXACTO DEL ORIGINAL:**
-Día | Comida | Quitar | Cena | Quitar | Herramientas del Día
-
-- Los días son **números correlativos**, empezando en 1, **SIN FECHAS** (1, 2, 3, 4...).
-- Checkboxes para quitar platos.
-- Columna "Quitar": Checkbox que elimina la comida o cena, dejando el hueco libre.
-- El hueco libre puede volver a rellenarse desde el tentativo.
-- Columna "Herramientas del Día": Resumen consolidado de herramientas para comida + cena.
-
-### 6. INTERACCIÓN CON EL MENÚ TENTATIVO (DEL ORIGINAL)
-- Click en celda de comida → añade comida al menú efectivo.
-- Click en celda de cena → añade cena al menú efectivo.
-- Se coloca en el **primer hueco libre** (primera fila donde falte comida o cena).
-- Mostrar alerta visual:
-- "Comida añadida"
-- "Cena añadida"
-- **IMPORTANTE:** No se añade al final, se busca el primer hueco vacío.
-
-### 7. INTERACCIÓN CON EL MENÚ EFECTIVO (DEL ORIGINAL)
-- Checkboxes en cada plato para quitarlo.
-- Al desmarcar: se elimina la comida o cena, el hueco queda libre.
-- El hueco puede volver a rellenarse desde el tentativo.
-- Los días son correlativos (1, 2, 3...), no días de la semana.
-
-### 8. CONTROLES DE ENTRADA (GENERACIÓN) - DEL ORIGINAL
-- Selector múltiple "No contenga herramientas":
-- Texto: "No contenga herramientas"
-- Opciones: herramientas únicas de recetas.
-- Excluye recetas con esas herramientas.
-- Input numérico "Días":
-- Texto: "Días"
-- Entero obligatorio.
-- Mínimo: 1.
-- Máximo: total_platos / 2.
-- Botón "Generar".
-
-### 9. SELECCIÓN DE COMENSALES
-- Checkbox list con todos los usuarios activos.
-- Se guardan en menu_comensales.
-- Las preferencias de TODOS los comensales se unifican para la generación.
-
-### 10. RECOPIACIÓN DE RESTRICCIONES
-- Se consultan las preferencias de TODOS los comensales seleccionados.
-- Se unifican los ingredientes_a_evitar de todos (un plato se excluye si ALGÚN comensal evita ese ingrediente).
-- Se identifican restricciones dietéticas comunes.
-- Se identifican platos exclusivos de cada comensal.
-
-### 11. RESTRICCIONES DE GENERACIÓN (CRÍTICO - DEL ORIGINAL)
-- No repetir platos en el mismo menú (salvo necesidad extrema).
-- ≥ 4 días entre pasta.
-- ≥ 9 días entre fajitas.
-- ≥ 5 días entre tortillas.
-- ≥ 5 días entre cremas.
-- Al menos un pescado cada 7 días.
-- Excluir platos que contengan ingredientes en ingredientes_a_evitar de CUALQUIER comensal.
-- Excluir platos que no cumplan restricciones dietéticas de CUALQUIER comensal.
-- Respetar filtros de herramientas (excluir recetas que usen herramientas seleccionadas).
-
-### 12. LÓGICA DE PERSONAS (COMENSALES) - DEL ORIGINAL
-- Mantener platos exclusivos: Si un plato es exclusivo de un comensal, solo aparece para ese comensal.
-- Añadir complemento si coincide el día: Si dos comensales tienen platos diferentes el mismo día, añadir complemento si es necesario.
-- **Prioridad:**
-1. Exclusivo (plato que solo puede comer un comensal específico).
-2. Compartido (plato que pueden comer todos).
-- **Columna "Para" en Menú Tentativo:** Mostrar qué comensales pueden comer cada plato (ej: "Eme / Cris" o "Eme" o "Cris").
-
-### 13. RESOLUCIÓN DE INGREDIENTES - DEL ORIGINAL
-- Buscar por coincidencia exacta de nombre (ahora por ID).
-- Si no existe en el catálogo:
-- Se acepta igualmente.
-- supermercado = "Desconocido".
-- Nunca se rompe la ejecución.
-
-### 14. CÁLCULO DE CALORÍAS
-- Fórmula: Calorías Totales = SUM( (cantidad * calorias_x_100g) / 100 ).
-- Se asume que la unidad por defecto es gramos (g).
-- Si la unidad es diferente (ej: kg), se debe convertir a gramos antes del cálculo.
-- Si un ingrediente no tiene calorias_x_100g definido (NULL o 0), se asume 0 calorías para ese ingrediente.
-- Visualización en el Menú:
-- Menú Tentativo: Mostrar las calorías totales del plato entre paréntesis (ej: Sopa de cocido (450 kcal)).
-- Menú Efectivo: Mostrar las calorías totales del plato en la celda correspondiente.
-- **NUEVO:** El campo nivel_calorico en la tabla platos se usa para pintar visualmente el plato (clases CSS: .cal-bajo, .cal-medio, .cal-alto).
-
-### 15. LISTA DINÁMICA DE INGREDIENTES (CON GESTIÓN DE INVENTARIO)
-- Se actualiza en tiempo real (AJAX).
-- Basada SOLO en el menú efectivo.
-- Ingredientes agrupados por nombre.
-- **FORMATO DEL ORIGINAL:**
-Día 1 – Comida · Filetes de lomo · Caldo de cocido · Fideos · Sal
-
-- **Columna "Ya en casa":** Al final de cada fila de ingrediente, añadir un CHECKBOX.
-- Si se marca: El ingrediente se registra en la tabla ingredientes_comprados como comprado = TRUE.
-- Visualmente: El ingrediente tachado o con opacidad reducida.
-- El PDF de la lista de la compra debe EXCLUIR los ingredientes marcados como "comprados".
-- Ordenar por supermercado.
-
-### 16. RESUMEN DE HERRAMIENTAS DIARIAS
-- En el Menú Efectivo, en la columna final de cada día:
-- Consultar las herramientas de la receta de la Comida.
-- Consultar las herramientas de la receta de la Cena.
-- Unificar y deduplicar la lista (ej: Comida="Olla", Cena="Sartén" → Resultado: "Olla, Sartén").
-- Mostrar esta lista compacta en la celda.
-
-### 17. PDF DE INGREDIENTES
-- Dos opciones:
-- Vista previa (nueva pestaña).
-- Descargar.
-- Contenido:
-- Ingredientes únicos.
-- Ordenados por supermercado.
-- **FILTRO:** Solo incluir ingredientes donde comprado = FALSE.
-- Recomendación: Usar TCPDF o Dompdf para generación profesional.
-- Opcional: Incluir resumen calórico diario en el PDF.
-
-### 18. VISTA DE RECETA (receta.php) - DEL ORIGINAL
-- Recibe id como parámetro (?id=1).
-- Lee de recetas (JOIN con platos).
-- Renderiza:
-1. titulo_html (enlace externo, target="_blank").
-2. subtitulo_html.
-3. texto_html.
-4. Lista de ingredientes (con cantidad y unidad explícitas).
-5. Lista de herramientas.
-- Toda la estructura HTML la genera PHP.
-- Botón "Marcar como favorito" para el plato.
-- Mostrar calorías totales de la receta en la vista.
-- Mostrar nivel_calorico visual.
-
----
-
-## 📱 ARQUITECTURA HÍBRIDA (WEB TO ANDROID APK)
-
-### Estrategia de Empaquetado
-La aplicación se desarrollará como una Web App completa (PHP + HTML + JS) alojada en un servidor. Para convertirla en una APK de Android:
-
-1. Tecnología Elegida: Capacitor (recomendado por Ionic) o Apache Cordova.
- - Contenedor nativo (WebView) que carga la URL de la aplicación web.
- - Acceso a APIs nativas si fuera necesario.
- - Generación de .apk o .aab para Google Play.
-
-2. Flujo de Trabajo:
- - Desarrollar la aplicación web en PHP.
- - Configurar Capacitor/Cordova.
- - Build y exportación.
-
-3. Requisitos para la App:
- - Diseño Mobile-First.
- - Manejo de conexión.
- - Seguridad (HTTPS).
- - Permisos (Internet).
-
-4. Publicación en Google Play:
- - Firma de APK.
- - Subida a consola.
-
----
-
-## 📄 FUNCIONALIDADES DE LA INTERFAZ (FRONTEND)
-
-### index.php (Dashboard Principal)
-- Panel Superior:
-- Selector de Comensales (checkbox list con todos los usuarios activos).
-- Filtros (Herramientas a excluir, Días a generar).
-- Botón "Generar Nuevo Menú" (actualiza el menú actual).
-- Sección Menú Tentativo:
-- Tabla NO editable.
-- **Columnas EXACTAS:** Nº | Comida | Para | Cena | Para
-- No hay checkboxes.
-- Click sobre la celda añade al menú efectivo.
-- Mostrar calorías por plato.
-- Mostrar etiqueta nivel_calorico visual.
-- Columna "Para" muestra qué comensales pueden comer ese plato.
-- Sección Menú Efectivo:
-- Tabla EDITABLE.
-- **Columnas EXACTAS:** Día | Comida | Quitar | Cena | Quitar | Herramientas del Día
-- Checkboxes para quitar platos.
-- Huecos libres se pueden rellenar desde el tentativo.
-- Mostrar calorías por plato.
-- Días correlativos (1, 2, 3...) SIN FECHAS.
-- Sección Mis Favoritos:
-- Lista de tarjetas o tabla con: Nombre del menú, Fecha de creación, Acciones (Ver, Cargar, Eliminar, Renombrar).
-- Sección Platos Favoritos:
-- Lista rápida de platos favoritos del usuario logueado.
-- Enlace directo a la receta.
-- Lista de Ingredientes:
-- Panel que se actualiza al cambiar el menú o los comensales.
-- Agrupado por día y momento (comida/cena).
-- Ordenado por supermercado.
-- **Columna final:** Checkbox "Ya en casa".
-- Ingredientes marcados se tachan y se excluyen del PDF.
-- Exportar PDF:
-- Botón para vista previa o descarga (excluyendo comprados).
-
-### perfil.php
-- Gestión de preferencias:
-- Ingredientes a evitar (con búsqueda y selección).
-- Restricciones dietéticas (selectores).
-- Platos exclusivos (para este usuario).
-- Platos preferidos.
-- Lista de platos favoritos del usuario (con opción de quitar).
-
-### favoritos.php
-- Vista detallada de la gestión de menús guardados.
-- Capacidad de renombrar o eliminar favoritos.
-
-### receta.php
-- Vista de receta.
-- Parámetro: ?id=1.
-- Botón "Marcar como favorito" (cambia estado dinámicamente).
-- Mostrar calorías totales de la receta.
-- Mostrar nivel_calorico visual.
-- Mostrar cantidad explícita de ingredientes.
-
-### login.php / register.php
-- Formularios seguros.
-
-### Adaptación Móvil (CSS)
-- Uso de Flexbox/Grid para layouts responsivos.
-- Botones grandes (touch-friendly).
-- Menús desplegables para pantallas pequeñas.
-- Evitar hover states que no funcionan en táctil.
-
----
-
-## 🚦 RESTRICCIONES TÉCNICAS Y DE SEGURIDAD
-
-1. Integridad del Menú Actual: Asegurar que un usuario nunca tenga más de un menú con tipo='actual'. Usar transacciones SQL o lógica de aplicación robusta.
-2. Copiado de Favoritos: Al guardar un favorito, debe ser una copia profunda (clonar menu_dias y menu_comensales), no una referencia.
-3. SQL Injection: PDO::prepare() obligatorio para TODAS las consultas.
-4. XSS: htmlspecialchars() en todas las salidas.
-5. Librerías: Solo para PDF (TCPDF/Dompdf) y Empaquetado (Capacitor/Cordova). Justificar uso en comentarios.
-6. Validación: Validar entradas en PHP (backend) y JS (frontend).
-7. Accesibilidad: WCAG 2.2 obligatorio.
-8. Navegación por teclado: Tablas accesibles.
-9. Responsive: CSS Grid/Flexbox para móvil y escritorio.
-10. Sin jQuery: fetch() nativo para AJAX.
-11. Manejo de errores: try-catch en PDO, mensajes claros al usuario.
-12. Validación JSON: Validar estructura de datos JSON antes de usar.
-13. HTTPS Obligatorio: Para la app híbrida y la API, el tráfico debe ir cifrado.
-14. CORS: Configurar cabeceras CORS en el servidor PHP para permitir peticiones desde el contenedor de la app si se usa una URL externa.
-15. Precisión de Calorías: Asegurar que el cálculo de calorías sea preciso y maneje casos donde calorias_x_100g sea 0 o NULL.
-16. Formato de Calorías: Mostrar como entero redondeado (ej: 450 kcal) o con un decimal si se desea precisión.
-17. **Gestión de Estado de Ingredientes:** El checkbox "Ya en casa" debe persistir en la BD (ingredientes_comprados) y actualizarse vía AJAX sin recargar la página.
-18. **Consolidación de Herramientas:** La lógica de unión de herramientas por día debe ser eficiente (SET de herramientas en PHP o SQL).
-19. **Visualización de Nivel Calórico:** Usar clases CSS específicas (ej: .cal-bajo, .cal-alto) para colorear o añadir iconos según el campo nivel_calorico.
-20. **Primer Hueco Libre:** Al añadir desde el tentativo al efectivo, buscar SIEMPRE el primer hueco vacío, no añadir al final.
-21. **Columna "Para":** En el menú tentativo, mostrar claramente qué comensales pueden comer cada plato (basado en preferencias/exclusivos).
-
----
-
-## 🧠 EXPECTATIVA FINAL
-
+🧩 LÓGICA DE NEGOCIO COMPLETA
+1. AUTENTICACIÓN Y GESTIÓN DE ROLES
+Registro/Login: Seguro con password_hash() (PASSWORD_BCRYPT).
+Sesiones: Seguras (cookies HttpOnly, Secure).
+Carga de Permisos: Al iniciar sesión, se cargan los roles del usuario (usuarios_roles) y sus permisos (roles_permisos).
+Middleware: Verificación de permisos en cada página protegida.
+Admin: Acceso total (Usuarios, Roles, Herramientas, Categorías, Logs).
+Usuario: Acceso a sus menús, perfil, generación y favoritos.
+2. GESTIÓN DE HERRAMIENTAS (CRÍTICO)
+Catálogo: Tabla herramientas gestionada por Admin.
+Asignación: Relación recetas_herramientas define qué herramientas necesita cada receta.
+Filtrado en Generación:
+El usuario selecciona herramientas que NO quiere usar (ej: "No tengo Termomix").
+El algoritmo excluye cualquier receta que tenga una relación con esas herramientas en recetas_herramientas.
+Consulta SQL: SELECT r.id FROM recetas r LEFT JOIN recetas_herramientas rh ON r.id = rh.id_receta WHERE rh.id_herramienta NOT IN (...).
+Resumen Diario: En el menú efectivo, se consolidan las herramientas necesarias para la comida y cena de ese día.
+3. DOS MENÚS TOTALMENTE DIFERENCIADOS
+3.1. MENÚ TENTATIVO (GENERADO)
+Origen: Se genera al pulsar "Generar".
+Estado: Efímero, no persistente, se resetea al generar de nuevo.
+Restricciones: Cumple TODAS las reglas (no repetir, distancias mínimas, pescado, herramientas, ingredientes).
+Formato de Tabla: Nº | Comida | Para | Cena | Para
+Columna "Para": Muestra qué comensales pueden comer (basado en exclusividad/preferencias).
+Interacción: Click en celda -> Añade al menú efectivo (busca el primer hueco libre).
+Visualización: Nombre del plato, calorías totales, etiqueta visual nivel_calorico (clases CSS: .cal-bajo, .cal-medio, .cal-alto).
+Sin Checkboxes: No se puede editar ni quitar.
+3.2. MENÚ EFECTIVO (PERSISTENTE)
+Origen: Se llena manualmente desde el tentativo o se edita.
+Estado: Persistente en menu_dias.
+Restricciones: El usuario puede romperlas manualmente (añadir repetidos, etc.).
+Formato de Tabla: Día | Comida | Quitar | Cena | Quitar | Herramientas del Día
+Días: Números correlativos (1, 2, 3...), SIN FECHAS.
+Interacción:
+Checkboxes "Quitar": Eliminan el plato, dejan el hueco libre.
+Hueco libre: Se puede rellenar desde el tentativo.
+Columna "Herramientas del Día": Resumen consolidado de herramientas de Comida + Cena (ej: "Olla, Sartén").
+Base de Datos: Es la fuente de verdad para la lista de ingredientes y el PDF.
+4. INTERACCIÓN Y FLUJO
+Click en Tentativo: Añade al efectivo en el primer hueco vacío. Alerta visual: "Comida añadida".
+Checkbox en Efectivo: Quita el plato. El hueco queda libre.
+Generación:
+Selección de Comensales (Checkbox list).
+Selección de Herramientas a Excluir.
+Input "Días" (1 a total_platos/2).
+Algoritmo aplica restricciones y genera el Tentativo.
+El Efectivo se mantiene intacto hasta que el usuario lo modifique.
+5. RESTRICCIONES DE GENERACIÓN (CRÍTICO)
+No repetir platos en el mismo menú (salvo necesidad extrema).
+≥ 4 días entre pasta.
+≥ 9 días entre fajitas.
+≥ 5 días entre tortillas.
+≥ 5 días entre cremas.
+Al menos un pescado cada 7 días.
+Filtro de Herramientas: Excluir platos que requieran herramientas deseleccionadas.
+Filtro de Ingredientes: Excluir platos con ingredientes en ingredientes_avitar de CUALQUIER comensal.
+Filtro Dietético: Excluir platos incompatibles con restricciones de CUALQUIER comensal.
+Lógica de Personas:
+Prioridad: Exclusivo > Compartido.
+Si un plato es exclusivo de un comensal, solo aparece para él.
+6. CÁLCULO DE CALORÍAS
+Fórmula: SUM( (cantidad * calorias_x_100g) / 100 ).
+Unidades: Conversión automática si no es gramos.
+Visualización:
+Tentativo: "Nombre (450 kcal)".
+Efectivo: "Nombre (450 kcal)".
+Receta: Total calórico y etiqueta visual.
+7. LISTA DE LA COMPRA E INVENTARIO
+Fuente: Solo el menú efectivo.
+Agrupación: Por nombre de ingrediente, ordenado por supermercado.
+Formato: Día 1 – Comida • Ingrediente.
+Checkbox "Ya en casa":
+Persiste en ingredientes_comprados.
+Actualización AJAX sin recargar.
+Visual: Tachado o opacidad reducida.
+PDF: Excluye ingredientes marcados como comprados.
+8. GESTIÓN DE ADMINISTRADOR
+Usuario Admin por defecto: Generado en script SQL (usuario: admin, pass: admin123 - cambiar en prod).
+Funciones Admin:
+CRUD de Usuarios (asignar roles).
+CRUD de Roles y Permisos.
+CRUD de Herramientas (Catálogo).
+CRUD de Categorías (Ingredientes/Platos).
+Ver estadísticas básicas (opcional).
+Interfaz: Panel de administración separado o sección protegida.
+9. VISTA DE RECETA (receta.php)
+Parámetro ?id=1.
+Muestra: Título, Subtítulo, Texto, Ingredientes (con cantidad/unidad), Herramientas (lista de nombres), Calorías, Nivel Calórico.
+Botón "Marcar como favorito".
+10. FAVORITOS
+Menús: Guardar como favorito (copia profunda de menu_dias y menu_comensales), nombre personalizado.
+Platos: Marcar/desmarcar en platos_favoritos.
+Prioridad: Los platos favoritos tienen mayor peso en la generación aleatoria.
+📱 ARQUITECTURA HÍBRIDA (WEB TO ANDROID APK)
+Tecnología: Capacitor (recomendado) o Cordova.
+Flujo:
+Desarrollar Web App completa (PHP + HTML + JS).
+Configurar Capacitor (capacitor.config.json).
+npx cap add android -> npx cap open android.
+Build en Android Studio -> Generar .aab para Google Play.
+Requisitos:
+Diseño Mobile-First (Responsive).
+Manejo de estado "Sin conexión".
+HTTPS obligatorio.
+CORS configurado en PHP.
+📄 FUNCIONALIDADES DE LA INTERFAZ (FRONTEND)
+index.php (Dashboard)
+Panel Superior: Selector de Comensales, Filtros (Herramientas a excluir), Input Días, Botón "Generar".
+Sección Menú Tentativo: Tabla NO editable. Columnas: Nº | Comida | Para | Cena | Para. Click en celda añade al efectivo.
+Sección Menú Efectivo: Tabla EDITABLE. Columnas: Día | Comida | Quitar | Cena | Quitar | Herramientas del Día.
+Sección Mis Favoritos: Lista de menús guardados (Ver, Cargar, Eliminar, Renombrar).
+Sección Platos Favoritos: Lista rápida.
+Lista de Ingredientes: Panel dinámico con checkbox "Ya en casa".
+Exportar PDF: Vista previa/Descarga (excluyendo comprados).
+perfil.php
+Gestión de preferencias (ingredientes a evitar, dietas, exclusivos, preferidos).
+Lista de platos favoritos.
+admin.php (Solo Admin)
+Gestión de Usuarios, Roles, Permisos, Herramientas.
+receta.php
+Vista detallada con herramientas, ingredientes, calorías y botón favorito.
+login.php / register.php
+Formularios seguros.
+🚦 RESTRICCIONES TÉCNICAS Y DE SEGURIDAD
+Integridad del Menú Actual: Máximo un menú tipo='actual' por usuario (transacciones SQL).
+Copiado de Favoritos: Copia profunda (clonar datos, no referencias).
+SQL Injection: PDO::prepare() obligatorio para TODAS las consultas.
+XSS: htmlspecialchars() en todas las salidas.
+Librerías: Solo para PDF (TCPDF/Dompdf) y Empaquetado (Capacitor).
+Validación: Backend (PHP) y Frontend (JS).
+Accesibilidad: WCAG 2.2.
+Responsive: Mobile First.
+Sin jQuery: fetch() nativo.
+Manejo de Errores: try-catch en PDO.
+HTTPS: Obligatorio.
+CORS: Configurado para la app móvil.
+Precisión de Calorías: Manejo de NULL/0 en calorias_x_100g.
+Gestión de Estado: Checkbox "Ya en casa" persistente y AJAX.
+Consolidación de Herramientas: Lógica eficiente de unión y deduplicación.
+Visualización Calórica: Clases CSS específicas.
+Primer Hueco Libre: Algoritmo de inserción correcto.
+Columna "Para": Lógica de exclusividad/compartido correcta.
+🧠 EXPECTATIVA FINAL
 El código debe reflejar una arquitectura donde:
-- El backend es PHP + MariaDB robusto y seguro.
-- La interfaz web es completa, accesible y responsive.
-- La aplicación móvil es una versión empaquetada de la web usando Capacitor/Cordova.
-- **TODA la lógica de negocio del prompt original está implementada:**
-- Restricciones temporales (pasta, fajitas, tortillas, cremas, pescado).
-- Exclusión de ingredientes.
-- Lógica de comensales (exclusivo vs compartido).
-- **DOS MENÚS DIFERENCIADOS** (tentativo vs efectivo) con formatos EXACTOS del original.
-- **Columna "Para"** en menú tentativo mostrando qué comensales pueden comer.
-- **Días correlativos** (1, 2, 3...) SIN FECHAS en menú efectivo.
-- **Primer hueco libre** al añadir desde tentativo.
-- Alertas visuales ("Comida añadida", "Cena añadida").
-- Interacción por click en celdas (no botones).
-- Checkboxes para quitar platos.
-- Cálculo y visualización de calorías por comida.
-- Nivel calórico visual en platos.
-- Gestión de inventario (check "ya en casa").
-- Resumen diario de herramientas.
-- Cantidades explícitas en recetas.
-- El sistema es escalable y mantenible.
 
-Este documento es la especificación técnica definitiva. No se permiten interpretaciones ambiguas sobre el esquema de base de datos, la lógica de usuarios, las restricciones de generación o las reglas de negocio.
+El backend es PHP + MariaDB robusto y seguro.
+La interfaz web es completa, accesible y responsive.
+La aplicación móvil es una versión empaquetada de la web.
+TODA la lógica de negocio está implementada:
+Restricciones temporales y de ingredientes.
+Lógica de comensales (exclusivo vs compartido).
+Dos menús diferenciados (tentativo vs efectivo) con formatos exactos.
+Columna "Para" en menú tentativo.
+Días correlativos sin fechas.
+Primer hueco libre al añadir.
+Alertas visuales.
+Interacción por click en celdas.
+Checkboxes para quitar.
+Cálculo de calorías y nivel calórico visual.
+Gestión de inventario (check "ya en casa").
+Resumen diario de herramientas.
+Cantidades explícitas en recetas.
+Sistema de Roles y Permisos completo.
+Catálogo de Herramientas relacional con filtrado dinámico.
+El sistema es escalable y mantenible.
+Este documento es la especificación técnica definitiva. No se permiten interpretaciones ambiguas.
 
 FIN DEL PROMPT
