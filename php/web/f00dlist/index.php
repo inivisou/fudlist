@@ -15,7 +15,6 @@ require_once 'config/config.php';
 require_once 'config/db.php';
 require_once 'includes/auth.php';
 require_once 'includes/functions.php';
-require_once 'classes/User.php';
 require_once 'classes/Menu.php';
 require_once 'classes/MenuGenerator.php';
 require_once 'classes/Recipe.php';
@@ -27,6 +26,15 @@ requireLogin();
 
 $userId = getCurrentUserId();
 $userData = getCurrentUserData();
+
+// Debugging: Ensure hasRole() is defined
+if (!function_exists('hasRole')) {
+    die("Error crítico: La función hasRole() no está definida. Verifique la carga de includes/auth.php en el servidor.");
+}
+
+// RBAC: Definición de capacidades
+$isColaborador = hasRole('admin') || hasRole('colaborador');
+$isAdmin = hasRole('admin');
 
 // 2. Obtener o crear el Menú Actual
 $menuActual = Menu::getActualForUser($userId);
@@ -73,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 }
 
 // 4. Obtener datos para los formularios
-$allUsers = fetchAll("SELECT id, username, nombre_completo FROM users WHERE activo = 1 ORDER BY nombre_completo ASC");
+$allUsers = getEligibleComensals();
 $allTools = Tool::getAllActive();
 $favoritos = Menu::getFavoritesForUser($userId);
 
@@ -82,30 +90,7 @@ $diasEfectivos = $menuActual->getDiasData();
 $comensalesActuales = $menuActual->getComensalesData();
 
 // 6. Obtener lista de ingredientes para el menú efectivo
-$listaIngredientes = [];
-if (!empty($diasEfectivos)) {
-    $sql = "SELECT i.id, i.nombre, i.supermercado, SUM(ri.cantidad) as total_cantidad, ri.unidad
-            FROM menu_dias md
-            JOIN platos p ON md.id_plato = p.id
-            JOIN recetas r ON p.id = r.id_plato
-            JOIN recetas_ingredientes ri ON r.id = ri.id_receta
-            JOIN ingredientes i ON ri.id_ingrediente = i.id
-            WHERE md.id_menu = ? AND i.activo = 1
-            GROUP BY i.id, i.nombre, i.supermercado, ri.unidad
-            ORDER BY i.supermercado, i.nombre";
-    
-    $rawIngredients = fetchAll($sql, [$menuActual->getId()]);
-    
-    // Marcar cuáles están comprados
-    $compradosSql = "SELECT id_ingrediente FROM ingredientes_comprados WHERE id_menu = ? AND comprado = 1";
-    $comprados = fetchAll($compradosSql, [$menuActual->getId()]);
-    $compradosIds = array_column($comprados, 'id_ingrediente');
-
-    foreach ($rawIngredients as $ing) {
-        $ing['comprado'] = in_array($ing['id'], $compradosIds);
-        $listaIngredientes[] = $ing;
-    }
-}
+$listaIngredientes = Ingredient::getShoppingListByMenu($menuActual->getId());
 
 // Definir título de la página
 $pageTitle = 'Dashboard';
@@ -114,37 +99,6 @@ $pageTitle = 'Dashboard';
 require_once 'includes/header.php';
 ?>
 
-<style>
-    /* Estilos específicos del Dashboard */
-    .dashboard-container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-    .header-panel { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 20px; }
-    .section-title { font-size: 1.4rem; color: #2c3e50; margin-bottom: 15px; border-bottom: 2px solid #3498db; padding-bottom: 5px; }
-    .table-responsive { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; background: white; }
-    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
-    th { background-color: #f8f9fa; font-weight: 600; color: #34495e; }
-    tr:hover { background-color: #f1f1f1; }
-    .btn { padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; text-decoration: none; display: inline-block; }
-    .btn-primary { background: #3498db; color: white; }
-    .btn-success { background: #27ae60; color: white; }
-    .btn-warning { background: #f39c12; color: white; }
-    .btn-danger { background: #e74c3c; color: white; }
-    .btn-sm { padding: 5px 10px; font-size: 0.8rem; }
-    .cal-bajo { color: #27ae60; font-weight: bold; }
-    .cal-medio { color: #f39c12; font-weight: bold; }
-    .cal-alto { color: #e74c3c; font-weight: bold; }
-    .ingredient-row { opacity: 1; transition: opacity 0.3s; }
-    .ingredient-row.comprado { opacity: 0.5; text-decoration: line-through; }
-    .alert { padding: 15px; margin-bottom: 20px; border-radius: 5px; }
-    .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-    .alert-danger { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-    .form-check { display: flex; align-items: center; margin-bottom: 5px; }
-    .form-check input { margin-right: 8px; }
-    .loading { display: none; color: #3498db; font-weight: bold; margin-left: 10px; }
-    .tentative-item { cursor: pointer; padding: 5px; background: #e8f6f3; border-radius: 4px; transition: background 0.2s; }
-    .tentative-item:hover { background: #d1f2eb; }
-</style>
-
 <div class="dashboard-container">
     <!-- Mensajes Flash -->
     <?php if ($mensajeExito): ?>
@@ -152,6 +106,20 @@ require_once 'includes/header.php';
     <?php endif; ?>
     <?php if ($mensajeError): ?>
         <div class="alert alert-danger"><?= sanitize($mensajeError) ?></div>
+    <?php endif; ?>
+
+    <!-- Accesos Administrativos (RBAC) -->
+    <?php if ($isColaborador): ?>
+        <div class="header-panel" style="border-bottom: 3px solid #3498db; background: #ebf5fb;">
+            <h3 style="margin-top:0; color:#2980b9;">🛠️ Panel de Gestión</h3>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <a href="<?= url('admin/recipes.php') ?>" class="btn btn-primary btn-sm">Gestionar Platos</a>
+                <a href="<?= url('admin/ingredients.php') ?>" class="btn btn-primary btn-sm">Ingredientes</a>
+                <?php if ($isAdmin): ?>
+                    <a href="<?= url('admin/users.php') ?>" class="btn btn-danger btn-sm">Gestión de Usuarios (Admin)</a>
+                <?php endif; ?>
+            </div>
+        </div>
     <?php endif; ?>
 
     <!-- Panel de Control -->
@@ -232,9 +200,9 @@ require_once 'includes/header.php';
                                 <td><?= $i ?></td>
                                 
                                 <!-- Comida -->
-                                <td>
+                                <td data-label="Comida">
                                     <?php if ($diaData['comida']): ?>
-                                        <div class="tentative-item" data-dia="<?= $i ?>" data-momento="comida" data-plato="<?= $diaData['comida']['id_plato'] ?>" onclick="addToEffective(this)">
+                                        <div class="tentative-item" data-plato="<?= $diaData['comida']['id_plato'] ?>" onclick="addToEffective(this)">
                                             <strong><?= sanitize($diaData['comida']['plato_nombre']) ?></strong>
                                             <br><small class="<?= getCaloricClass($diaData['comida']['nivel_calorico']) ?>">
                                                 <?= formatCalories($diaData['comida']['calorias'] ?? 0) ?>
@@ -245,13 +213,13 @@ require_once 'includes/header.php';
                                     <?php endif; ?>
                                 </td>
 
-                                <!-- Para Comida -->
-                                <td><?php echo "Todos"; ?></td>
+                                <!-- Para Comida (Comensales compatibles) -->
+                                <td data-label="Para"><?= !empty($diaData['comida']['para_comensales']) ? implode(', ', $diaData['comida']['para_comensales']) : 'Nadie' ?></td>
 
                                 <!-- Cena -->
-                                <td>
+                                <td data-label="Cena">
                                     <?php if ($diaData['cena']): ?>
-                                        <div class="tentative-item" data-dia="<?= $i ?>" data-momento="cena" data-plato="<?= $diaData['cena']['id_plato'] ?>" onclick="addToEffective(this)">
+                                        <div class="tentative-item" data-plato="<?= $diaData['cena']['id_plato'] ?>" onclick="addToEffective(this)">
                                             <strong><?= sanitize($diaData['cena']['plato_nombre']) ?></strong>
                                             <br><small class="<?= getCaloricClass($diaData['cena']['nivel_calorico']) ?>">
                                                 <?= formatCalories($diaData['cena']['calorias'] ?? 0) ?>
@@ -262,8 +230,8 @@ require_once 'includes/header.php';
                                     <?php endif; ?>
                                 </td>
 
-                                <!-- Para Cena -->
-                                <td><?php echo "Todos"; ?></td>
+                                <!-- Para Cena (Comensales compatibles) -->
+                                <td data-label="Para"><?= !empty($diaData['cena']['para_comensales']) ? implode(', ', $diaData['cena']['para_comensales']) : 'Nadie' ?></td>
                             </tr>
                         <?php endfor; ?>
                     </tbody>
@@ -302,29 +270,46 @@ require_once 'includes/header.php';
                     for ($d = 1; $d <= $totalRows; $d++): 
                         $comida = $diasEfectivos[$d]['comida'] ?? null;
                         $cena = $diasEfectivos[$d]['cena'] ?? null;
+
+                        $comidaCalorias = 0;
+                        $cenaCalorias = 0;
                         
                         // Calcular herramientas del día (simplificado para visualización)
-                        $herramientasDia = [];
+                        $herramientasDiaNombres = [];
                         if ($comida && $comida['id_plato']) {
-                            // En una versión completa, cargaríamos la receta aquí
-                            $herramientasDia[] = "Calculando..."; 
+                            $recipeComida = Recipe::getByPlatoId($comida['id_plato']);
+                            if ($recipeComida) {
+                                $comidaCalorias = $recipeComida->calculateTotalCalories();
+                                foreach ($recipeComida->getTools() as $tool) {
+                                    $herramientasDiaNombres[] = $tool->getNombre();
+                                }
+                            }
                         }
                         if ($cena && $cena['id_plato']) {
-                            $herramientasDia[] = "Calculando...";
+                            $recipeCena = Recipe::getByPlatoId($cena['id_plato']);
+                            if ($recipeCena) {
+                                $cenaCalorias = $recipeCena->calculateTotalCalories();
+                                foreach ($recipeCena->getTools() as $tool) {
+                                    $herramientasDiaNombres[] = $tool->getNombre();
+                                }
+                            }
                         }
-                        $herramientasStr = implode(", ", array_unique($herramientasDia));
+                        $herramientasStr = implode(", ", array_unique($herramientasDiaNombres));
+                        if (empty($herramientasStr)) {
+                            $herramientasStr = "N/A";
+                        }
                     ?>
                     <tr data-dia="<?= $d ?>">
                         <td><?= $d ?></td>
                         
                         <!-- Comida -->
-                        <td>
+                        <td data-label="Comida">
                             <?php if ($comida): ?>
                                 <a href="<?= url('receta.php?id=' . $comida['id_plato']) ?>" target="_blank">
                                     <?= sanitize($comida['nombre']) ?>
                                 </a>
                                 <br><small class="<?= getCaloricClass($comida['nivel_calorico']) ?>">
-                                    <?= formatCalories(0) ?>
+                                    <?= formatCalories($comidaCalorias) ?>
                                 </small>
                             <?php else: ?>
                                 <span style="color:#ccc;">Hueco libre</span>
@@ -332,20 +317,20 @@ require_once 'includes/header.php';
                         </td>
                         
                         <!-- Quitar Comida -->
-                        <td style="text-align:center;">
+                        <td data-label="Quitar Comida" style="text-align:center;">
                             <?php if ($comida): ?>
-                                <input type="checkbox" onchange="removeFromEffective(<?= $d ?>, 'comida')" style="transform: scale(1.5);">
+                                <button type="button" class="btn-remove-plato" onclick="removeFromEffective(<?= $d ?>, 'comida')">❌</button>
                             <?php endif; ?>
                         </td>
 
                         <!-- Cena -->
-                        <td>
+                        <td data-label="Cena">
                             <?php if ($cena): ?>
                                 <a href="<?= url('receta.php?id=' . $cena['id_plato']) ?>" target="_blank">
                                     <?= sanitize($cena['nombre']) ?>
                                 </a>
                                 <br><small class="<?= getCaloricClass($cena['nivel_calorico']) ?>">
-                                    <?= formatCalories(0) ?>
+                                    <?= formatCalories($cenaCalorias) ?>
                                 </small>
                             <?php else: ?>
                                 <span style="color:#ccc;">Hueco libre</span>
@@ -353,14 +338,14 @@ require_once 'includes/header.php';
                         </td>
 
                         <!-- Quitar Cena -->
-                        <td style="text-align:center;">
+                        <td data-label="Quitar Cena" style="text-align:center;">
                             <?php if ($cena): ?>
-                                <input type="checkbox" onchange="removeFromEffective(<?= $d ?>, 'cena')" style="transform: scale(1.5);">
+                                <button type="button" class="btn-remove-plato" onclick="removeFromEffective(<?= $d ?>, 'cena')">❌</button>
                             <?php endif; ?>
                         </td>
 
                         <!-- Herramientas -->
-                        <td><small><?= $herramientasStr ?></small></td>
+                        <td data-label="Herramientas"><small><?= $herramientasStr ?></small></td>
                     </tr>
                     <?php endfor; ?>
                 </tbody>
@@ -387,12 +372,12 @@ require_once 'includes/header.php';
                     <?php else: ?>
                         <?php foreach ($listaIngredientes as $ing): ?>
                             <tr class="ingredient-row <?= $ing['comprado'] ? 'comprado' : '' ?>">
-                                <td><?= sanitize($ing['nombre']) ?></td>
-                                <td><?= number_format($ing['total_cantidad'], 0) ?> <?= sanitize($ing['unidad']) ?></td>
-                                <td><?= sanitize($ing['supermercado']) ?></td>
-                                <td>
+                                <td data-label="Ingrediente"><?= sanitize($ing['nombre']) ?></td>
+                                <td data-label="Cantidad"><?= number_format($ing['total_cantidad'], 0) ?> <?= sanitize($ing['unidad']) ?></td>
+                                <td data-label="Supermercado"><?= sanitize($ing['supermercado']) ?></td>
+                                <td data-label="Ya en casa">
                                     <input type="checkbox" 
-                                           onchange="toggleIngredient(<?= $ing['id'] ?>, this.checked)"
+                                           onchange="toggleIngredient(<?= $ing['id'] ?>, this.checked, this)"
                                            <?= $ing['comprado'] ? 'checked' : '' ?>>
                                 </td>
                             </tr>
@@ -408,93 +393,11 @@ require_once 'includes/header.php';
 
 </div>
 
+<!-- Elemento Toast para notificaciones -->
+<div id="toast" class="toast-feedback">Actualizado con éxito</div>
+
 <!-- Scripts JS -->
-<script>
-    const MENU_ID = <?= $menuActual->getId() ?>;
-    const CSRF_TOKEN = '<?= generateCSRFToken() ?>';
-
-    // Añadir plato al menú efectivo (desde el tentativo)
-    function addToEffective(element) {
-        const dia = element.dataset.dia;
-        const momento = element.dataset.momento;
-        const platoId = element.dataset.plato;
-
-        if(!confirm('¿Añadir "' + element.querySelector('strong').innerText + '" al día ' + dia + ' (' + momento + ')?')) return;
-
-        fetch('api/add_to_effective.php', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: `csrf_token=${CSRF_TOKEN}&menu_id=${MENU_ID}&dia=${dia}&momento=${momento}&plato_id=${platoId}`
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Plato añadido correctamente.');
-                location.reload(); 
-            } else {
-                alert('Error: ' + data.message);
-            }
-        })
-        .catch(err => {
-            console.error(err);
-            alert('Error de conexión.');
-        });
-    }
-
-    // Quitar plato del menú efectivo
-    function removeFromEffective(dia, momento) {
-        if (!confirm('¿Quitar este plato?')) return;
-
-        fetch('api/remove_from_effective.php', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: `csrf_token=${CSRF_TOKEN}&menu_id=${MENU_ID}&dia=${dia}&momento=${momento}`
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload();
-            } else {
-                alert('Error: ' + data.message);
-            }
-        });
-    }
-
-    // Marcar ingrediente como comprado
-    function toggleIngredient(ingredienteId, comprado) {
-        fetch('api/toggle_ingredient.php', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: `csrf_token=${CSRF_TOKEN}&menu_id=${MENU_ID}&ingrediente_id=${ingredienteId}&comprado=${comprado ? 1 : 0}`
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (!data.success) alert('Error al actualizar');
-            // Actualizar visualmente si falla o tiene retraso
-            if(!data.success) location.reload();
-        });
-    }
-
-    // Guardar como favorito
-    function saveAsFavorite() {
-        const nombre = prompt('Nombre para el menú favorito:');
-        if (!nombre) return;
-
-        fetch('api/save_as_favorite.php', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: `csrf_token=${CSRF_TOKEN}&menu_id=${MENU_ID}&nombre=${encodeURIComponent(nombre)}`
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Menú guardado como favorito: ' + nombre);
-                location.href = 'favoritos.php';
-            } else {
-                alert('Error: ' + data.message);
-            }
-        });
-    }
-</script>
+<script>const MENU_ID = <?= $menuActual->getId() ?>; const CSRF_TOKEN = '<?= generateCSRFToken() ?>';</script>
+<script src="<?= asset('js/dashboard.js') ?>"></script>
 
 <?php require_once 'includes/footer.php'; ?>

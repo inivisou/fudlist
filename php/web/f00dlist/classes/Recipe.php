@@ -168,6 +168,32 @@ class Recipe {
         return fetchAll($sql);
     }
 
+    /**
+     * Obtener lista extendida para administración
+     * @return array
+     */
+    public static function getAdminList() {
+        $sql = "SELECT r.id, r.id_plato, p.nombre as plato_nombre, p.tipo, p.categoria, p.nivel_calorico, p.es_comida, p.es_cena
+                FROM recetas r
+                JOIN platos p ON r.id_plato = p.id
+                WHERE p.activo = 1
+                ORDER BY p.nombre ASC";
+        return fetchAll($sql);
+    }
+
+    /**
+     * Obtener una receta por su ID de plato asociado
+     * @param int $platoId
+     * @return Recipe|null
+     */
+    public static function getByPlatoId($platoId) {
+        $sql = "SELECT id FROM recetas WHERE id_plato = ? LIMIT 1";
+        $data = fetchOne($sql, [$platoId]);
+        if ($data) {
+            return new Recipe($data['id']);
+        }
+        return null;
+    }
     // ========================================================================
     // CÁLCULOS NUTRICIONALES
     // ========================================================================

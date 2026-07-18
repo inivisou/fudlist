@@ -195,7 +195,7 @@ $numDias = count($dias);
     if (empty($comensales)) {
         echo "Nadie seleccionado";
     } else {
-        echo implode(", ", array_map(function($u) { return $u->getNombreCompleto() ?: $u->getUsername(); }, $comensales));
+        echo implode(", ", array_map(function($u) { return ($u['nombre_completo'] ?? '') ?: $u['username']; }, $comensales));
     }
     ?>
 </div>

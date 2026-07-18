@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         
                         $comensales = $menu->getComensalesData();
                         foreach ($comensales as $comensal) {
-                            $menuActual->addComensal($comensal->getId());
+                            $menuActual->addComensal($comensal['id']);
                         }
                         
                         $db->commit();

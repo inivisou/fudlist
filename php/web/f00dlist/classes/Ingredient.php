@@ -288,5 +288,33 @@ class Ingredient {
         }
         return [];
     }
+
+    /**
+     * Obtener lista de ingredientes necesarios para un menú específico
+     * @param int $menuId
+     * @return array
+     */
+    public static function getShoppingListByMenu($menuId) {
+        $sql = "SELECT i.id, i.nombre, i.supermercado, SUM(ri.cantidad) as total_cantidad, ri.unidad
+                FROM menu_dias md
+                JOIN platos p ON md.id_plato = p.id
+                JOIN recetas r ON p.id = r.id_plato
+                JOIN recetas_ingredientes ri ON r.id = ri.id_receta
+                JOIN ingredientes i ON ri.id_ingrediente = i.id
+                WHERE md.id_menu = ? AND i.activo = 1
+                GROUP BY i.id, i.nombre, i.supermercado, ri.unidad
+                ORDER BY i.supermercado, i.nombre";
+        
+        $ingredients = fetchAll($sql, [$menuId]);
+        
+        $compradosSql = "SELECT id_ingrediente FROM ingredientes_comprados WHERE id_menu = ? AND comprado = 1";
+        $comprados = fetchAll($compradosSql, [$menuId]);
+        $compradosIds = array_column($comprados, 'id_ingrediente');
+
+        foreach ($ingredients as &$ing) {
+            $ing['comprado'] = in_array($ing['id'], $compradosIds);
+        }
+        return $ingredients;
+    }
 }
 ?>

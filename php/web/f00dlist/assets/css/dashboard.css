@@ -1,0 +1,84 @@
+/* Estilos específicos del Dashboard */
+.dashboard-container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+.header-panel { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 20px; }
+.section-title { font-size: 1.4rem; color: #2c3e50; margin-bottom: 15px; border-bottom: 2px solid #3498db; padding-bottom: 5px; }
+.table-responsive { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; margin-bottom: 20px; background: white; }
+th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+th { background-color: #f8f9fa; font-weight: 600; color: #34495e; }
+tr:hover { background-color: #f1f1f1; }
+.btn { padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; text-decoration: none; display: inline-block; }
+.btn-primary { background: #3498db; color: white; }
+.btn-success { background: #27ae60; color: white; }
+.btn-warning { background: #f39c12; color: white; }
+.btn-danger { background: #e74c3c; color: white; }
+.btn-sm { padding: 5px 10px; font-size: 0.8rem; }
+.cal-bajo { color: #27ae60; font-weight: bold; }
+.cal-medio { color: #f39c12; font-weight: bold; }
+.cal-alto { color: #e74c3c; font-weight: bold; }
+.ingredient-row { transition: all 0.3s ease; }
+.ingredient-row.comprado { opacity: 0.6; }
+/* Forzamos el tachado en las celdas para que no lo hereden de forma errónea */
+.ingredient-row.comprado td { text-decoration: line-through !important; color: #7f8c8d; }
+.alert { padding: 15px; margin-bottom: 20px; border-radius: 5px; }
+.alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+.alert-danger { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+.form-check { display: flex; align-items: center; margin-bottom: 5px; }
+.form-check input { margin-right: 8px; }
+.loading { display: none; color: #3498db; font-weight: bold; margin-left: 10px; }
+.tentative-item { cursor: pointer; padding: 5px; background: #e8f6f3; border-radius: 4px; transition: background 0.2s; }
+.tentative-item:hover { background: #d1f2eb; }
+
+/* RWD: Tablas a Tarjetas para Cordova */
+@media screen and (max-width: 768px) {
+    table, thead, tbody, th, td, tr { display: block; }
+    thead tr { position: absolute; top: -9999px; left: -9999px; }
+    tr { border: 1px solid #ddd; border-radius: 8px; margin-bottom: 15px; padding: 10px; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    td { border: none; position: relative; padding-left: 50% !important; text-align: right !important; min-height: 40px; }
+    td:before { 
+        content: attr(data-label); 
+        position: absolute; left: 10px; width: 45%; 
+        text-align: left; font-weight: bold; color: #34495e;
+    }
+    .tentative-item { text-align: right; display: inline-block; width: 100%; }
+    .btn-sm { width: 100%; margin-top: 5px; box-sizing: border-box; }
+    .header-panel { padding: 10px; }
+}
+
+/* Feedback Visual sin Alerts */
+.toast-feedback {
+    position: fixed; bottom: 20px; right: 20px; 
+    background: #2ecc71; color: white; padding: 12px 25px;
+    border-radius: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    z-index: 9999; transform: translateY(100px); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.toast-feedback.show { transform: translateY(0); }
+
+/* Mejoras de Hit Target para Mobile */
+input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+}
+
+/* New style for remove dish button */
+.btn-remove-plato {
+    background: none;
+    color: white;
+    border: none;
+    border-radius: 50%; /* Make it round */
+    width: 30px; /* Fixed size for touch target */
+    height: 30px;
+    font-size: 1.2rem;
+    line-height: 1;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.btn-remove-plato:hover {
+    background: #c0392b;
+}
+@media screen and (max-width: 768px) {
+    td .btn-remove-plato { float: right; margin-top: -5px; }
+}

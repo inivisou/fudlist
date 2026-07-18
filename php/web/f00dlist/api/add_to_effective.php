@@ -29,9 +29,14 @@ $menuId = (int)($_POST['menu_id'] ?? 0);
 $dia = (int)($_POST['dia'] ?? 0);
 $momento = $_POST['momento'] ?? ''; // 'comida' o 'cena'
 $platoId = (int)($_POST['plato_id'] ?? 0);
+$autoFind = isset($_POST['auto_find']) && $_POST['auto_find'] == 1;
 
-if ($menuId <= 0 || $platoId <= 0 || !in_array($momento, ['comida', 'cena'])) {
-    echo json_encode(['success' => false, 'message' => 'Parámetros inválidos.']);
+if ($menuId <= 0 || $platoId <= 0) {
+    echo json_encode(['success' => false, 'message' => 'Parámetros inválidos (menu_id o plato_id).']);
+    exit;
+}
+if (!$autoFind && !in_array($momento, ['comida', 'cena'])) {
+    echo json_encode(['success' => false, 'message' => 'Parámetros inválidos (momento).']);
     exit;
 }
 
@@ -44,35 +49,30 @@ if (!$menu->getId() || $menu->getUsuarioCreadorId() != getCurrentUserId()) {
 
 // 5. Lógica de inserción
 try {
-    // Si se especificó día y momento, intentamos ponerlo ahí
-    if ($dia > 0) {
-        // Verificar si ya hay algo ahí (si es así, podríamos devolver error o sobrescribir)
-        // En este caso, sobrescribimos si el usuario hizo clic en el tentativo sobre un hueco libre
-        // Pero si ya hay algo, quizás queremos devolver error.
-        // Para simplificar: si hay algo, no hacemos nada o devolvemos mensaje.
-        
+    if ($autoFind) {
+        $freeSlot = $menu->getFirstFreeSlot(MAX_DIAS_GENERACION);
+
+        if (!$freeSlot) {
+            echo json_encode(['success' => false, 'message' => 'No hay huecos libres en el menú.']);
+            exit;
+        }
+        $dia = $freeSlot['dia'];
+        $momento = $freeSlot['momento'];
+        $success = $menu->setPlato($dia, $momento, $platoId);
+    } else {
+        // Si no es auto_find, entonces día y momento deben estar definidos y ser válidos
         // Comprobamos si ya existe un plato en esa posición
         $checkSql = "SELECT id_plato FROM menu_dias WHERE id_menu = ? AND dia_numero = ? AND tipo_momento = ?";
         $existing = fetchOne($checkSql, [$menuId, $dia, $momento]);
-        
+
         if ($existing && $existing['id_plato'] !== null) {
             // Ya hay un plato, no hacemos nada (o podríamos devolver un error)
             echo json_encode(['success' => true, 'message' => 'Ya hay un plato en esa posición.']);
             exit;
         }
-        
+
         // Asignar
         $success = $menu->setPlato($dia, $momento, $platoId);
-    } else {
-        // Si no se especificó día, buscar el primer hueco libre
-        $freeSlot = $menu->getFirstFreeSlot(MAX_DIAS_GENERACION);
-        
-        if (!$freeSlot) {
-            echo json_encode(['success' => false, 'message' => 'No hay huecos libres en el menú.']);
-            exit;
-        }
-        
-        $success = $menu->setPlato($freeSlot['dia'], $freeSlot['momento'], $platoId);
     }
 
     if ($success) {

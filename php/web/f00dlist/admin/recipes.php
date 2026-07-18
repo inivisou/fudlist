@@ -32,25 +32,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             beginTransaction();
 
             // 1. Datos del Plato
-            $idPlato = (int)($_POST['id_plato'] ?? 0);
+            $idPlato = (int)($_POST['id_plato_hidden'] ?? 0); // Use a distinct name for hidden input
             $nombrePlato = trim($_POST['nombre_plato'] ?? '');
             $tipo = $_POST['tipo'] ?? 'principal';
             $categoria = trim($_POST['categoria'] ?? '');
             $esComida = isset($_POST['es_comida']) ? 1 : 0;
             $esCena = isset($_POST['es_cena']) ? 1 : 0;
             $nivelCalorico = $_POST['nivel_calorico'] ?? 'medio';
-
-            if (empty($nombrePlato) || $idPlato <= 0) {
-                throw new Exception("Debe seleccionar o crear un plato válido.");
+            
+            if (empty($nombrePlato)) {
+                throw new Exception("El nombre del plato es obligatorio.");
             }
 
-            // Si el plato no existe, crearlo (o actualizarlo si se cambia el nombre)
-            // Para simplificar: asumimos que el ID del plato ya existe y solo actualizamos sus datos básicos
-            // O si es nuevo, lo creamos primero.
-            // En este flujo: El usuario selecciona un plato existente o el admin lo crea antes.
-            // Aquí actualizamos los datos del plato seleccionado.
-            $sqlPlato = "UPDATE platos SET nombre = ?, tipo = ?, categoria = ?, es_comida = ?, es_cena = ?, nivel_calorico = ? WHERE id = ?";
-            executeQuery($sqlPlato, [$nombrePlato, $tipo, $categoria, $esComida, $esCena, $nivelCalorico, $idPlato]);
+            if ($idPlato > 0) {
+                // Actualizar plato existente
+                $sqlPlato = "UPDATE platos SET nombre = ?, tipo = ?, categoria = ?, es_comida = ?, es_cena = ?, nivel_calorico = ? WHERE id = ?";
+                executeQuery($sqlPlato, [$nombrePlato, $tipo, $categoria, $esComida, $esCena, $nivelCalorico, $idPlato]);
+            } else {
+                // Crear nuevo plato
+                $sqlPlato = "INSERT INTO platos (nombre, tipo, categoria, es_comida, es_cena, nivel_calorico) VALUES (?, ?, ?, ?, ?, ?)";
+                executeQuery($sqlPlato, [$nombrePlato, $tipo, $categoria, $esComida, $esCena, $nivelCalorico]);
+                $idPlato = getLastInsertId();
+                if (!$idPlato) {
+                    throw new Exception("Error al crear el nuevo plato.");
+                }
+            }
 
             // 2. Datos de la Receta
             $idReceta = (int)($_POST['id_receta'] ?? 0);
@@ -137,17 +143,6 @@ if ($editingId > 0) {
 }
 
 // Listar recetas
-$sqlList = "SELECT r.id, r.id_plato, p.nombre as plato_nombre, p.tipo, p.categoria, p.nivel_calorico
-            FROM recetas r
-            JOIN platos p ON r.id_plato = p.id
-            WHERE p.activo = 1
-            ORDER BY p.nombre ASC";
-$recipes = fetchAll($sqlList);
-
-// Obtener todos los ingredientes y herramientas para los selects
-$allIngredients = Ingredient::getAllActive();
-$allTools = Tool::getAllActive();
-
 $pageTitle = 'Gestionar Recetas';
 require_once '../includes/header.php';
 ?>
@@ -167,6 +162,7 @@ require_once '../includes/header.php';
         <h3><?= $editingId > 0 ? 'Editar Receta' : 'Nueva Receta' ?></h3>
         <form method="POST" action="">
             <?= csrfField() ?>
+            <input type="hidden" name="id_plato_hidden" value="<?= $recipeData['id_plato'] ?? '' ?>">
             <input type="hidden" name="id_receta" value="<?= $recipeData['id'] ?? '' ?>">
 
             <!-- Datos del Plato -->

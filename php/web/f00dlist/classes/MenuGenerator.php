@@ -11,7 +11,6 @@ require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/Recipe.php';
 require_once __DIR__ . '/Menu.php';
-require_once __DIR__ . '/User.php';
 require_once __DIR__ . '/Ingredient.php';
 
 class MenuGenerator {
@@ -20,6 +19,7 @@ class MenuGenerator {
     private $excludedToolIds = [];
     private $comensalIds = [];
     private $availableRecipes = [];
+    private $comensalNames = []; // Cache para los nombres de los comensales seleccionados
     private $usedPlatoIds = []; // Para evitar repetidos en el mismo menú
     private $lastUsageDates = []; // Para controlar distancias mínimas (plato_id => ultimo_dia_usado)
     
@@ -36,6 +36,16 @@ class MenuGenerator {
         $this->numDias = max(MIN_DIAS_GENERACION, min($numDias, MAX_DIAS_GENERACION));
         $this->excludedToolIds = $excludedToolIds;
         $this->comensalIds = $comensalIds;
+
+        // Cargar los nombres de los comensales seleccionados para la columna "Para"
+        if (!empty($comensalIds)) {
+            $placeholders = implode(',', array_fill(0, count($comensalIds), '?'));
+            $sql = "SELECT id, username, nombre_completo FROM users WHERE id IN ($placeholders)";
+            $userRows = fetchAll($sql, $comensalIds);
+            foreach ($userRows as $row) {
+                $this->comensalNames[$row['id']] = $row['nombre_completo'] ?: $row['username'];
+            }
+        }
     }
 
     /**
@@ -246,6 +256,29 @@ class MenuGenerator {
                 }
                 if (!$valid) continue;
             }
+
+            // Calcular calorías para la visualización en el menú tentativo
+            $recipeObj = new Recipe($recipe['id']);
+            $totalCalories = $recipeObj->calculateTotalCalories();
+            $recipe['calorias'] = $totalCalories;
+
+            // Determinar comensales compatibles para la columna "Para"
+            $paraComensales = [];
+            if (isset($this->exclusivePlatos[$platoId])) {
+                // Si es un plato exclusivo, solo se listan los comensales exclusivos que también están seleccionados
+                foreach ($this->comensalIds as $selectedUserId) {
+                    if (in_array($selectedUserId, $this->exclusivePlatos[$platoId])) {
+                        if (isset($this->comensalNames[$selectedUserId])) {
+                            $paraComensales[] = $this->comensalNames[$selectedUserId];
+                        }
+                    }
+                }
+            } else {
+                // Si no es exclusivo, todos los comensales seleccionados pueden comerlo (ya que pasó los filtros globales)
+                $paraComensales = array_values($this->comensalNames); // Todos los comensales seleccionados
+            }
+            $recipe['para_comensales'] = $paraComensales;
+
 
             $filtered[] = $recipe;
         }

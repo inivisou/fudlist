@@ -115,8 +115,8 @@ function registerUser($username, $email, $password, $nombreCompleto) {
         
         $userId = getLastInsertId();
         
-        // Asignar rol de usuario por defecto (ID 2 = 'usuario')
-        $assignRoleSql = "INSERT INTO usuarios_roles (id_usuario, id_rol) VALUES (?, 2)";
+        // Asignar rol de usuario por defecto buscando por nombre
+        $assignRoleSql = "INSERT INTO usuarios_roles (id_usuario, id_rol) SELECT ?, id FROM roles WHERE nombre = 'user'";
         executeQuery($assignRoleSql, [$userId]);
         
         return ['success' => true, 'user_id' => $userId, 'message' => 'Registro exitoso'];
@@ -217,6 +217,63 @@ function getUserRoles($userId = null) {
 }
 
 /**
+ * Obtener todos los usuarios con sus roles concatenados
+ * @return array
+ */
+function getAllUsersWithRoles() {
+    $sql = "SELECT u.*, 
+            GROUP_CONCAT(r.nombre SEPARATOR ', ') as roles 
+            FROM users u
+            LEFT JOIN usuarios_roles ur ON u.id = ur.id_usuario
+            LEFT JOIN roles r ON ur.id_rol = r.id
+            GROUP BY u.id
+            ORDER BY u.activo DESC, u.username ASC";
+    return fetchAll($sql);
+}
+
+/**
+ * Asignar un único rol a un usuario (reemplaza los anteriores)
+ * @param int $userId
+ * @param string $roleName
+ * @return bool
+ */
+function syncUserRole($userId, $roleName) {
+    try {
+        beginTransaction();
+        // 1. Eliminar roles actuales
+        executeQuery("DELETE FROM usuarios_roles WHERE id_usuario = ?", [$userId]);
+        // 2. Insertar nuevo rol buscando por nombre
+        $sql = "INSERT INTO usuarios_roles (id_usuario, id_rol) 
+                SELECT ?, id FROM roles WHERE nombre = ?";
+        $success = executeQuery($sql, [$userId, $roleName]);
+        commit();
+        return $success;
+    } catch (Exception $e) {
+        rollback();
+        return false;
+    }
+}
+
+/**
+ * Cambiar el estado activo de un usuario
+ * @param int $userId
+ * @param int $active (1 o 0)
+ * @return bool
+ */
+function setUserActiveState($userId, $active) {
+    $sql = "UPDATE users SET activo = ? WHERE id = ?";
+    return executeQuery($sql, [$active, $userId]);
+}
+
+function getEligibleComensals() {
+    $sql = "SELECT u.id, u.username, u.nombre_completo 
+            FROM users u 
+            WHERE u.activo = 1 AND u.id NOT IN (SELECT ur.id_usuario FROM usuarios_roles ur JOIN roles r ON ur.id_rol = r.id WHERE r.nombre = 'admin') 
+            ORDER BY u.nombre_completo ASC";
+    return fetchAll($sql);
+}
+
+/**
  * Obtener permisos del usuario actual (agrupados por roles)
  * @param int|null $userId
  * @return array Array de strings con los nombres de los permisos
@@ -254,18 +311,28 @@ function hasPermission($permissionName, $userId = null) {
 }
 
 /**
+ * Verificar si el usuario tiene un rol específico por nombre
+ * @param string $roleName
+ * @param int|null $userId
+ * @return bool
+ */
+function hasRole($roleName, $userId = null) {
+    $roles = getUserRoles($userId);
+    foreach ($roles as $role) {
+        if ($role['nombre'] === $roleName) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
  * Verificar si el usuario es admin (tiene el rol 'admin')
  * @param int|null $userId
  * @return bool
  */
 function isAdmin($userId = null) {
-    $roles = getUserRoles($userId);
-    foreach ($roles as $role) {
-        if ($role['nombre'] === 'admin') {
-            return true;
-        }
-    }
-    return false;
+    return hasRole('admin', $userId);
 }
 
 /**

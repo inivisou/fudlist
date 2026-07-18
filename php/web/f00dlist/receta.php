@@ -49,6 +49,11 @@ if (isLoggedIn()) {
     $isFavorite = (bool)$favRow;
 }
 
+// 4.1 Verificar roles para edición (RBAC)
+// Asumimos las funciones hasRole() definidas en auth.php según el roadmap
+$canEdit = isLoggedIn() && (hasRole('admin') || hasRole('colaborador'));
+$isAdmin = isLoggedIn() && hasRole('admin');
+
 // 5. Procesar acción de favorito (AJAX o POST simple)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'toggle_favorite' && isLoggedIn()) {
     if (!validateCSRFToken($_POST['csrf_token'] ?? '')) {
@@ -129,6 +134,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                     <?= $isFavorite ? '★ Favorito' : '☆ Añadir a Favoritos' ?>
                 </button>
             </form>
+            
+            <?php if ($canEdit): ?>
+                <a href="<?= url('admin/editar_receta.php?id=' . $recipe->getId()) ?>" class="btn btn-warning" style="margin-left:10px;">📝 Editar Catálogo</a>
+            <?php endif; ?>
         <?php else: ?>
             <a href="<?= url('login.php') ?>" class="btn-fav">Inicia sesión para favoritar</a>
         <?php endif; ?>
