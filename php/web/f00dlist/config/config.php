@@ -15,6 +15,29 @@
  * (Decisión 10 / Decisión 43: sin secretos hardcodeados en el repo)
  */
 
+$envFile = __DIR__ . '/.env';
+
+if (is_file($envFile)) {
+    $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+    foreach ($lines as $line) {
+        $line = trim($line);
+
+        if ($line === '' || str_starts_with($line, '#')) {
+            continue;
+        }
+
+        [$name, $value] = array_pad(explode('=', $line, 2), 2, '');
+
+        $name = trim($name);
+        $value = trim($value);
+
+        putenv("$name=$value");
+        $_ENV[$name] = $value;
+    }
+}
+
+
 // Evitar acceso directo al archivo
 if (!defined('APP_NAME')) {
     define('APP_NAME', 'f00dlist');
