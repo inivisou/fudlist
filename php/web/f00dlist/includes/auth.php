@@ -71,6 +71,18 @@ function requireAdmin() {
     }
 }
 
+/**
+ * Redirigir si el usuario no tiene el rol especificado
+ * @param string $roleName
+ */
+function requireRole($roleName) {
+    requireLogin();
+    if (!hasRole($roleName)) {
+        header('Location: ' . url('index.php'));
+        exit;
+    }
+}
+
 // ============================================================================
 // REGISTRO Y LOGIN
 // ============================================================================
@@ -86,15 +98,15 @@ function requireAdmin() {
 function registerUser($username, $email, $password, $nombreCompleto) {
     // Validaciones básicas
     if (strlen($username) < USERNAME_MIN_LENGTH || strlen($username) > USERNAME_MAX_LENGTH) {
-        return ['success' => false, 'message' => 'El nombre de usuario debe tener entre ' . USERNAME_MIN_LENGTH . ' y ' . USERNAME_MAX_LENGTH . ' caracteres'];
+        return ['success' => false, 'message' => 'Datos de registro inválidos'];
     }
     
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        return ['success' => false, 'message' => 'Email inválido'];
+        return ['success' => false, 'message' => 'Datos de registro inválidos'];
     }
     
     if (strlen($password) < PASSWORD_MIN_LENGTH) {
-        return ['success' => false, 'message' => 'La contraseña debe tener al menos ' . PASSWORD_MIN_LENGTH . ' caracteres'];
+        return ['success' => false, 'message' => 'Datos de registro inválidos'];
     }
     
     // Verificar si el usuario o email ya existen
@@ -102,7 +114,8 @@ function registerUser($username, $email, $password, $nombreCompleto) {
     $existing = fetchOne($checkSql, [$username, $email]);
     
     if ($existing) {
-        return ['success' => false, 'message' => 'El nombre de usuario o email ya están registrados'];
+        // Mensaje genérico para evitar revelar si el usuario o email existe
+        return ['success' => false, 'message' => 'Datos de registro inválidos'];
     }
     
     // Hash de contraseña (Bcrypt)
@@ -137,20 +150,23 @@ function registerUser($username, $email, $password, $nombreCompleto) {
 function loginUser($username, $password) {
     $sql = "SELECT id, username, email, password_hash, nombre_completo, activo 
             FROM users 
-            WHERE (username = ? OR email = ?) AND activo = 1";
+            WHERE (username = ? OR email = ?)";
     $user = fetchOne($sql, [$username, $username]);
     
     if (!$user) {
-        return ['success' => false, 'message' => 'Usuario o contraseña incorrectos'];
+        // Usuario no existe o inactivo: mensaje genérico para evitar enumeración
+        return ['success' => false, 'message' => 'Credenciales inválidas'];
     }
     
     if (!password_verify($password, $user['password_hash'])) {
-        return ['success' => false, 'message' => 'Usuario o contraseña incorrectos'];
+        // Contraseña incorrecta: mensaje genérico
+        return ['success' => false, 'message' => 'Credenciales inválidas'];
     }
     
     // Verificar si el usuario está activo
     if (!$user['activo']) {
-        return ['success' => false, 'message' => 'Tu cuenta está desactivada. Contacta con el administrador'];
+        // Cuenta inactiva: mensaje genérico
+        return ['success' => false, 'message' => 'Credenciales inválidas'];
     }
     
     // Iniciar sesión

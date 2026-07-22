@@ -166,29 +166,6 @@ class Menu {
         return $this->comensalesData;
     }
 
-    /**
-     * Obtener un plato específico para un día y momento
-     * @param int $diaNumero
-     * @param string $tipoMomento ('comida' o 'cena')
-     * @return Recipe|null
-     */
-    public function getPlato($diaNumero, $tipoMomento) {
-        $dias = $this->getDiasData();
-        if (isset($dias[$diaNumero][$tipoMomento]['id_plato']) && $dias[$diaNumero][$tipoMomento]['id_plato']) {
-            $recipeId = $dias[$diaNumero][$tipoMomento]['id_plato'];
-            // Necesitamos el ID de la receta, no del plato. 
-            // La tabla menu_dias guarda id_plato. Necesitamos buscar la receta asociada a ese plato.
-            // Asumimos 1 receta por plato para simplificar, o tomamos la primera.
-            $sql = "SELECT id FROM recetas WHERE id_plato = ? LIMIT 1";
-            $recipeData = fetchOne($sql, [$dias[$diaNumero][$tipoMomento]['id_plato']]);
-            
-            if ($recipeData) {
-                return new Recipe($recipeData['id']);
-            }
-        }
-        return null;
-    }
-
     // ========================================================================
     // MÉTODOS DE GUARDADO (CREATE/UPDATE)
     // ========================================================================
@@ -272,25 +249,49 @@ class Menu {
      * Quitar un plato de un día y momento (dejar hueco libre)
      * @param int $diaNumero
      * @param string $tipoMomento
-     * @return bool
+     * @return string 'eliminado' | 'ya_vacio' | 'error'  (Decisión 42)
      */
     public function removePlato($diaNumero, $tipoMomento) {
-        if (!$this->id) return false;
+        if (!$this->id) return 'error';
+        
+        // Comprobar si ya estaba vacío
+        $checkSql = "SELECT id_plato FROM menu_dias WHERE id_menu = ? AND dia_numero = ? AND tipo_momento = ?";
+        $existing = fetchOne($checkSql, [$this->id, $diaNumero, $tipoMomento]);
+        if (!$existing || $existing['id_plato'] === null) {
+            return 'ya_vacio';
+        }
         
         $sql = "DELETE FROM menu_dias WHERE id_menu = ? AND dia_numero = ? AND tipo_momento = ?";
-        return executeQuery($sql, [$this->id, $diaNumero, $tipoMomento]);
+        $ok = executeQuery($sql, [$this->id, $diaNumero, $tipoMomento]);
+        return $ok ? 'eliminado' : 'error';
     }
 
     /**
-     * Obtener el primer hueco libre (dia, momento) donde no hay plato
+     * Obtener el primer hueco libre (dia, momento) donde no hay plato.
+     * Si se pasa $momentoPreferido, busca primero ese momento; si no hay,
+     * entonces cualquier hueco libre (fallback). Decisión 18.
      * @param int $maxDias
+     * @param string|null $momentoPreferido ('comida' o 'cena')
      * @return array|null ['dia' => int, 'momento' => string]
      */
-    public function getFirstFreeSlot($maxDias = 14) {
+    public function getFirstFreeSlot($maxDias = 14, $momentoPreferido = null) {
         if (!$this->id) return null;
         
+        $momentos = ['comida', 'cena'];
+        if (in_array($momentoPreferido, $momentos, true)) {
+            // Buscar primero en el momento preferido
+            for ($d = 1; $d <= $maxDias; $d++) {
+                $checkSql = "SELECT id FROM menu_dias WHERE id_menu = ? AND dia_numero = ? AND tipo_momento = ? AND id_plato IS NOT NULL";
+                $exists = fetchOne($checkSql, [$this->id, $d, $momentoPreferido]);
+                if (!$exists) {
+                    return ['dia' => $d, 'momento' => $momentoPreferido];
+                }
+            }
+        }
+        
+        // Fallback: cualquier hueco libre
         for ($d = 1; $d <= $maxDias; $d++) {
-            foreach (['comida', 'cena'] as $m) {
+            foreach ($momentos as $m) {
                 $checkSql = "SELECT id FROM menu_dias WHERE id_menu = ? AND dia_numero = ? AND tipo_momento = ? AND id_plato IS NOT NULL";
                 $exists = fetchOne($checkSql, [$this->id, $d, $m]);
                 if (!$exists) {

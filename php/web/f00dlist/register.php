@@ -28,48 +28,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!validateCSRFToken($_POST['csrf_token'] ?? '')) {
         $errors['general'] = 'Token de seguridad inválido. Por favor, recarga la página.';
     } else {
-        // Capturar datos
-        $formData['username'] = trim($_POST['username'] ?? '');
-        $formData['email'] = trim($_POST['email'] ?? '');
-        $formData['nombre_completo'] = trim($_POST['nombre_completo'] ?? '');
-        $password = $_POST['password'] ?? '';
-        $passwordConfirm = $_POST['password_confirm'] ?? '';
+        // Rate limiting: verificar intentos fallidos por IP
+        $clientIp = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+        if (!checkRateLimit($clientIp, null, 5, 300)) {
+            $errors['general'] = 'Demasiados intentos de registro. Por favor, intenta más tarde.';
+        } else {
+            // Capturar datos
+            $formData['username'] = trim($_POST['username'] ?? '');
+            $formData['email'] = trim($_POST['email'] ?? '');
+            $formData['nombre_completo'] = trim($_POST['nombre_completo'] ?? '');
+            $password = $_POST['password'] ?? '';
+            $passwordConfirm = $_POST['password_confirm'] ?? '';
 
-        // Validaciones básicas
-        if (strlen($formData['username']) < USERNAME_MIN_LENGTH) {
-            $errors['username'] = 'El usuario debe tener al menos ' . USERNAME_MIN_LENGTH . ' caracteres.';
-        }
+            // Validaciones básicas
+            if (strlen($formData['username']) < USERNAME_MIN_LENGTH || strlen($formData['username']) > USERNAME_MAX_LENGTH) {
+                $errors['username'] = 'El usuario debe tener entre ' . USERNAME_MIN_LENGTH . ' y ' . USERNAME_MAX_LENGTH . ' caracteres.';
+            }
 
-        if (!isValidEmail($formData['email'])) {
-            $errors['email'] = 'El email no es válido.';
-        }
+            if (!isValidEmail($formData['email'])) {
+                $errors['email'] = 'El email no es válido.';
+            }
 
-        if (empty($formData['nombre_completo'])) {
-            $errors['nombre_completo'] = 'El nombre completo es obligatorio.';
-        }
+            if (!validateNombreCompleto($formData['nombre_completo'])) {
+                $errors['nombre_completo'] = 'El nombre completo debe tener entre 2 y 100 caracteres.';
+            }
 
-        if (strlen($password) < PASSWORD_MIN_LENGTH) {
-            $errors['password'] = 'La contraseña debe tener al menos ' . PASSWORD_MIN_LENGTH . ' caracteres.';
-        }
+            if (strlen($password) < PASSWORD_MIN_LENGTH) {
+                $errors['password'] = 'La contraseña debe tener al menos ' . PASSWORD_MIN_LENGTH . ' caracteres.';
+            }
 
-        if ($password !== $passwordConfirm) {
-            $errors['password_confirm'] = 'Las contraseñas no coinciden.';
-        }
+            if ($password !== $passwordConfirm) {
+                $errors['password_confirm'] = 'Las contraseñas no coinciden.';
+            }
 
-        // Si no hay errores de validación, intentar registrar
-        if (empty($errors)) {
-            $result = registerUser(
-                $formData['username'],
-                $formData['email'],
-                $password,
-                $formData['nombre_completo']
-            );
+            // Si no hay errores de validación, intentar registrar
+            if (empty($errors)) {
+                $result = registerUser(
+                    $formData['username'],
+                    $formData['email'],
+                    $password,
+                    $formData['nombre_completo']
+                );
 
-            if ($result['success']) {
-                setSuccessMessage('¡Registro exitoso! Ahora puedes iniciar sesión.');
-                redirect(url('login.php'));
-            } else {
-                $errors['general'] = $result['message'];
+                if ($result['success']) {
+                    setSuccessMessage('¡Registro exitoso! Ahora puedes iniciar sesión.');
+                    redirect(url('login.php'));
+                } else {
+                    $errors['general'] = $result['message'];
+                }
             }
         }
     }

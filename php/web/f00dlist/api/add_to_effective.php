@@ -29,7 +29,7 @@ $menuId = (int)($_POST['menu_id'] ?? 0);
 $dia = (int)($_POST['dia'] ?? 0);
 $momento = $_POST['momento'] ?? ''; // 'comida' o 'cena'
 $platoId = (int)($_POST['plato_id'] ?? 0);
-$autoFind = isset($_POST['auto_find']) && $_POST['auto_find'] == 1;
+$autoFind = filter_var($_POST['auto_find'] ?? false, FILTER_VALIDATE_BOOLEAN);
 
 if ($menuId <= 0 || $platoId <= 0) {
     echo json_encode(['success' => false, 'message' => 'Parámetros inválidos (menu_id o plato_id).']);
@@ -50,7 +50,7 @@ if (!$menu->getId() || $menu->getUsuarioCreadorId() != getCurrentUserId()) {
 // 5. Lógica de inserción
 try {
     if ($autoFind) {
-        $freeSlot = $menu->getFirstFreeSlot(MAX_DIAS_GENERACION);
+        $freeSlot = $menu->getFirstFreeSlot(MAX_DIAS_GENERACION, $momento ?: null);
 
         if (!$freeSlot) {
             echo json_encode(['success' => false, 'message' => 'No hay huecos libres en el menú.']);

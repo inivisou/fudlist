@@ -352,7 +352,10 @@ class MenuGenerator {
     // ========================================================================
 
     private function forcePescado(&$menuData, $candidates) {
-        // Buscar días sin pescado y asignar uno
+        // Objetivo: al menos 1 pescado cada PESCADO_CADA_X_DIAS (Decisión 17)
+        $objetivoPescados = ceil($this->numDias / PESCADO_CADA_X_DIAS);
+        $pescadosForzados = 0;
+
         for ($dia = 1; $dia <= $this->numDias; $dia++) {
             // Verificar si ya hay pescado en este día
             $hasPescado = false;
@@ -374,7 +377,11 @@ class MenuGenerator {
                         $menuData[$dia][MOMENTO_CENA] = $pescado;
                     }
                     $this->markAsUsed($pescado['id_plato'], $dia);
-                    return; // Ya forzamos uno, salir
+                    $pescadosForzados++;
+                    // Seguir forzando hasta alcanzar el objetivo (no salir tras el primero)
+                    if ($pescadosForzados >= $objetivoPescados) {
+                        break;
+                    }
                 }
             }
         }

@@ -57,8 +57,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ON DUPLICATE KEY UPDATE valor = ?";
             executeQuery($sql, [$userId, json_encode($avoidIds), json_encode($avoidIds)]);
 
-            // Guardar Restricción Dietética
+            // Guardar Restricción Dietética (Decisión 44: validar contra whitelist)
             $restriccionInput = $_POST['restriccion_dietetica'] ?? 'normal';
+            $dietasValidas = ['normal', 'vegetariano', 'vegan', 'celiaco', 'sin_lactosa'];
+            if (!in_array($restriccionInput, $dietasValidas, true)) {
+                $restriccionInput = 'normal';
+            }
             $sql = "INSERT INTO preferencias_usuario (usuario_id, clave, valor, tipo_dato) 
                     VALUES (?, 'restriccion_dietetica', ?, 'string')
                     ON DUPLICATE KEY UPDATE valor = ?";

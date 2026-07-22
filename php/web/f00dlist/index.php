@@ -264,7 +264,7 @@ require_once 'includes/header.php';
                 </thead>
                 <tbody>
                     <?php 
-                    $maxDiasEfectivo = max(array_keys($diasEfectivos)) ?? 0;
+                    $maxDiasEfectivo = !empty($diasEfectivos) ? max(array_keys($diasEfectivos)) : 0;
                     $totalRows = max($maxDiasEfectivo, $menuTentativoData ? count($menuTentativoData) : 0);
                     
                     for ($d = 1; $d <= $totalRows; $d++): 

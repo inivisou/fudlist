@@ -72,26 +72,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $idReceta = $recipe->getId(); // Obtener ID si era nuevo
 
-            // 3. Gestionar Ingredientes
-            // Recibir arrays: ingredientes_ids[], cantidades[], unidades[]
-            $ingIds = isset($_POST['ingredientes_ids']) ? $_POST['ingredientes_ids'] : [];
-            $cantidades = isset($_POST['cantidades']) ? $_POST['cantidades'] : [];
-            $unidades = isset($_POST['unidades']) ? $_POST['unidades'] : [];
-
-            // Limpiar relaciones anteriores
-            $recipe->clearRelations();
-
-            // Insertar nuevos
-            if (!empty($ingIds)) {
-                foreach ($ingIds as $index => $ingId) {
-                    $ingId = (int)$ingId;
-                    if ($ingId > 0) {
-                        $cant = floatval($cantidades[$index] ?? 1);
-                        $uni = trim($unidades[$index] ?? 'g');
-                        $recipe->addIngredient($ingId, $cant, $uni);
-                    }
-                }
-            }
+             // 3. Gestionar Ingredientes
+             // Recibir arrays: ingredientes_ids[], cantidades[], unidades[]
+             $ingIds = isset($_POST['ingredientes_ids']) ? $_POST['ingredientes_ids'] : [];
+             $cantidades = isset($_POST['cantidades']) ? $_POST['cantidades'] : [];
+             $unidades = isset($_POST['unidades']) ? $_POST['unidades'] : [];
+ 
+             // Validar que los arrays tengan la misma longitud
+             if (!empty($ingIds) && (count($ingIds) !== count($cantidades) || count($ingIds) !== count($unidades))) {
+                 throw new Exception('Los arrays de ingredientes, cantidades y unidades deben tener la misma longitud.');
+             }
+ 
+             // Limpiar relaciones anteriores
+             $recipe->clearRelations();
+ 
+             // Insertar nuevos
+             if (!empty($ingIds)) {
+                 foreach ($ingIds as $index => $ingId) {
+                     $ingId = (int)$ingId;
+                     if ($ingId > 0) {
+                         $cant = floatval($cantidades[$index] ?? 1);
+                         $uni = trim($unidades[$index] ?? 'g');
+                         
+                         // Validar que la cantidad sea positiva
+                         if ($cant <= 0) {
+                             throw new Exception('La cantidad debe ser mayor que cero.');
+                         }
+                         
+                         $recipe->addIngredient($ingId, $cant, $uni);
+                     }
+                 }
+             }
 
             // 4. Gestionar Herramientas
             $toolIds = isset($_POST['herramientas_ids']) ? array_map('intval', $_POST['herramientas_ids']) : [];

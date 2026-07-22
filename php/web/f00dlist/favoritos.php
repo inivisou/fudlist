@@ -62,8 +62,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $db = getDB();
                     $db->beginTransaction();
                     try {
-                        $db->exec("DELETE FROM menu_dias WHERE id_menu = {$menuActual->getId()}");
-                        $db->exec("DELETE FROM menu_comensales WHERE id_menu = {$menuActual->getId()}");
+                        $stmt = $db->prepare("DELETE FROM menu_dias WHERE id_menu = ?");
+                        $stmt->execute([$menuActual->getId()]);
+                        $stmt = $db->prepare("DELETE FROM menu_comensales WHERE id_menu = ?");
+                        $stmt->execute([$menuActual->getId()]);
                         
                         // 3. Copiar datos del favorito al actual
                         $dias = $menu->getDiasData();

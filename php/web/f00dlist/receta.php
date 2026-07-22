@@ -143,21 +143,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         <?php endif; ?>
     </div>
 
-    <!-- Contenido de la Receta -->
-    <?php if ($recipeData['titulo_html']): ?>
-        <div class="section-card">
-            <div class="recipe-content">
-                <?= $recipeData['titulo_html'] ?>
-                <?php if ($recipeData['subtitulo_html']): ?>
-                    <h3><?= $recipeData['subtitulo_html'] ?></h3>
-                <?php endif; ?>
-                <?= $recipeData['texto_html'] ?>
-                <?php if ($recipeData['enlace']): ?>
-                    <p><a href="<?= sanitize($recipeData['enlace']) ?>" target="_blank" style="color:#3498db;">Ver receta original →</a></p>
-                <?php endif; ?>
-            </div>
-        </div>
-    <?php endif; ?>
+     <!-- Contenido de la Receta -->
+     <?php if ($recipeData['titulo_html']): ?>
+         <div class="section-card">
+             <div class="recipe-content">
+                 <?= strip_tags($recipeData['titulo_html'], '<strong><em><b><i><u><br><p><h3><ul><ol><li><a>') ?>
+                 <?php if ($recipeData['subtitulo_html']): ?>
+                     <h3><?= strip_tags($recipeData['subtitulo_html'], '<strong><em><b><i><u><br><p><ul><ol><li><a>') ?></h3>
+                 <?php endif; ?>
+                 <?= strip_tags($recipeData['texto_html'], '<strong><em><b><i><u><br><p><ul><ol><li><a><img>') ?>
+                 <?php if ($recipeData['enlace']): ?>
+                     <p><a href="<?= sanitize($recipeData['enlace']) ?>" target="_blank" style="color:#3498db;">Ver receta original →</a></p>
+                 <?php endif; ?>
+             </div>
+         </div>
+     <?php endif; ?>
 
     <!-- Ingredientes -->
     <div class="section-card">

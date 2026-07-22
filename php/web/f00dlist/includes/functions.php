@@ -292,4 +292,50 @@ function debugLog($message) {
         error_log('[DEBUG] ' . $message);
     }
 }
+
+// ============================================================================
+// RATE LIMITING
+// ============================================================================
+
+/**
+ * Verificar límite de intentos por IP (y opcionalmente por username)
+ * @param string $ip
+ * @param string|null $username
+ * @param int $maxAttempts
+ * @param int $windowSeconds
+ * @return bool true si permitido, false si excedido
+ */
+function checkRateLimit($ip, $username = null, $maxAttempts = 5, $windowSeconds = 300) {
+    $key = 'rate_limit_' . md5($ip . ($username ?? ''));
+    $now = time();
+    
+    if (!isset($_SESSION[$key])) {
+        $_SESSION[$key] = [];
+    }
+    
+    // Limpiar intentos antiguos
+    $_SESSION[$key] = array_filter($_SESSION[$key], function($timestamp) use ($now, $windowSeconds) {
+        return ($now - $timestamp) < $windowSeconds;
+    });
+    
+    if (count($_SESSION[$key]) >= $maxAttempts) {
+        return false;
+    }
+    
+    // Registrar intento actual
+    $_SESSION[$key][] = $now;
+    return true;
+}
+
+/**
+ * Validar longitud de nombre_completo
+ * @param string $nombre
+ * @param int $min
+ * @param int $max
+ * @return bool
+ */
+function validateNombreCompleto($nombre, $min = 2, $max = 100) {
+    $len = mb_strlen(trim($nombre));
+    return $len >= $min && $len <= $max;
+}
 ?>

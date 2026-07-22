@@ -11,7 +11,7 @@ require_once '../includes/auth.php';
 require_once '../includes/functions.php';
 require_once '../classes/Tool.php';
 
-requireAdmin();
+requireRole('admin');
 
 $mensaje = '';
 $tipoMensaje = '';

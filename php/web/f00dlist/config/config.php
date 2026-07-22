@@ -6,9 +6,13 @@
  * 
  * Este archivo define:
  * - Constantes de la aplicación
- * - Configuración de Base de Datos
+ * - Configuración de Base de Datos (vía variables de entorno)
  * - Configuración de Sesión y Seguridad
  * - Rutas y Límites de negocio
+ * 
+ * Las credenciales sensibles se leen de variables de entorno (getenv).
+ * Ver .env.example para las variables requeridas en el servidor.
+ * (Decisión 10 / Decisión 43: sin secretos hardcodeados en el repo)
  */
 
 // Evitar acceso directo al archivo
@@ -19,12 +23,13 @@ if (!defined('APP_NAME')) {
 }
 
 // ============================================================================
-// CONFIGURACIÓN DE BASE DE DATOS (MARIADB)
+// CONFIGURACIÓN DE BASE DE DATOS (MARIADB) — desde variables de entorno
 // ============================================================================
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'inivi_f00dlist');
-define('DB_USER', 'inivi_tXU5o0w');           // CAMBIAR EN PRODUCCIÓN
-define('DB_PASS', 'wbf^7R0q51#8v6FB!xsR4BaE07s*1EQpA');               // CAMBIAR EN PRODUCCIÓN
+define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
+define('DB_NAME', getenv('DB_NAME') ?: 'inivi_f00dlist');
+define('DB_USER', getenv('DB_USER') ?: 'inivi_tXU5o0w');
+// La contraseña NUNCA se hardcodea en el repo: debe venir de F00DLIST_DB_PASS
+define('DB_PASS', getenv('F00DLIST_DB_PASS') ?: '');
 define('DB_CHARSET', 'utf8mb4');
 
 // ============================================================================
@@ -43,8 +48,9 @@ ini_set('session.gc_maxlifetime', 3600); // 1 hora
 // Detectar protocolo (http/https)
 $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
 $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-// Ajusta la ruta base según donde estés alojando (ej: /f00dlist/ o /)
-$basePath = '/f00dlist/'; 
+// Base path desde entorno (Decisión 10/43): default raíz '/'
+$basePathRaw = getenv('F00DLIST_BASE_PATH') ?: '/';
+$basePath = '/' . trim($basePathRaw, '/') . '/';
 
 define('BASE_URL', $protocol . '://' . $host . $basePath);
 define('ROOT_PATH', dirname(__DIR__));
@@ -84,8 +90,8 @@ define('NIVEL_CALORICO_ALTO', 'alto');
 // ============================================================================
 // CONFIGURACIÓN DE ERRORES Y DEBUG
 // ============================================================================
-// Cambiar a FALSE en producción
-define('DEBUG_MODE', true);
+// En producción false por defecto (Decisión 10/43): se activa solo con F00DLIST_DEBUG=true
+define('DEBUG_MODE', filter_var(getenv('F00DLIST_DEBUG'), FILTER_VALIDATE_BOOLEAN));
 
 if (DEBUG_MODE) {
     error_reporting(E_ALL);
@@ -106,6 +112,7 @@ define('PASSWORD_MIN_LENGTH', 6);
 define('USERNAME_MIN_LENGTH', 3);
 define('USERNAME_MAX_LENGTH', 50);
 define('EMAIL_MAX_LENGTH', 100);
+define('NOMBRE_COMPLETO_MAX_LENGTH', 100); // Decisión 37
 
 // ============================================================================
 // PDF CONFIGURATION (Para TCPDF/Dompdf)
@@ -145,4 +152,20 @@ function asset($path) {
 function url($path = '') {
     return BASE_URL . ltrim($path, '/');
 }
-?>
+
+// ============================================================================
+// SEGURIDAD: Cabeceras HTTP (Decisión 24 / 38)
+// ============================================================================
+function applySecurityHeaders() {
+    if (headers_sent()) {
+        return;
+    }
+    header("Content-Security-Policy: default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; frame-ancestors 'none'");
+    header("X-Frame-Options: DENY");
+    header("X-Content-Type-Options: nosniff");
+    header("Referrer-Policy: no-referrer");
+    if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+        header("Strict-Transport-Security: max-age=31536000; includeSubDomains");
+    }
+}
+applySecurityHeaders();

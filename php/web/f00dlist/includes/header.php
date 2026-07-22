@@ -94,17 +94,24 @@ $currentPath = $_SERVER['SCRIPT_NAME'] ?? '';
         </label>
 
         <div class="nav-menu">
+            <?php
+            // Decisión 35: resaltado por nombre de archivo, no por ruta hardcodeada
+            $currentScript = basename($currentPath);
+            ?>
             <?php if (isLoggedIn()): ?>
-                <a href="<?= url('index.php') ?>" style="<?= $currentPath === '/f00dlist/index.php' ? 'font-weight:bold;' : '' ?>">Dashboard</a>
-                <a href="<?= url('favoritos.php') ?>" style="<?= strpos($currentPath, 'favoritos') !== false ? 'font-weight:bold;' : '' ?>">Favoritos</a>
-                <a href="<?= url('perfil.php') ?>" style="<?= strpos($currentPath, 'perfil') !== false ? 'font-weight:bold;' : '' ?>">Perfil</a>
+                <a href="<?= url('index.php') ?>" style="<?= $currentScript === 'index.php' ? 'font-weight:bold;' : '' ?>">Dashboard</a>
+                <a href="<?= url('favoritos.php') ?>" style="<?= $currentScript === 'favoritos.php' ? 'font-weight:bold;' : '' ?>">Favoritos</a>
+                <a href="<?= url('perfil.php') ?>" style="<?= $currentScript === 'perfil.php' ? 'font-weight:bold;' : '' ?>">Perfil</a>
                 
                 <?php if (isAdmin()): ?>
                     <a href="<?= url('admin/index.php') ?>" style="color: #f39c12; text-decoration: none; font-weight: bold; border: 1px solid #f39c12; padding: 5px 10px; border-radius: 4px;">Admin</a>
                 <?php endif; ?>
 
                 <span class="nav-user-info" style="color: #bdc3c7; font-size: 0.9rem;">Hola, <?= sanitize(getCurrentUsername()) ?></span>
-                <a href="<?= url('logout.php') ?>" style="color: #e74c3c; text-decoration: none; font-weight: bold;">Salir</a>
+                <form method="POST" action="<?= url('logout.php') ?>" style="display:inline; margin:0;">
+                    <?= csrfField() ?>
+                    <button type="submit" style="background:none; border:none; color: #e74c3c; text-decoration: none; font-weight: bold; cursor: pointer; font-size: inherit; padding: 0;">Salir</button>
+                </form>
             <?php else: ?>
                 <a href="<?= url('login.php') ?>">Login</a>
                 <a href="<?= url('register.php') ?>" style="background: #3498db; color: white; padding: 8px 15px; border-radius: 4px; text-decoration: none;">Registrarse</a>

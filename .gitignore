@@ -1,0 +1,22 @@
+# Secretos / variables de entorno (NO subir al repo)
+.env
+*.local
+
+# Logs
+*.log
+logs/
+
+# Sistema / SO
+.DS_Store
+Thumbs.db
+
+# Editores
+.vscode/
+.idea/
+
+# Dependencias de composer (si se usa HTMLPurifier, Decisión 23)
+/vendor/
+composer.lock
+
+# Distribución comprimida
+*.zip

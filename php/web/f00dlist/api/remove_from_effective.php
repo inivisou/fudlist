@@ -43,10 +43,12 @@ if (!$menu->getId() || $menu->getUsuarioCreadorId() != getCurrentUserId()) {
 
 // 5. Eliminar el plato
 try {
-    $success = $menu->removePlato($dia, $momento);
+    $result = $menu->removePlato($dia, $momento); // Devuelve 'eliminado' | 'ya_vacio' | 'error' (Decisión 42)
 
-    if ($success) {
+    if ($result === 'eliminado') {
         echo json_encode(['success' => true, 'message' => 'Plato eliminado. Hueco libre.']);
+    } elseif ($result === 'ya_vacio') {
+        echo json_encode(['success' => true, 'message' => 'El hueco ya estaba vacío.']);
     } else {
         echo json_encode(['success' => false, 'message' => 'No se pudo eliminar el plato.']);
     }

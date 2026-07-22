@@ -27,19 +27,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $usernameInput = trim($_POST['username'] ?? '');
         $passwordInput = $_POST['password'] ?? '';
 
-        if (empty($usernameInput) || empty($passwordInput)) {
-            $error = 'Por favor, introduce usuario y contraseña.';
+        // Rate limiting: verificar intentos fallidos por IP y username
+        $clientIp = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+        if (!checkRateLimit($clientIp, $usernameInput, 5, 300)) {
+            $error = 'Demasiados intentos fallidos. Por favor, intenta más tarde.';
         } else {
-            // Intentar login
-            $result = loginUser($usernameInput, $passwordInput);
-
-            if ($result['success']) {
-                // Login exitoso: redirigir al dashboard
-                setSuccessMessage('¡Bienvenido de nuevo, ' . sanitize($result['user']['username']) . '!');
-                redirect(url('index.php'));
+            if (empty($usernameInput) || empty($passwordInput)) {
+                $error = 'Por favor, introduce usuario y contraseña.';
             } else {
-                $error = $result['message'];
-                $username = $usernameInput; // Mantener el usuario introducido
+                // Intentar login
+                $result = loginUser($usernameInput, $passwordInput);
+
+                if ($result['success']) {
+                    // Login exitoso: redirigir al dashboard
+                    setSuccessMessage('¡Bienvenido de nuevo, ' . sanitize($result['user']['username']) . '!');
+                    redirect(url('index.php'));
+                } else {
+                    // Registrar intento fallido para rate limiting (ya se registra en checkRateLimit, pero llamamos nuevamente para contar este intento)
+                    checkRateLimit($clientIp, $usernameInput, 5, 300);
+                    $error = $result['message'];
+                    $username = $usernameInput; // Mantener el usuario introducido
+                }
             }
         }
     }
