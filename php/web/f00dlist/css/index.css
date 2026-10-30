@@ -1,0 +1,107 @@
+/* ============================================
+   INDEX.CSS - Estilos específicos del Dashboard
+   ============================================ */
+
+/* --- Título panel gestión --- */
+.titulo-panel-gestion {
+    margin-top: 0;
+    color: #2980b9;
+}
+
+/* --- Grid de formulario generar menú --- */
+.grid-generar-menu {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+/* --- Contenedor scrollable herramientas/comensales --- */
+.scroll-container {
+    max-height: 100px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+/* --- Botón generar margen superior --- */
+.margen-generar {
+    margin-top: 20px;
+    text-align: right;
+}
+
+/* --- Input número generar menú --- */
+.input-generar-dias {
+    width: 100%;
+    padding: 8px;
+}
+
+/* --- Estilo placeholder vacío --- */
+.placeholder-vacio {
+    color: #ccc;
+}
+
+/* --- Texto descripción tentativo --- */
+.texto-descripcion-tentativo {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* --- Ancho columnas tabla tentativo --- */
+.col-numero {
+    width: 50px;
+}
+
+.col-para {
+    width: 150px;
+}
+
+/* --- Encabezado menú efectivo sin margen --- */
+.titulo-efectivo {
+    margin: 0;
+}
+
+/* --- Flex contenedor menú efectivo --- */
+.flex-efectivo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+/* --- Celda centrada quitar --- */
+.celda-quitar {
+    text-align: center;
+}
+
+/* --- Input ancho cantidad --- */
+.col-cantidad {
+    width: 100px;
+}
+
+.col-en-casa {
+    width: 150px;
+}
+
+/* --- Celda tabla vacía centrada --- */
+.celda-vacia {
+    text-align: center;
+}
+
+/* --- Flex gap genérico --- */
+.flex-gap {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* --- Columna quitar (60px) --- */
+.col-quitar {
+    width: 60px;
+}
+
+/* --- Contenedor descargar PDF --- */
+.contenedor-pdf {
+    text-align: right;
+    margin-top: 10px;
+}

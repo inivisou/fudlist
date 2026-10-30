@@ -110,9 +110,9 @@ require_once 'includes/header.php';
 
     <!-- Accesos Administrativos (RBAC) -->
     <?php if ($isColaborador): ?>
-        <div class="header-panel" style="border-bottom: 3px solid #3498db; background: #ebf5fb;">
-            <h3 style="margin-top:0; color:#2980b9;">🛠️ Panel de Gestión</h3>
-            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <div class="header-panel panel-gestion">
+            <h3 class="titulo-panel-gestion">🛠️ Panel de Gestión</h3>
+            <div class="flex-gap">
                 <a href="<?= url('admin/recipes.php') ?>" class="btn btn-primary btn-sm">Gestionar Platos</a>
                 <a href="<?= url('admin/ingredients.php') ?>" class="btn btn-primary btn-sm">Ingredientes</a>
                 <?php if ($isAdmin): ?>
@@ -129,17 +129,17 @@ require_once 'includes/header.php';
             <?= csrfField() ?>
             <input type="hidden" name="action" value="generar">
             
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+            <div class="grid-generar-menu">
                 <!-- Días -->
                 <div>
                     <label><strong>Días a generar:</strong></label>
-                    <input type="number" name="dias" min="1" max="14" value="7" class="form-control" style="width:100%; padding:8px;" required>
+                    <input type="number" name="dias" min="1" max="14" value="7" class="form-control input-generar-dias" required>
                 </div>
 
                 <!-- Herramientas a excluir -->
                 <div>
                     <label><strong>No contenga herramientas:</strong></label>
-                    <div style="max-height: 100px; overflow-y: auto; border: 1px solid #ddd; padding: 5px;">
+                    <div class="scroll-container">
                         <?php foreach ($allTools as $tool): ?>
                             <label class="form-check">
                                 <input type="checkbox" name="herramientas_excluir[]" value="<?= $tool['id'] ?>">
@@ -152,7 +152,7 @@ require_once 'includes/header.php';
                 <!-- Comensales -->
                 <div>
                     <label><strong>Comensales:</strong></label>
-                    <div style="max-height: 100px; overflow-y: auto; border: 1px solid #ddd; padding: 5px;">
+                    <div class="scroll-container">
                         <?php foreach ($allUsers as $user): ?>
                             <label class="form-check">
                                 <input type="checkbox" name="comensales[]" value="<?= $user['id'] ?>" 
@@ -164,7 +164,7 @@ require_once 'includes/header.php';
                 </div>
             </div>
 
-            <div style="margin-top: 20px; text-align: right;">
+            <div class="margen-generar">
                 <button type="submit" class="btn btn-primary" onclick="document.getElementById('loading').style.display='inline'">
                     Generar Menú Tentativo
                 </button>
@@ -175,19 +175,19 @@ require_once 'includes/header.php';
 
     <!-- Menú Tentativo (Si se generó) -->
     <?php if ($menuTentativoData): ?>
-        <div class="header-panel" style="border-left: 5px solid #f39c12;">
+        <div class="header-panel panel-tentativo">
             <h2 class="section-title">Menú Tentativo (Propuesta)</h2>
-            <p style="font-size:0.9rem; color:#666;">Haz clic en un plato para añadirlo al menú efectivo.</p>
+            <p class="texto-descripcion-tentativo">Haz clic en un plato para añadirlo al menú efectivo.</p>
             
             <div class="table-responsive">
                 <table>
                     <thead>
                         <tr>
-                            <th style="width: 50px;">Nº</th>
+                            <th class="col-numero">Nº</th>
                             <th>Comida</th>
-                            <th style="width: 150px;">Para</th>
+                            <th class="col-para">Para</th>
                             <th>Cena</th>
-                            <th style="width: 150px;">Para</th>
+                            <th class="col-para">Para</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -209,7 +209,7 @@ require_once 'includes/header.php';
                                             </small>
                                         </div>
                                     <?php else: ?>
-                                        <span style="color:#ccc;">-</span>
+                                        <span class="placeholder-vacio">-</span>
                                     <?php endif; ?>
                                 </td>
 
@@ -226,7 +226,7 @@ require_once 'includes/header.php';
                                             </small>
                                         </div>
                                     <?php else: ?>
-                                        <span style="color:#ccc;">-</span>
+                                        <span class="placeholder-vacio">-</span>
                                     <?php endif; ?>
                                 </td>
 
@@ -241,9 +241,9 @@ require_once 'includes/header.php';
     <?php endif; ?>
 
     <!-- Menú Efectivo -->
-    <div class="header-panel" style="border-left: 5px solid #27ae60;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-            <h2 class="section-title" style="margin:0;">Menú Efectivo</h2>
+    <div class="header-panel panel-efectivo">
+        <div class="flex-efectivo-header">
+            <h2 class="section-title titulo-efectivo">Menú Efectivo</h2>
             <div>
                 <button class="btn btn-warning btn-sm" onclick="saveAsFavorite()">Guardar como Favorito</button>
                 <a href="<?= url('favoritos.php') ?>" class="btn btn-primary btn-sm">Ver Favoritos</a>
@@ -254,11 +254,11 @@ require_once 'includes/header.php';
             <table id="menuEfectivoTable">
                 <thead>
                     <tr>
-                        <th style="width: 50px;">Día</th>
+                        <th class="col-numero">Día</th>
                         <th>Comida</th>
-                        <th style="width: 60px;">Quitar</th>
+                        <th class="col-quitar">Quitar</th>
                         <th>Cena</th>
-                        <th style="width: 60px;">Quitar</th>
+                        <th class="col-quitar">Quitar</th>
                         <th>Herramientas</th>
                     </tr>
                 </thead>
@@ -312,12 +312,12 @@ require_once 'includes/header.php';
                                     <?= formatCalories($comidaCalorias) ?>
                                 </small>
                             <?php else: ?>
-                                <span style="color:#ccc;">Hueco libre</span>
+                                <span class="placeholder-vacio">Hueco libre</span>
                             <?php endif; ?>
                         </td>
                         
                         <!-- Quitar Comida -->
-                        <td data-label="Quitar Comida" style="text-align:center;">
+                        <td data-label="Quitar Comida" class="celda-quitar">
                             <?php if ($comida): ?>
                                 <button type="button" class="btn-remove-plato" onclick="removeFromEffective(<?= $d ?>, 'comida')">❌</button>
                             <?php endif; ?>
@@ -333,12 +333,12 @@ require_once 'includes/header.php';
                                     <?= formatCalories($cenaCalorias) ?>
                                 </small>
                             <?php else: ?>
-                                <span style="color:#ccc;">Hueco libre</span>
+                                <span class="placeholder-vacio">Hueco libre</span>
                             <?php endif; ?>
                         </td>
 
                         <!-- Quitar Cena -->
-                        <td data-label="Quitar Cena" style="text-align:center;">
+                        <td data-label="Quitar Cena" class="celda-quitar">
                             <?php if ($cena): ?>
                                 <button type="button" class="btn-remove-plato" onclick="removeFromEffective(<?= $d ?>, 'cena')">❌</button>
                             <?php endif; ?>
@@ -361,14 +361,14 @@ require_once 'includes/header.php';
                 <thead>
                     <tr>
                         <th>Ingrediente</th>
-                        <th style="width: 100px;">Cantidad</th>
+                        <th class="col-cantidad">Cantidad</th>
                         <th>Supermercado</th>
-                        <th style="width: 150px;">Ya en casa</th>
+                        <th class="col-en-casa">Ya en casa</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if (empty($listaIngredientes)): ?>
-                        <tr><td colspan="4" style="text-align:center;">No hay ingredientes en el menú efectivo.</td></tr>
+                        <tr><td colspan="4" class="celda-vacia">No hay ingredientes en el menú efectivo.</td></tr>
                     <?php else: ?>
                         <?php foreach ($listaIngredientes as $ing): ?>
                             <tr class="ingredient-row <?= $ing['comprado'] ? 'comprado' : '' ?>">
@@ -386,7 +386,7 @@ require_once 'includes/header.php';
                 </tbody>
             </table>
         </div>
-        <div style="text-align:right; margin-top:10px;">
+        <div class="contenedor-pdf">
             <a href="<?= url('pdf/generate_list.php') ?>" target="_blank" class="btn btn-success btn-sm">Descargar PDF</a>
         </div>
     </div>

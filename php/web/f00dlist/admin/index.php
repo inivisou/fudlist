@@ -25,53 +25,87 @@ $pageTitle = 'Panel de Administración';
 require_once '../includes/header.php';
 ?>
 
-<div class="admin-dashboard">
-    <h1 style="margin-bottom: 30px;">Panel de Administración</h1>
+<div class="admin-page">
+    <h1 class="mb-4">Panel de Administración</h1>
 
     <!-- Tarjetas de Estadísticas -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px;">
-        <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); text-align: center;">
-            <h3 style="margin: 0; color: #3498db; font-size: 2rem;"><?= $totalUsers ?></h3>
-            <p style="margin: 5px 0 0; color: #7f8c8d;">Usuarios Activos</p>
+    <div class="row mb-5">
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="card-title text-primary"><?= $totalUsers ?></h3>
+                    <p class="card-text text-muted">Usuarios Activos</p>
+                </div>
+            </div>
         </div>
-        <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); text-align: center;">
-            <h3 style="margin: 0; color: #27ae60; font-size: 2rem;"><?= $totalPlatos ?></h3>
-            <p style="margin: 5px 0 0; color: #7f8c8d;">Platos Disponibles</p>
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="card-title text-success"><?= $totalPlatos ?></h3>
+                    <p class="card-text text-muted">Platos Disponibles</p>
+                </div>
+            </div>
         </div>
-        <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); text-align: center;">
-            <h3 style="margin: 0; color: #f39c12; font-size: 2rem;"><?= $totalHerramientas ?></h3>
-            <p style="margin: 5px 0 0; color: #7f8c8d;">Herramientas</p>
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="card-title text-warning"><?= $totalHerramientas ?></h3>
+                    <p class="card-text text-muted">Herramientas</p>
+                </div>
+            </div>
         </div>
-        <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); text-align: center;">
-            <h3 style="margin: 0; color: #9b59b6; font-size: 2rem;"><?= $totalIngredientes ?></h3>
-            <p style="margin: 5px 0 0; color: #7f8c8d;">Ingredientes</p>
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="card-title text-danger"><?= $totalIngredientes ?></h3>
+                    <p class="card-text text-muted">Ingredientes</p>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Acciones Rápidas -->
-    <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-        <h2 style="border-bottom: 2px solid #3498db; padding-bottom: 10px; margin-bottom: 20px;">Gestión de Contenido</h2>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-            <a href="tools.php" style="display: block; padding: 15px; background: #f8f9fa; border: 1px solid #ddd; border-radius: 5px; text-decoration: none; color: #333; transition: all 0.3s;">
-                <strong>🛠️ Gestionar Herramientas</strong>
-                <p style="margin: 5px 0 0; font-size: 0.9rem; color: #666;">Añadir, editar o eliminar herramientas (Olla, Sartén, etc.).</p>
-            </a>
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title border-bottom pb-3 mb-4">Gestión de Contenido</h2>
 
-            <a href="ingredients.php" style="display: block; padding: 15px; background: #f8f9fa; border: 1px solid #ddd; border-radius: 5px; text-decoration: none; color: #333; transition: all 0.3s;">
-                <strong>🥕 Gestionar Ingredientes</strong>
-                <p style="margin: 5px 0 0; font-size: 0.9rem; color: #666;">Catálogo de ingredientes, calorías y supermercados.</p>
-            </a>
+            <div class="row">
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <a href="tools.php" class="card text-decoration-none h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">🛠️ Gestionar Herramientas</h5>
+                            <p class="card-text text-muted small">Añadir, editar o eliminar herramientas (Olla, Sartén, etc.).</p>
+                        </div>
+                    </a>
+                </div>
 
-            <a href="recipes.php" style="display: block; padding: 15px; background: #f8f9fa; border: 1px solid #ddd; border-radius: 5px; text-decoration: none; color: #333; transition: all 0.3s;">
-                <strong>🍲 Gestionar Recetas y Platos</strong>
-                <p style="margin: 5px 0 0; font-size: 0.9rem; color: #666;">Crear platos, asignar ingredientes y herramientas.</p>
-            </a>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <a href="ingredients.php" class="card text-decoration-none h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">🥕 Gestionar Ingredientes</h5>
+                            <p class="card-text text-muted small">Catálogo de ingredientes, calorías y supermercados.</p>
+                        </div>
+                    </a>
+                </div>
 
-            <a href="users.php" style="display: block; padding: 15px; background: #f8f9fa; border: 1px solid #ddd; border-radius: 5px; text-decoration: none; color: #333; transition: all 0.3s;">
-                <strong>👥 Gestionar Usuarios</strong>
-                <p style="margin: 5px 0 0; font-size: 0.9rem; color: #666;">Ver usuarios, asignar roles y permisos.</p>
-            </a>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <a href="recipes.php" class="card text-decoration-none h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">🍲 Gestionar Recetas y Platos</h5>
+                            <p class="card-text text-muted small">Crear platos, asignar ingredientes y herramientas.</p>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <a href="users.php" class="card text-decoration-none h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">👥 Gestionar Usuarios</h5>
+                            <p class="card-text text-muted small">Ver usuarios, asignar roles y permisos.</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </div>

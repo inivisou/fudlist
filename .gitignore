@@ -1,5 +1,7 @@
 # Secretos / variables de entorno (NO subir al repo)
 .env
+.env.local
+.env.*.local
 *.local
 
 # Logs

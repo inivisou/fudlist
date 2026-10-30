@@ -20,6 +20,7 @@ if (!function_exists('asset')) {
 // Variables opcionales para personalizar el título por página
 $pageTitle = $pageTitle ?? 'f00dlist';
 $currentPath = $_SERVER['SCRIPT_NAME'] ?? '';
+$currentScript = basename($currentPath);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -28,97 +29,75 @@ $currentPath = $_SERVER['SCRIPT_NAME'] ?? '';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= sanitize($pageTitle) ?> - f00dlist</title>
     
-    <!-- CSS -->
+    <!-- Bootstrap 5.3 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- CSS Propios -->
     <link rel="stylesheet" href="<?= asset('css/style.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/responsive.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/caloric.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/index.css') ?>">
     
-    <!-- Favicon (opcional, puedes añadirlo después) -->
+    <!-- Favicon -->
     <link rel="icon" href="<?= asset('img/favicon.ico') ?>" type="image/x-icon">
 
     <style>
-        /* Estilos para el Menú Hamburguesa */
-        .navbar { background: #2c3e50; padding: 15px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: relative; z-index: 1000; }
-        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; }
-        .nav-logo { color: white; text-decoration: none; font-size: 1.5rem; font-weight: bold; }
-        .nav-menu { display: flex; gap: 15px; align-items: center; }
-        .nav-menu a { color: #ecf0f1; text-decoration: none; transition: color 0.3s; }
-        .nav-menu a:hover { color: #3498db; }
-
-        /* Checkbox oculto para el toggle */
-        #menu-toggle { display: none; }
-        .hamburger { display: none; flex-direction: column; cursor: pointer; gap: 4px; }
-        .hamburger span { width: 25px; height: 3px; background: white; border-radius: 2px; transition: 0.3s; }
-
-        /* Responsive */
-        @media screen and (max-width: 768px) {
-            .hamburger { display: flex; }
-            .nav-menu {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background: #2c3e50;
-                flex-direction: column;
-                padding: 20px;
-                gap: 20px;
-                box-shadow: 0 4px 5px rgba(0,0,0,0.2);
-            }
-            /* Mostrar menú cuando el checkbox está activo */
-            #menu-toggle:checked ~ .nav-menu { display: flex; }
-            
-            .nav-menu a, .nav-menu span { 
-                width: 100%; 
-                text-align: left; 
-                padding: 5px 0;
-                font-size: 1.1rem;
-            }
-            .nav-user-info { border-top: 1px solid #34495e; padding-top: 15px; margin-top: 5px; }
-        }
+        .navbar-dark .nav-link.active-page { font-weight: bold; }
     </style>
 </head>
 <body>
 
-<!-- Navegación Superior -->
-<nav class="navbar">
-    <div class="nav-container">
-        <a href="<?= url('index.php') ?>" class="nav-logo">f00dlist</a>
+<!-- Navbar Bootstrap -->
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="<?= url('index.php') ?>">f00dlist</a>
         
-        <!-- Toggle para móvil -->
-        <input type="checkbox" id="menu-toggle">
-        <label for="menu-toggle" class="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </label>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-        <div class="nav-menu">
-            <?php
-            // Decisión 35: resaltado por nombre de archivo, no por ruta hardcodeada
-            $currentScript = basename($currentPath);
-            ?>
+        <div class="collapse navbar-collapse" id="navMenu">
             <?php if (isLoggedIn()): ?>
-                <a href="<?= url('index.php') ?>" style="<?= $currentScript === 'index.php' ? 'font-weight:bold;' : '' ?>">Dashboard</a>
-                <a href="<?= url('favoritos.php') ?>" style="<?= $currentScript === 'favoritos.php' ? 'font-weight:bold;' : '' ?>">Favoritos</a>
-                <a href="<?= url('perfil.php') ?>" style="<?= $currentScript === 'perfil.php' ? 'font-weight:bold;' : '' ?>">Perfil</a>
-                
-                <?php if (isAdmin()): ?>
-                    <a href="<?= url('admin/index.php') ?>" style="color: #f39c12; text-decoration: none; font-weight: bold; border: 1px solid #f39c12; padding: 5px 10px; border-radius: 4px;">Admin</a>
-                <?php endif; ?>
-
-                <span class="nav-user-info" style="color: #bdc3c7; font-size: 0.9rem;">Hola, <?= sanitize(getCurrentUsername()) ?></span>
-                <form method="POST" action="<?= url('logout.php') ?>" style="display:inline; margin:0;">
-                    <?= csrfField() ?>
-                    <button type="submit" style="background:none; border:none; color: #e74c3c; text-decoration: none; font-weight: bold; cursor: pointer; font-size: inherit; padding: 0;">Salir</button>
-                </form>
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link <?= $currentScript === 'index.php' ? 'active-page' : '' ?>" href="<?= url('index.php') ?>">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= $currentScript === 'favoritos.php' ? 'active-page' : '' ?>" href="<?= url('favoritos.php') ?>">Favoritos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= $currentScript === 'perfil.php' ? 'active-page' : '' ?>" href="<?= url('perfil.php') ?>">Perfil</a>
+                    </li>
+                    <?php if (isAdmin()): ?>
+                        <li class="nav-item">
+                            <a class="nav-link text-warning fw-bold" href="<?= url('admin/index.php') ?>">Admin</a>
+                        </li>
+                    <?php endif; ?>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <span class="nav-link disabled text-secondary small">Hola, <?= sanitize(getCurrentUsername()) ?></span>
+                    </li>
+                    <li class="nav-item">
+                        <form method="POST" action="<?= url('logout.php') ?>" class="d-inline">
+                            <?= csrfField() ?>
+                            <button type="submit" class="btn btn-link nav-link text-danger fw-bold">Salir</button>
+                        </form>
+                    </li>
+                </ul>
             <?php else: ?>
-                <a href="<?= url('login.php') ?>">Login</a>
-                <a href="<?= url('register.php') ?>" style="background: #3498db; color: white; padding: 8px 15px; border-radius: 4px; text-decoration: none;">Registrarse</a>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= url('login.php') ?>">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-primary text-white px-3 ms-2" href="<?= url('register.php') ?>">Registrarse</a>
+                    </li>
+                </ul>
             <?php endif; ?>
         </div>
     </div>
 </nav>
 
 <!-- Contenedor Principal -->
-<div style="max-width: 1200px; margin: 20px auto; padding: 0 20px;">
+<div class="container my-4">

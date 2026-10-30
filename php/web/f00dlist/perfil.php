@@ -85,57 +85,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             commit();
             $tipoMensaje = 'success';
             $mensaje = 'Preferencias guardadas correctamente.';
-
-            // Recargar datos
+            
+            // Recargar preferencias
             $ingredientesAvoid = $avoidIds;
             $restriccion = $restriccionInput;
             $exclusivos = $exclIds;
             $preferidos = $prefIds;
-
         } catch (Exception $e) {
-            rollback();
-            if (DEBUG_MODE) {
-                error_log("Error en perfil: " . $e->getMessage());
-            }
+            rollBack();
             $tipoMensaje = 'danger';
             $mensaje = 'Error al guardar preferencias.';
         }
     }
 }
+
+$pageTitle = 'Mi Perfil';
+require_once 'includes/header.php';
 ?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Perfil - f00dlist</title>
-    <link rel="stylesheet" href="<?= asset('css/style.css') ?>">
-    <link rel="stylesheet" href="<?= asset('css/responsive.css') ?>">
-    <style>
-        .profile-container { max-width: 800px; margin: 0 auto; padding: 20px; }
-        .header-panel { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        .section-card { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        .section-title { font-size: 1.3rem; color: #34495e; margin-bottom: 15px; border-bottom: 2px solid #3498db; padding-bottom: 5px; }
-        .form-group { margin-bottom: 15px; }
-        .form-label { display: block; margin-bottom: 5px; font-weight: 600; color: #34495e; }
-        .form-select, .form-control { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
-        .checkbox-group { max-height: 150px; overflow-y: auto; border: 1px solid #eee; padding: 10px; border-radius: 4px; }
-        .checkbox-item { display: flex; align-items: center; margin-bottom: 5px; }
-        .checkbox-item input { margin-right: 8px; }
-        .btn-primary { background: #3498db; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 1rem; }
-        .btn-secondary { background: #95a5a6; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 1rem; text-decoration: none; display: inline-block; }
-        .alert { padding: 15px; margin-bottom: 20px; border-radius: 5px; }
-        .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .alert-danger { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-    </style>
-</head>
-<body>
 
 <div class="profile-container">
-    <div class="header-panel">
-        <h1>Mi Perfil y Preferencias</h1>
-        <p>Gestiona tus gustos para que el generador de menús se adapte a ti.</p>
-        <a href="<?= url('index.php') ?>" class="btn-secondary">← Volver al Dashboard</a>
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="mb-3">Mi Perfil y Preferencias</h1>
+            <p class="text-muted">Gestiona tus gustos para que el generador de menús se adapte a ti.</p>
+        </div>
     </div>
 
     <?php if ($mensaje): ?>
@@ -146,78 +119,85 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?= csrfField() ?>
 
         <!-- Restricción Dietética -->
-        <div class="section-card">
-            <h2 class="section-title">Restricción Dietética</h2>
-            <div class="form-group">
-                <label class="form-label">Tipo de dieta:</label>
-                <select name="restriccion_dietetica" class="form-select">
-                    <option value="normal" <?= $restriccion === 'normal' ? 'selected' : '' ?>>Normal (Sin restricciones)</option>
-                    <option value="vegetariano" <?= $restriccion === 'vegetariano' ? 'selected' : '' ?>>Vegetariano</option>
-                    <option value="vegan" <?= $restriccion === 'vegan' ? 'selected' : '' ?>>Vegano</option>
-                    <option value="celiaco" <?= $restriccion === 'celiaco' ? 'selected' : '' ?>>Sin Gluten (Celiaco)</option>
-                    <option value="sin_lactosa" <?= $restriccion === 'sin_lactosa' ? 'selected' : '' ?>>Sin Lactosa</option>
-                </select>
-                <small style="color:#666;">Esto filtrará automáticamente los platos que no sean compatibles.</small>
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Restricción Dietética</h5>
+                <div class="mb-3">
+                    <label for="restriccion" class="form-label">Tipo de dieta:</label>
+                    <select id="restriccion" name="restriccion_dietetica" class="form-select">
+                        <option value="normal" <?= $restriccion === 'normal' ? 'selected' : '' ?>>Normal (Sin restricciones)</option>
+                        <option value="vegetariano" <?= $restriccion === 'vegetariano' ? 'selected' : '' ?>>Vegetariano</option>
+                        <option value="vegan" <?= $restriccion === 'vegan' ? 'selected' : '' ?>>Vegano</option>
+                        <option value="celiaco" <?= $restriccion === 'celiaco' ? 'selected' : '' ?>>Sin Gluten (Celiaco)</option>
+                        <option value="sin_lactosa" <?= $restriccion === 'sin_lactosa' ? 'selected' : '' ?>>Sin Lactosa</option>
+                    </select>
+                    <small class="text-muted d-block mt-2">Esto filtrará automáticamente los platos que no sean compatibles.</small>
+                </div>
             </div>
         </div>
 
         <!-- Ingredientes a Evitar -->
-        <div class="section-card">
-            <h2 class="section-title">Ingredientes a Evitar</h2>
-            <div class="form-group">
-                <label class="form-label">Selecciona los ingredientes que NO quieres consumir:</label>
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Ingredientes a Evitar</h5>
                 <div class="checkbox-group">
                     <?php foreach ($allIngredients as $ing): ?>
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="ingredientes_avitar[]" value="<?= $ing['id'] ?>" 
-                                   <?= in_array($ing['id'], $ingredientesAvoid) ? 'checked' : '' ?>>
-                            <?= sanitize($ing['nombre']) ?>
-                        </label>
+                        <div class="form-check">
+                            <input type="checkbox" id="ing_<?= $ing['id'] ?>" name="ingredientes_avitar[]" value="<?= $ing['id'] ?>" 
+                                   class="form-check-input" <?= in_array($ing['id'], $ingredientesAvoid) ? 'checked' : '' ?>>
+                            <label class="form-check-label" for="ing_<?= $ing['id'] ?>">
+                                <?= sanitize($ing['nombre']) ?>
+                            </label>
+                        </div>
                     <?php endforeach; ?>
                 </div>
             </div>
         </div>
 
         <!-- Platos Exclusivos -->
-        <div class="section-card">
-            <h2 class="section-title">Platos Exclusivos</h2>
-            <div class="form-group">
-                <label class="form-label">Platos que solo TÚ puedes comer (no se compartirán con otros comensales):</label>
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Platos Exclusivos (Nunca generar)</h5>
                 <div class="checkbox-group">
                     <?php foreach ($allPlatos as $plato): ?>
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="platos_exclusivos[]" value="<?= $plato['id'] ?>" 
-                                   <?= in_array($plato['id'], $exclusivos) ? 'checked' : '' ?>>
-                            <?= sanitize($plato['nombre']) ?>
-                        </label>
+                        <div class="form-check">
+                            <input type="checkbox" id="excl_<?= $plato['id'] ?>" name="platos_exclusivos[]" value="<?= $plato['id'] ?>" 
+                                   class="form-check-input" <?= in_array($plato['id'], $exclusivos) ? 'checked' : '' ?>>
+                            <label class="form-check-label" for="excl_<?= $plato['id'] ?>">
+                                <?= sanitize($plato['nombre']) ?>
+                            </label>
+                        </div>
                     <?php endforeach; ?>
                 </div>
-                <small style="color:#666;">Si seleccionas un plato exclusivo, solo aparecerá en tu menú si eres el único comensal o si se genera específicamente para ti.</small>
             </div>
         </div>
 
         <!-- Platos Preferidos -->
-        <div class="section-card">
-            <h2 class="section-title">Platos Preferidos</h2>
-            <div class="form-group">
-                <label class="form-label">Platos que te gustan mucho (tendrán prioridad al generar):</label>
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Platos Preferidos (Priorizar)</h5>
                 <div class="checkbox-group">
                     <?php foreach ($allPlatos as $plato): ?>
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="platos_preferidos[]" value="<?= $plato['id'] ?>" 
-                                   <?= in_array($plato['id'], $preferidos) ? 'checked' : '' ?>>
-                            <?= sanitize($plato['nombre']) ?>
-                        </label>
+                        <div class="form-check">
+                            <input type="checkbox" id="pref_<?= $plato['id'] ?>" name="platos_preferidos[]" value="<?= $plato['id'] ?>" 
+                                   class="form-check-input" <?= in_array($plato['id'], $preferidos) ? 'checked' : '' ?>>
+                            <label class="form-check-label" for="pref_<?= $plato['id'] ?>">
+                                <?= sanitize($plato['nombre']) ?>
+                            </label>
+                        </div>
                     <?php endforeach; ?>
                 </div>
             </div>
         </div>
 
-        <div style="text-align: right; margin-top: 20px;">
-            <button type="submit" class="btn-primary">Guardar Preferencias</button>
+        <!-- Botones -->
+        <div class="row">
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Guardar Preferencias</button>
+                <a href="<?= url('index.php') ?>" class="btn btn-secondary">Volver al Dashboard</a>
+            </div>
         </div>
     </form>
 </div>
 
-</body>
-</html>
+<?php require_once 'includes/footer.php'; ?>

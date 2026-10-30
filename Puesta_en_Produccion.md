@@ -13,14 +13,12 @@ En este proyecto existen scripts de arranque para crear la estructura base de ca
 - php/web/create_structure.ps1
 
 Estos scripts:
-
 - crean la carpeta principal del proyecto llamada f00dlist,
 - generan carpetas como config, includes, classes, api, admin, assets, pdf, tests,
 - crean archivos PHP, CSS, JS y de configuración vacíos,
 - sirven para iniciar un proyecto de forma rápida.
 
 Importante:
-
 - no crean la base de datos,
 - no crean usuarios de FTP/SFTP,
 - no crean usuarios de MariaDB/MySQL,
@@ -56,7 +54,6 @@ cd php\web
 ```
 
 Resultado esperado:
-
 - se crea una carpeta f00dlist con la estructura base,
 - dentro de esa carpeta aparecerán los archivos iniciales vacíos o de plantilla,
 - después hay que copiar o subir el código real del proyecto y configurar la aplicación.
@@ -74,7 +71,6 @@ Antes de subir la aplicación, el servidor debe tener instalado lo siguiente:
 - Certificado SSL si se quiere acceso HTTPS
 
 Recomendación:
-
 - usar un usuario dedicado para el sitio web,
 - no ejecutar la aplicación con el usuario root,
 - proteger las credenciales de la base de datos.
@@ -163,7 +159,6 @@ mysql -u inivi_tXU5o0w -p inivi_f00dlist < php/bbdd/00_ScriptInicial.txt
 ```
 
 Este script:
-
 - crea todas las tablas necesarias,
 - inserta roles y permisos,
 - crea usuarios iniciales,
@@ -173,39 +168,88 @@ Este script:
 
 ---
 
-## 7. Configurar la aplicación
+## 7. Configurar variables de entorno (.env)
 
-El proyecto toma los parámetros de conexión desde:
+**IMPORTANTE**: El proyecto **NO** usa credenciales hardcodeadas en config.php. Todas las credenciales sensibles se leen desde **variables de entorno**. El repositorio incluye un archivo `.env.example` como plantilla.
 
-- php/web/f00dlist/config/config.php
+### 7.1 Crear el archivo .env en el servidor
 
-Debes ajustar al menos estas constantes:
+En el directorio raíz del proyecto (donde está config.php), crea un archivo `.env` basado en `.env.example`:
 
-```php
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'inivi_f00dlist');
-define('DB_USER', 'inivi_tXU5o0w');
-define('DB_PASS', 'TU_NUEVA_CONTRASEÑA');
-define('DB_CHARSET', 'utf8mb4');
+```bash
+cp .env.example .env
 ```
 
-También conviene revisar:
+### 7.2 Editar .env con los valores reales del servidor
+
+```bash
+# Plantilla de variables de entorno para f00dlist
+# Copiar a .env y rellenar con los valores reales del servidor.
+# El archivo .env NUNCA debe subirse al repositorio (ver .gitignore).
+
+# Base de datos MariaDB/MySQL
+DB_HOST=localhost
+DB_NAME=inivi_f00dlist
+DB_USER=inivi_tXU5o0w
+F00DLIST_DB_PASS=TU_CONTRASEÑA_REAL_SEGURA
+
+# Ruta base de la app (ej: / para raíz, /f00dlist/ para subdirectorio)
+F00DLIST_BASE_PATH=/
+
+# Debug (true solo en desarrollo; false en producción)
+F00DLIST_DEBUG=false
+```
+
+### 7.3 Variables requeridas
+
+| Variable | Descripción | Ejemplo |
+|----------|-------------|---------|
+| `DB_HOST` | Host de la base de datos | `localhost` |
+| `DB_NAME` | Nombre de la base de datos | `inivi_f00dlist` |
+| `DB_USER` | Usuario de la base de datos | `inivi_tXU5o0w` |
+| `F00DLIST_DB_PASS` | **Contraseña real de la BD** (nunca en el repo) | `password_seguro_123` |
+| `F00DLIST_BASE_PATH` | Ruta base si la app está en subdirectorio | `/` o `/f00dlist/` |
+| `F00DLIST_DEBUG` | Modo debug (false en producción) | `false` |
+
+> **CRÍTICO**: El archivo `.env` **NUNCA** debe subirse al repositorio git. Está incluido en `.gitignore`. En el servidor de producción, créalo manualmente o usa el sistema de variables de entorno de tu proveedor (cPanel, Plesk, Docker, Kubernetes, etc.).
+
+### 7.4 Cómo se leen las variables en config.php
+
+El archivo `config/config.php` usa `getenv()` para leer estas variables:
 
 ```php
-define('BASE_URL', 'https://tu-dominio.com/');
-define('DEBUG_MODE', false);
+define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
+define('DB_NAME', getenv('DB_NAME') ?: 'inivi_f00dlist');
+define('DB_USER', getenv('DB_USER') ?: 'inivi_tXU5o0w');
+define('DB_PASS', getenv('F00DLIST_DB_PASS') ?: '');
+define('BASE_URL', $protocol . '://' . $host . $basePath);
+define('DEBUG_MODE', filter_var(getenv('F00DLIST_DEBUG'), FILTER_VALIDATE_BOOLEAN));
+```
+
+---
+
+## 8. Configurar la aplicación (config.php)
+
+El archivo `php/web/f00dlist/config/config.php` ya está preparado para leer las variables de entorno. **No necesitas editarlo** si has configurado correctamente el `.env`.
+
+Solo verifica que estas constantes se derivan correctamente:
+
+```php
+// Se derivan automáticamente de las variables de entorno
+define('BASE_URL', 'https://tu-dominio.com/');  // Se construye desde $_SERVER + F00DLIST_BASE_PATH
+define('DEBUG_MODE', false);                     // Desde F00DLIST_DEBUG
 ```
 
 ### Recomendaciones de configuración
 
 - usar HTTPS en producción,
 - activar logs de errores del servidor,
-- desactivar el modo debug,
-- revisar la ruta base si el proyecto está en un subdirectorio.
+- desactivar el modo debug (`F00DLIST_DEBUG=false`),
+- revisar la ruta base si el proyecto está en un subdirectorio (`F00DLIST_BASE_PATH`).
 
 ---
 
-## 8. Permisos de archivos en el servidor
+## 9. Permisos de archivos en el servidor
 
 Para un entorno Linux con Apache o Nginx, conviene dejar los permisos así:
 
@@ -214,6 +258,7 @@ sudo find /var/www/f00dlist -type d -exec chmod 755 {} \;
 sudo find /var/www/f00dlist -type f -exec chmod 644 {} \;
 sudo chmod 600 /var/www/f00dlist/config/config.php
 sudo chmod 600 /var/www/f00dlist/config/db.php
+sudo chmod 600 /var/www/f00dlist/.env          # ¡Proteger el archivo .env!
 sudo chown -R www-data:www-data /var/www/f00dlist
 ```
 
@@ -227,7 +272,7 @@ Y luego permitir que el servidor web lea los archivos.
 
 ---
 
-## 9. Configurar el servidor web
+## 10. Configurar el servidor web
 
 ### Apache (ejemplo básico)
 
@@ -256,21 +301,19 @@ El bloque de servidor debe apuntar al directorio del proyecto y ejecutar PHP con
 
 ---
 
-## 10. Activar HTTPS
+## 11. Activar HTTPS
 
 Una vez funcionando la web en HTTP, conviene poner HTTPS:
-
 - instalar Certbot,
 - obtener un certificado para el dominio,
 - redirigir HTTP a HTTPS,
-- actualizar BASE_URL a https://...
+- actualizar BASE_URL a https://... (se hace automáticamente al detectar HTTPS en `$_SERVER`)
 
 ---
 
-## 11. Pasos finales de validación
+## 12. Pasos finales de validación
 
 Una vez subido el proyecto y configurada la base de datos:
-
 1. abrir la URL del sitio,
 2. comprobar que la aplicación carga sin errores,
 3. entrar con el usuario administrador inicial,
@@ -280,14 +323,33 @@ Una vez subido el proyecto y configurada la base de datos:
 
 ---
 
-## 12. Recomendaciones de seguridad importantes
+## 13. Recomendaciones de seguridad importantes
 
 - cambiar todas las contraseñas por defecto,
 - usar un usuario de base de datos con permisos mínimos,
-- no dejar el modo debug activado,
-- proteger el archivo de configuración,
+- no dejar el modo debug activado (`F00DLIST_DEBUG=false`),
+- proteger el archivo de configuración y **el archivo .env** (chmod 600),
 - mantener copias de seguridad de la base de datos,
 - usar HTTPS y actualizar PHP/MariaDB periódicamente.
+
+---
+
+## 14. Actualizaciones recientes en el proyecto
+
+### Seguridad mejorada
+- Todas las credenciales de base de datos se han migrado a variables de entorno en config/config.php (archivo .env)
+- DEBUG_MODE se ha desactivado por defecto en producción
+- Se han implementado cabeceras de seguridad HTTP (CSP, X-Frame-Options, etc.)
+
+### Mejoras en la generación de menús
+- Algoritmo de fuerza bruta para pescado corregido para cumplir con la frecuencia mínima
+- Validación de pertenencia de ingredientes al menú implementada
+- Soporte para categorías dietéticas libres en ingredientes
+
+### Mejoras en la interfaz de administración
+- Roles y permisos más granulares (admin, colaborador)
+- Validación de longitud de nombres completos
+- Mensajes genéricos para evitar enumeración de cuentas
 
 ---
 
@@ -298,7 +360,7 @@ Para poner f00dlist en producción, necesitas:
 1. crear el usuario FTP/SFTP para subir los archivos,
 2. crear la base de datos y un usuario dedicado en MariaDB/MySQL,
 3. importar el script SQL inicial,
-4. ajustar las credenciales en config/config.php,
+4. **crear y configurar el archivo .env con las variables de entorno**,
 5. subir la aplicación al servidor,
 6. configurar Apache/Nginx y HTTPS,
-7. revisar permisos y seguridad.
+7. revisar permisos y seguridad (incluyendo chmod 600 en .env).

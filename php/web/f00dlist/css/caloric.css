@@ -1,0 +1,132 @@
+/* ============================================
+   CALORIC.CSS - Estilos para niveles calóricos
+   ============================================ */
+
+/* --- Badges de calorías --- */
+.cal-badge {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 0.85rem;
+    margin-left: 10px;
+}
+
+.cal-bajo {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.cal-medio {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.cal-alto {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* --- Clases de nivel calórico para texto --- */
+.nivel-bajo {
+    color: #155724;
+    font-weight: 500;
+}
+
+.nivel-medio {
+    color: #856404;
+    font-weight: 500;
+}
+
+.nivel-alto {
+    color: #721c24;
+    font-weight: 500;
+}
+
+/* --- Indicadores visuales en tablas --- */
+.caloric-indicator {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+.caloric-indicator.bajo {
+    background: #28a745;
+}
+
+.caloric-indicator.medio {
+    background: #ffc107;
+}
+
+.caloric-indicator.alto {
+    background: #dc3545;
+}
+
+/* --- Información de calorías --- */
+.caloric-info {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 5px;
+}
+
+.caloric-total {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+/* --- Estilos para filas según calorías --- */
+.row-bajo {
+    background: rgba(212, 237, 218, 0.1);
+}
+
+.row-medio {
+    background: rgba(255, 243, 205, 0.1);
+}
+
+.row-alto {
+    background: rgba(248, 215, 218, 0.1);
+}
+
+/* --- Leyenda de calorías --- */
+.caloric-legend {
+    display: flex;
+    gap: 20px;
+    margin: 15px 0;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    flex-wrap: wrap;
+}
+
+.caloric-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+}
+
+.caloric-legend-item .indicator {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+}
+
+/* --- Responsive --- */
+@media (max-width: 576px) {
+    .cal-badge {
+        display: block;
+        margin-left: 0;
+        margin-top: 5px;
+    }
+    
+    .caloric-legend {
+        flex-direction: column;
+        gap: 10px;
+    }
+}

@@ -75,125 +75,108 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     // Redirigir para evitar reenvío
     redirect(url('receta.php?id=' . $idPlato));
 }
+
+$pageTitle = sanitize($recipeData['plato_nombre']);
+require_once 'includes/header.php';
 ?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= sanitize($recipeData['plato_nombre']) ?> - f00dlist</title>
-    <link rel="stylesheet" href="<?= asset('css/style.css') ?>">
-    <link rel="stylesheet" href="<?= asset('css/responsive.css') ?>">
-    <link rel="stylesheet" href="<?= asset('css/caloric.css') ?>">
-    <style>
-        .recipe-container { max-width: 900px; margin: 0 auto; padding: 20px; }
-        .recipe-header { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: start; }
-        .recipe-title h1 { margin: 0; color: #2c3e50; }
-        .recipe-meta { margin-top: 10px; color: #7f8c8d; font-size: 0.9rem; }
-        .cal-badge { display: inline-block; padding: 5px 10px; border-radius: 15px; font-weight: bold; margin-left: 10px; }
-        .cal-bajo { background: #d4edda; color: #155724; }
-        .cal-medio { background: #fff3cd; color: #856404; }
-        .cal-alto { background: #f8d7da; color: #721c24; }
-        .btn-fav { background: none; border: 2px solid #e74c3c; color: #e74c3c; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: all 0.3s; }
-        .btn-fav.active { background: #e74c3c; color: white; }
-        .btn-fav:hover { transform: scale(1.05); }
-        .section-card { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        .section-title { font-size: 1.3rem; color: #34495e; margin-bottom: 15px; border-bottom: 2px solid #3498db; padding-bottom: 5px; }
-        .ingredient-list, .tool-list { list-style: none; padding: 0; }
-        .ingredient-list li, .tool-list li { padding: 8px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
-        .ingredient-list li:last-child { border-bottom: none; }
-        .qty { font-weight: bold; color: #3498db; }
-        .recipe-content { line-height: 1.6; color: #333; }
-        .back-link { display: inline-block; margin-bottom: 20px; color: #3498db; text-decoration: none; }
-        .back-link:hover { text-decoration: underline; }
-    </style>
-</head>
-<body>
 
 <div class="recipe-container">
-    <a href="<?= url('index.php') ?>" class="back-link">← Volver al Menú</a>
+    <a href="<?= url('index.php') ?>" class="btn btn-secondary mb-3">← Volver al Menú</a>
 
     <!-- Cabecera del Plato -->
-    <div class="recipe-header">
-        <div class="recipe-title">
-            <h1><?= sanitize($recipeData['plato_nombre']) ?></h1>
-            <div class="recipe-meta">
-                <span>Tipo: <?= sanitize($recipeData['tipo']) ?></span> | 
-                <span>Categoría: <?= sanitize($recipeData['categoria']) ?></span>
-                <span class="cal-badge <?= getCaloricClass($recipeData['nivel_calorico']) ?>">
-                    <?= getCaloricIcon($recipeData['nivel_calorico']) ?> <?= formatCalories($totalCalories) ?>
-                </span>
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <h1 class="card-title"><?= sanitize($recipeData['plato_nombre']) ?></h1>
+                    <p class="text-muted">
+                        <strong>Tipo:</strong> <?= sanitize($recipeData['tipo']) ?> | 
+                        <strong>Categoría:</strong> <?= sanitize($recipeData['categoria']) ?>
+                    </p>
+                    <span class="cal-badge <?= getCaloricClass($recipeData['nivel_calorico']) ?>">
+                        <?= getCaloricIcon($recipeData['nivel_calorico']) ?> <?= formatCalories($totalCalories) ?>
+                    </span>
+                </div>
+                <div class="col-md-4 text-end">
+                    <?php if (isLoggedIn()): ?>
+                        <form method="POST" action="" class="d-inline">
+                            <?= csrfField() ?>
+                            <input type="hidden" name="action" value="toggle_favorite">
+                            <button type="submit" class="btn btn-lg <?= $isFavorite ? 'btn-danger' : 'btn-outline-danger' ?>">
+                                <?= $isFavorite ? '★ Favorito' : '☆ Añadir a Favoritos' ?>
+                            </button>
+                        </form>
+                        
+                        <?php if ($canEdit): ?>
+                            <a href="<?= url('admin/editar_receta.php?id=' . $recipe->getId()) ?>" class="btn btn-warning">📝 Editar</a>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        <p class="text-muted"><a href="<?= url('login.php') ?>">Inicia sesión</a> para añadir a favoritos.</p>
+                    <?php endif; ?>
+                </div>
             </div>
         </div>
-        
-        <?php if (isLoggedIn()): ?>
-            <form method="POST" action="">
-                <?= csrfField() ?>
-                <input type="hidden" name="action" value="toggle_favorite">
-                <button type="submit" class="btn-fav <?= $isFavorite ? 'active' : '' ?>">
-                    <?= $isFavorite ? '★ Favorito' : '☆ Añadir a Favoritos' ?>
-                </button>
-            </form>
-            
-            <?php if ($canEdit): ?>
-                <a href="<?= url('admin/editar_receta.php?id=' . $recipe->getId()) ?>" class="btn btn-warning" style="margin-left:10px;">📝 Editar Catálogo</a>
-            <?php endif; ?>
-        <?php else: ?>
-            <a href="<?= url('login.php') ?>" class="btn-fav">Inicia sesión para favoritar</a>
-        <?php endif; ?>
     </div>
 
-     <!-- Contenido de la Receta -->
-     <?php if ($recipeData['titulo_html']): ?>
-         <div class="section-card">
-             <div class="recipe-content">
-                 <?= strip_tags($recipeData['titulo_html'], '<strong><em><b><i><u><br><p><h3><ul><ol><li><a>') ?>
-                 <?php if ($recipeData['subtitulo_html']): ?>
-                     <h3><?= strip_tags($recipeData['subtitulo_html'], '<strong><em><b><i><u><br><p><ul><ol><li><a>') ?></h3>
-                 <?php endif; ?>
-                 <?= strip_tags($recipeData['texto_html'], '<strong><em><b><i><u><br><p><ul><ol><li><a><img>') ?>
-                 <?php if ($recipeData['enlace']): ?>
-                     <p><a href="<?= sanitize($recipeData['enlace']) ?>" target="_blank" style="color:#3498db;">Ver receta original →</a></p>
-                 <?php endif; ?>
-             </div>
-         </div>
-     <?php endif; ?>
-
     <!-- Ingredientes -->
-    <div class="section-card">
-        <h2 class="section-title">Ingredientes</h2>
-        <?php if (empty($ingredients)): ?>
-            <p>No hay ingredientes registrados para esta receta.</p>
-        <?php else: ?>
-            <ul class="ingredient-list">
-                <?php foreach ($ingredients as $ing): ?>
-                    <li>
-                        <span><?= sanitize($ing->getNombre()) ?></span>
-                        <span class="qty"><?= number_format($ing->cantidad, 0) ?> <?= sanitize($ing->unidad) ?></span>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        <?php endif; ?>
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Ingredientes</h5>
+            <?php if (empty($ingredients)): ?>
+                <p class="text-muted">No hay ingredientes registrados.</p>
+            <?php else: ?>
+                <ul class="list-unstyled">
+                    <?php foreach ($ingredients as $ing): ?>
+                        <li class="mb-2">
+                            <strong><?= sanitize($ing['nombre']) ?></strong>
+                            <span class="text-muted">- <?= number_format($ing['cantidad'], 2) ?> <?= sanitize($ing['unidad']) ?></span>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
+        </div>
     </div>
 
     <!-- Herramientas -->
-    <div class="section-card">
-        <h2 class="section-title">Herramientas Necesarias</h2>
-        <?php if (empty($tools)): ?>
-            <p>No se requieren herramientas especiales.</p>
-        <?php else: ?>
-            <ul class="tool-list">
-                <?php foreach ($tools as $tool): ?>
-                    <li>
-                        <span><?= sanitize($tool->getNombre()) ?></span>
-                        <small style="color:#7f8c8d;"><?= sanitize($tool->getDescripcion()) ?></small>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        <?php endif; ?>
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Herramientas Necesarias</h5>
+            <?php if (empty($tools)): ?>
+                <p class="text-muted">No hay herramientas registradas.</p>
+            <?php else: ?>
+                <ul class="list-unstyled">
+                    <?php foreach ($tools as $tool): ?>
+                        <li class="mb-2">
+                            <strong><?= sanitize($tool->getNombre()) ?></strong>
+                            <br><small class="text-muted"><?= sanitize($tool->getDescripcion()) ?></small>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
+        </div>
     </div>
 
+    <!-- Instrucciones -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Instrucciones</h5>
+            <div class="recipe-content">
+                <?php if (!empty($recipeData['texto'])): ?>
+                    <?= $recipeData['texto'] ?>
+                <?php else: ?>
+                    <p class="text-muted">No hay instrucciones registradas.</p>
+                <?php endif; ?>
+            </div>
+            
+            <?php if (!empty($recipeData['enlace'])): ?>
+                <p class="mt-3">
+                    <a href="<?= sanitize($recipeData['enlace']) ?>" target="_blank" class="btn btn-info btn-sm">
+                        🔗 Ver receta original
+                    </a>
+                </p>
+            <?php endif; ?>
+        </div>
+    </div>
 </div>
 
-</body>
-</html>
+<?php require_once 'includes/footer.php'; ?>
